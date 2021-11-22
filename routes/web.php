@@ -8,4 +8,4 @@ Route::post('/login', 'Auth\AuthController@login');
 Route::post('/logout', 'Auth\AuthController@logout');
 Route::post('/forgot-password', 'Auth\PasswordResetLinkController@store');
 
-Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->middleware('guest')->name('password.reset');
+// Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->middleware('guest')->name('password.reset');

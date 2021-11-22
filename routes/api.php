@@ -14,11 +14,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'v1'], function() {
+\DB::connection()->enableQueryLog();
+
+// e.g. /api/v1/en/items
+$locale = request()->segment(3);
+
+if(!array_key_exists($locale, config('mappit.supported_locales'))) {
+    $locale = 'nl';
+}
+
+App::setLocale($locale);
+
+Route::group(['prefix' => 'v1/'.$locale], function() {
     
     /**
     * User Routes
     */
     Route::get('/user', 'API\UsersController@show');
     
+    // Item routes
+    Route::get('/items',         'API\ItemController@index');
+    Route::get('/items/{id}',    'API\ItemController@find');
+    Route::post('/items',        'API\ItemController@store');
+    Route::put('/items/{id}',    'API\ItemController@update');
+    Route::delete('/items/{id}', 'API\ItemController@delete');
+
 });
