@@ -24,13 +24,13 @@ class UpdateItemRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|integer',
-            'language' => 'required|string|size:2',
-            'item_type_id' => 'integer', // 10 = item, 20 = page
-            'external_id' => 'nullable|max:255', // only required if data is imported from external source, to keep track of updates on existing records
-            'name' => 'required|min:3|max:255',
-            // 'slug' => 'required|min:3|max:255',
-            'content' => 'nullable|max:16777215',
+            'id'           => 'required|integer',
+            'language'     => 'required|string|size:2',
+            'item_type_id' => 'nullable|integer', // 10 = item, 20 = page
+            'external_id'  => 'nullable|string|max:255', // only required if data is imported from external source, to keep track of updates on existing records
+            'name'         => 'nullable|string|min:3|max:255',
+            'slug'         => 'nullable|string|min:3|max:255',
+            'content'      => 'nullable|string|max:16777215',
         ];
     }
 

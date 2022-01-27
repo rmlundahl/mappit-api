@@ -24,7 +24,7 @@ class UpdateItem {
         $this->item->external_id  = $this->data['external_id'] ?? null;
         
         if( !empty($this->data['name']) )
-            $this->item->name         = $this->data['name'];
+            $this->item->name     = $this->data['name'];
 
         if( !empty($this->data['slug']) ) {
             $this->item->slug     = Str::slug($this->data['slug']);

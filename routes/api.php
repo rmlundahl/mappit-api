@@ -25,12 +25,16 @@ if(!array_key_exists($locale, config('mappit.supported_locales'))) {
 
 App::setLocale($locale);
 
-Route::group(['prefix' => 'v1/'.$locale], function() {
-    
-    /**
-    * User Routes
-    */
+// routes without locale
+Route::group(['prefix' => 'v1'], function() {
+
+    // User routes
     Route::get('/user', 'API\UsersController@show');
+
+});
+
+// routes with locale
+Route::group(['prefix' => 'v1/'.$locale], function() {
     
     // Item routes
     Route::get('/items',         'API\ItemController@index');

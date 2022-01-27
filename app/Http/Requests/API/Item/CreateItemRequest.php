@@ -24,12 +24,12 @@ class CreateItemRequest extends FormRequest
     public function rules()
     {
         return [
-            'language' => 'required|string|size:2',
+            'language'     => 'required|string|size:2',
             'item_type_id' => 'required|integer', // 10 = item, 20 = page
-            'external_id' => 'nullable|max:255', // only required if data is imported from external source, to keep track of updates on existing records
-            'name' => 'required|min:3|max:255',
-            // 'slug' => 'required|min:3|max:255',
-            'content' => 'nullable|max:16777215',
+            'external_id'  => 'nullable|string|max:255', // only required if data is imported from external source, to keep track of updates on existing records
+            'name'         => 'required|string|min:3|max:255',
+            'slug'         => 'nullable|string|min:3|max:255',
+            'content'      => 'nullable|string|max:16777215',
         ];
     }
 
