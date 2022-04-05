@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\API\Item;
+namespace Tests\API\Item;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 // use Illuminate\Foundation\Testing\WithFaker;
