@@ -29,8 +29,14 @@ App::setLocale($locale);
 Route::group(['prefix' => 'v1'], function() {
 
     // User routes
-    Route::get('/user', 'API\UsersController@show');
-
+    Route::get('/user',          'API\UsersController@show');
+    Route::get('/users',         'API\UsersController@index');
+    Route::get('/users_from_group/{group_id}', 'API\UsersController@users_from_group');
+    Route::get('/users/{id}',    'API\UsersController@find');
+    Route::post('/users',        'API\UsersController@store');
+    Route::put('/users/{id}',    'API\UsersController@update');
+    Route::delete('/users/{id}', 'API\UsersController@delete');
+    
 });
 
 // routes with locale

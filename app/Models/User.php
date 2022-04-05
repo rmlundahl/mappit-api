@@ -43,4 +43,9 @@ class User extends Authenticatable
         'status_id' => 'integer',
     ];
 
+    public function group()
+    {
+        return $this->hasOne('App\Models\Group');
+    }
+
 }

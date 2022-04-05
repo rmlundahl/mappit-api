@@ -19,8 +19,12 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->foreignId('group_id')->default(1)->index();
+            $table->boolean('is_group_admin')->default(false);
+            $table->string('role', 64)->default('author')->index(); // 'author', 'editor', 'administrator'
             $table->rememberToken();
             $table->timestamps();
+            $table->smallInteger('status_id')->unsigned()->default(1)->index(); // FK
         });
     }
 
