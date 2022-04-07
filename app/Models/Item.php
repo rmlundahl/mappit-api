@@ -43,7 +43,7 @@ class Item extends Model
         $original = $slug;
         $count = 2;
 
-        while (static::whereSlug($slug)->whereLanguage($this->attributes['language'])->where('id', '<>', $this->attributes['id'])->exists()) {
+        while (static::whereSlug($slug)->whereLanguage($this->attributes['language'])->exists()) {
             $slug = "{$original}-" . $count++;
         }
     

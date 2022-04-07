@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait HasCompositePrimaryKey
 {

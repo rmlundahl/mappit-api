@@ -30,6 +30,7 @@ class CreateItemRequest extends FormRequest
             'name'         => 'required|string|min:3|max:255',
             'slug'         => 'nullable|string|min:3|max:255',
             'content'      => 'nullable|string|max:16777215',
+            'user_id'      => 'required|integer',
         ];
     }
 

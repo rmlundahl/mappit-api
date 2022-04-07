@@ -13,7 +13,7 @@ use App\Http\Requests\API\Item\CreateItemRequest;
 use App\Http\Requests\API\Item\UpdateItemRequest;
 use App\Http\Requests\API\Item\DeleteItemRequest;
 
-use App;
+use App, Log;
 
 class ItemController extends Controller
 {

@@ -31,7 +31,11 @@ class CreateItem {
         $item->content      = $this->data['content'] ?? null;
         $item->user_id      = $this->data['user_id'];
         $item->status_id    = $this->data['status_id'] ?? 1;
-        $item->save();
+        
+        if ( $item->save() ) {
+            // Necessary because the save() method does not return the last created 'id' in the model
+            $item = Item::orderBy('id','desc')->first();
+        }
 
         return $item;
     }

@@ -3,7 +3,9 @@
 namespace App\Services\Item;
 
 use App\Models\Item;
-use \Str;
+use App\Models\ItemProperty;
+
+use DB, Log, Str;
 
 class UpdateItem {
     
@@ -38,6 +40,33 @@ class UpdateItem {
         
         $this->item->save();
 
+        $this->_save_item_properties();
+        
         return $this->item;
+    }
+
+    private function _save_item_properties()
+    {
+        // abort if no data
+        if (empty($this->data['item_properties'])) return;
+
+        // delete exsiting data
+        DB::table('item_properties')->where('item_id', $this->item->id)->delete();
+
+        // insert new data
+        $data = json_decode($this->data['item_properties'], true);
+        
+        $item_property = new ItemProperty;
+        $item_property->language  = $this->item->language;
+        $item_property->item_id   = $this->item->id;
+        $item_property->status_id = $this->item->status_id;
+
+        foreach ($data as $r) {
+            foreach($r as $k => $v) {
+                $item_property->key = $k;
+                $item_property->value = $v;
+                $item_property->save();
+            }
+        }
     }
 }

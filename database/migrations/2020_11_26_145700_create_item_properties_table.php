@@ -14,7 +14,7 @@ class CreateItemPropertiesTable extends Migration
     public function up()
     {
         Schema::create('item_properties', function (Blueprint $table) {
-            $table->integer('id')->unsigned(); // part of composite PK
+            $table->bigIncrements('id')->unsigned(); // part of composite PK
             $table->string('language', 2); // part of composite PK
             $table->foreignId('item_id')->index();
             $table->string('key', 255)->index();
