@@ -26,6 +26,11 @@ class Item extends Model
         'status_id',
     ];
 
+    public function item_properties()
+    {
+        return $this->hasMany(ItemProperty::class);
+    }
+
     // Mutator for slug attribute
     public function setSlugAttribute($slug) 
     {

@@ -12,7 +12,7 @@ class ItemProperty extends Model
 
     protected $table = 'item_properties';
     protected $primaryKey = ['id', 'language'];
-    public $incrementing = false;
+    // public $incrementing = false;
     
     protected $fillable = [
         'id',

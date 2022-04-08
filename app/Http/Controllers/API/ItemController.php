@@ -74,9 +74,8 @@ class ItemController extends Controller
      */
     public function update(UpdateItemRequest $request)
     {
-        
         $item = Item::find(['id'=>$request->id, 'language'=>$request->language]);
-       
+        
         $updateItem = new UpdateItem( $request->all(), $item );
         
         $item = $updateItem->update($updateItem, $item);

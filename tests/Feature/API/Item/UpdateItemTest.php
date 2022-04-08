@@ -8,6 +8,7 @@ use Tests\TestCase;
 
 use App\Models\User;
 use App\Models\Item;
+use App\Models\ItemProperty;
 
 class UpdateItemTest extends TestCase
 {
@@ -61,7 +62,7 @@ class UpdateItemTest extends TestCase
             'language' => 'nl',
             'item_type_id' => 10,
             'name' => 'Second Name',
-            'slug' => 'new-name',
+            'slug' => 'second-name',
             'user_id' => $user->id,
             'status_id' => 20,
         ]);
@@ -81,6 +82,60 @@ class UpdateItemTest extends TestCase
             'language' => 'nl',
             'name' => 'Second Name',
             'slug' => 'new-name-2'
+            ]);
+    }
+
+    public function test_update_item__with_item_properties()
+    {
+        $user = User::factory()->create();
+       
+        $item = Item::factory()
+            ->create([
+                'id' => 23,
+                'language' => 'nl',
+                'item_type_id' => 10,
+                'name' => 'New Name',
+                'slug' => 'new-name',
+                'user_id' => $user->id,
+                'status_id' => 10
+            ]);
+        
+        $itemProperty = ItemProperty::factory()
+            ->create([
+                'language' => 'nl',
+                'item_id' => 23,
+                'key' => 'location',
+                'value' => 'Amsterdam',
+                'status_id' => 10
+            ]);
+
+        $this->actingAs($user)
+            ->json('PUT', '/api/v1/nl/items/23', 
+            [
+                'id' => 23,
+                'language' => 'nl',
+                'name' => 'Updated Name',
+                'item_properties' => [
+                    ['location' => 'updated to London'],
+                    ['second key' => 'second val']
+                ]
+            ])->assertStatus( 200 );
+        
+        
+        $this->assertDatabaseHas('item_properties', [
+            'language' => 'nl',
+            'item_id' => 23,
+            'key' => 'location',
+            'value' => 'updated to London',
+            'status_id' => 10            
+            ]);
+
+        $this->assertDatabaseHas('item_properties', [
+            'language' => 'nl',
+            'item_id' => 23,
+            'key' => 'second key',
+            'value' => 'second val',
+            'status_id' => 10            
             ]);
     }
 }

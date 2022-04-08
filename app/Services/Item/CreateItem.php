@@ -3,7 +3,9 @@
 namespace App\Services\Item;
 
 use App\Models\Item;
-use \Str;
+use App\Services\ItemProperty\SaveItemProperty;
+
+use Str;
 
 class CreateItem {
     
@@ -35,6 +37,10 @@ class CreateItem {
         if ( $item->save() ) {
             // Necessary because the save() method does not return the last created 'id' in the model
             $item = Item::orderBy('id','desc')->first();
+
+            $this->data['item_id'] = $item->id;
+            $saveItemProperty = new SaveItemProperty($this->data);
+            $saveItemProperty->save();
         }
 
         return $item;
