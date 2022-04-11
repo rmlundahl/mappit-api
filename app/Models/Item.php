@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     use HasFactory;
+    use \Awobaz\Compoships\Compoships;
     use \App\Models\Traits\HasCompositePrimaryKey;
 
     protected $table = 'items';
@@ -28,7 +29,8 @@ class Item extends Model
 
     public function item_properties()
     {
-        return $this->hasMany(ItemProperty::class);
+        // return $this->hasMany(ItemProperty::class);
+        return $this->hasMany('App\Models\ItemProperty', ['item_id','language'], ['id','language']);
     }
 
     // Mutator for slug attribute

@@ -57,8 +57,8 @@ class ItemController extends Controller
      */
     public function find($id)
     {
-        $item = Item::find(['id'=>$id, 'language'=>App::getLocale()]);
-       
+        $item = Item::where('id', $id)->where('language', App::getLocale())->with('item_properties')->first();
+        
         if (empty($item)) {
             return response()->json( [], 404 ); 
         }

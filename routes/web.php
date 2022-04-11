@@ -3,7 +3,7 @@
 Route::get('/','HomeController@index')->name('home');
 
 // For development purposes only
-Route::get('/groups', 'DevController@groups');
+Route::get('/dev', 'DevController@dev');
 
 /**
 * Authentication Routes

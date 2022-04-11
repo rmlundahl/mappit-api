@@ -5,23 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ItemProperty extends Model
+use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+class Filter extends Model
 {
     use HasFactory;
-    use \Awobaz\Compoships\Compoships;
     use \App\Models\Traits\HasCompositePrimaryKey;
-
-    protected $table = 'item_properties';
-    protected $primaryKey = ['id', 'language'];
-    // public $incrementing = false;
+    use HasRecursiveRelationships;
     
+    protected $table = 'filters';
+    protected $primaryKey = ['id', 'language'];
+
     protected $fillable = [
         'id',
         'language',
-        'item_id',
-        'key',
-        'value',
-        'user_id',
+        'parent_id',
+        'name',
+        'slug',
         'status_id',
     ];
 }

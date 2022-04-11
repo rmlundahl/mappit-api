@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateItemPropertiesTable extends Migration
+class CreateFiltersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,17 @@ class CreateItemPropertiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('item_properties', function (Blueprint $table) {
+        Schema::create('filters', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned(); // part of composite PK
             $table->string('language', 2); // part of composite PK
-            $table->foreignId('item_id')->index();
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->string('key', 255)->index();
-            $table->mediumText('value');
+            $table->string('name', 255);
+            $table->string('slug', 255)->index();
             $table->timestamps();
             $table->smallInteger('status_id')->unsigned()->default(1)->index(); // FK
         });
 
-        \DB::unprepared('ALTER TABLE `items` DROP PRIMARY KEY, ADD PRIMARY KEY ( `id` , `language` )');
+        \DB::unprepared('ALTER TABLE `filters` DROP PRIMARY KEY, ADD PRIMARY KEY ( `id` , `language` )');
     }
 
     /**
