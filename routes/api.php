@@ -43,6 +43,7 @@ Route::group(['prefix' => 'v1'], function() {
 Route::group(['prefix' => 'v1/'.$locale], function() {
     
     // Item routes
+    Route::get('/items/all_markers', 'API\ItemController@all_markers');
     Route::get('/items',         'API\ItemController@index');
     Route::get('/items/{id}',    'API\ItemController@find');
     Route::post('/items',        'API\ItemController@store');

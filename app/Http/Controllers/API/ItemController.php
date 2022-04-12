@@ -24,7 +24,22 @@ class ItemController extends Controller
         $this->middleware('auth:sanctum')->only(['store', 'update', 'delete']);
         $this->item = $item;
     }
-    
+
+    /**
+     * Get all items with item_properties for use as marker on the Google Map
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function all_markers()
+    {
+        $items =  $this->item->select('id', 'language', 'name', 'slug')->where('language', App::getLocale())->where('item_type_id', 10)->where('status_id', 20)->with('item_properties')->get();
+        
+        if (empty($items)) {
+            return response()->json( [], 404 ); 
+        }
+        return response()->json( $items, 200 );
+    }
+
     /**
      * Display a listing of the resource.
      *
