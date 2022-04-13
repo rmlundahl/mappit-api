@@ -37,6 +37,16 @@ class ItemController extends Controller
         if (empty($items)) {
             return response()->json( [], 404 ); 
         }
+
+        // add flattened properties
+        $items->map( function ($item) {
+            if( !empty($item->item_properties)) {
+                foreach($item->item_properties as $r) {
+                    ($item->item_properties)->put($r->key,$r->value);
+                }
+            }
+        });
+                
         return response()->json( $items, 200 );
     }
 
