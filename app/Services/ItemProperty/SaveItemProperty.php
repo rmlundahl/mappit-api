@@ -3,6 +3,7 @@
 namespace App\Services\ItemProperty;
 
 use App\Models\ItemProperty;
+use App\Services\Item\UploadItemImages;
 
 use DB, Exception, Log;
 
@@ -49,6 +50,15 @@ class SaveItemProperty {
         } catch (Exception $e) {
             
             Log::error('SaveItemProperty->save(): '.$e->getMessage());
+        }
+    }
+    
+    private function _save_images( $item_property, $data )
+    {
+        $uploadItemImages = new UploadItemImages( $item_property );
+
+        if( isset( $data['uitgelichte_afbeelding'] ) ){
+            $uploadItemImages->saveImage( $data['uitgelichte_afbeelding'] );
         }
     }
 }

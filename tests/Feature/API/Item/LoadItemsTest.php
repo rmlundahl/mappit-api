@@ -48,7 +48,7 @@ class LoadItemsTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson(fn (AssertableJson $json) => $json
-                ->count(11)    
+                ->count(12)    
                 ->where('id', 123)
                 ->where('language', 'nl')
                 ->etc()

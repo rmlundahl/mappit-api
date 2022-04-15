@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Awobaz\Compoships\Compoships;
 
 class ItemProperty extends Model
 {
     use HasFactory;
-    use \Awobaz\Compoships\Compoships;
+    use Compoships;
     use \App\Models\Traits\HasCompositePrimaryKey;
 
     protected $table = 'item_properties';

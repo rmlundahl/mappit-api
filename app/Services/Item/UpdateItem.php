@@ -46,6 +46,7 @@ class UpdateItem {
         // save item properties
         $this->data['item_id'] = $this->item->id;
         $this->data['status_id'] = $this->item->status_id;
+        
         $saveItemProperty = new SaveItemProperty($this->data);
         $saveItemProperty->save();
         
