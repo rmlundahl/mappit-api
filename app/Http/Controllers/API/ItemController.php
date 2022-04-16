@@ -32,7 +32,7 @@ class ItemController extends Controller
      */
     public function all_markers()
     {
-        $items =  $this->item->select('id', 'language', 'name', 'slug')->where('language', App::getLocale())->where('item_type_id', 10)->where('status_id', 20)->with('item_properties')->get();
+        $items =  $this->item->select('id', 'language', 'name', 'slug', 'content')->where('language', App::getLocale())->where('item_type_id', 10)->where('status_id', 20)->with('item_properties')->get();
         
         if (empty($items)) {
             return response()->json( [], 404 ); 
@@ -46,7 +46,7 @@ class ItemController extends Controller
                 }
             }
         });
-                
+            
         return response()->json( $items, 200 );
     }
 
