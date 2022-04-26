@@ -36,7 +36,9 @@ Route::group(['prefix' => 'v1'], function() {
     Route::post('/users',        'API\UsersController@store');
     Route::put('/users/{id}',    'API\UsersController@update');
     Route::delete('/users/{id}', 'API\UsersController@delete');
-    
+
+    // Image routes
+    Route::post('/images',       'API\ImageController@store');
 });
 
 // routes with locale
@@ -44,13 +46,13 @@ Route::group(['prefix' => 'v1/'.$locale], function() {
     
     // Item routes
     Route::get('/items/all_markers', 'API\ItemController@all_markers');
-    Route::get('/items',         'API\ItemController@index');
-    Route::get('/items/{id}',    'API\ItemController@find');
-    Route::post('/items',        'API\ItemController@store');
-    Route::put('/items/{id}',    'API\ItemController@update');
-    Route::delete('/items/{id}', 'API\ItemController@delete');
+    Route::get('/items',             'API\ItemController@index');
+    Route::get('/items/{id}',        'API\ItemController@find');
+    Route::post('/items',            'API\ItemController@store');
+    Route::put('/items/{id}',        'API\ItemController@update');
+    Route::delete('/items/{id}',     'API\ItemController@delete');
 
     // Filter routes
-    Route::get('/filters',         'API\FilterController@index');
-    Route::get('/filters/{id}',    'API\FilterController@find');
+    Route::get('/filters',           'API\FilterController@index');
+    Route::get('/filters/{id}',      'API\FilterController@find');
 });

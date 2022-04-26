@@ -3,7 +3,7 @@
 namespace App\Services\ItemProperty;
 
 use App\Models\ItemProperty;
-use App\Services\Item\UploadItemImages;
+use App\Services\Image\StoreImage;
 
 use DB, Exception, Log;
 
@@ -25,25 +25,31 @@ class SaveItemProperty {
         
         try {
             // delete exsiting data
-            DB::table('item_properties')->where('item_id', $this->data['item_id'])->delete();
+            DB::table('item_properties')->where('item_id', $this->data['item_id'])->where('language', $this->data['language'])->delete();
 
             // insert new data
             $data = $this->data['item_properties'];
-                       
-            foreach ($data as $r) {
+            // log::debug('$data', $data);     
+            foreach ($data as $k => $v) {
                                
                 $item_property = new ItemProperty;
                 $item_property->language  = $this->data['language'];
                 $item_property->item_id   = $this->data['item_id'];
                 $item_property->status_id = $this->data['status_id'];
                 
-                if( gettype($r)==='string' ) $r = json_decode($r, true);
-                
-                foreach($r as $k => $v) {
+                if( gettype($v)==='string' ) {
+
                     $item_property->key = $k;
                     $item_property->value = $v;
                     $item_property->save();
-                    // Log::debug($item_property);
+
+                } else if( gettype($v)==='object' ) {
+                   
+                    // Images are send as Object in a subdirectory
+                    $clear_sub_directory = true;
+                    $storeImage = new StoreImage( ['file'=>$v, 'item_id'=>$item_property->item_id], '/'.$k, $clear_sub_directory);
+                    $storeImage = $storeImage->store();
+
                 }
             }
 
@@ -52,13 +58,5 @@ class SaveItemProperty {
             Log::error('SaveItemProperty->save(): '.$e->getMessage());
         }
     }
-    
-    private function _save_images( $item_property, $data )
-    {
-        $uploadItemImages = new UploadItemImages( $item_property );
-
-        if( isset( $data['uitgelichte_afbeelding'] ) ){
-            $uploadItemImages->saveImage( $data['uitgelichte_afbeelding'] );
-        }
-    }
+   
 }
