@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\API\Image\StoreImageRequest;
 use App\Services\Image\StoreImage;
 
-use App, Log;
+use App, Log, Storage;
 
 class ImageController extends Controller
 {
@@ -18,6 +18,16 @@ class ImageController extends Controller
         $this->middleware('auth:sanctum')->only(['store', 'delete']);
     }
 
+    /**
+     * Get a listing of files in the direcatory
+     * @param  string  $path
+     * @return \Illuminate\Http\Response
+     */
+    public function index($path)
+    {
+        $files = Storage::allFiles($path);
+        return response()->json( $files, 200 );
+    }
 
     /**
      * Store an image in storage.

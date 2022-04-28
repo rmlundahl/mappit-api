@@ -38,7 +38,8 @@ Route::group(['prefix' => 'v1'], function() {
     Route::delete('/users/{id}', 'API\UsersController@delete');
 
     // Image routes
-    Route::post('/images',       'API\ImageController@store');
+    Route::get ('/images/{path}', 'API\ImageController@index')->where('path', '[\w\s\-_\/]+');
+    Route::post('/images',        'API\ImageController@store');
 });
 
 // routes with locale
