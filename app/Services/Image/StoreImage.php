@@ -17,17 +17,18 @@ class StoreImage {
 
     public function store ()
     {
-        if( !empty($this->image['item_id']) && $this->clear_sub_directory) {
+        if( !empty($this->image['item_id']) && !empty($this->sub_directory) && $this->clear_sub_directory) {
             
             // Get all files in a directory
-            $files =   Storage::allFiles('/items/'.$this->image['item_id'].$this->sub_directory);
-
+            $dir = storage_path('app/public').'/items/'.$this->image['item_id'].$this->sub_directory.'/';
+            $files =   Storage::allFiles($dir);
+           
             // Delete Files
             Storage::delete($files);
         }
-        
+
         $file = $this->image['file'];
-        $path = $file->storeAs('/items/'.$this->image['item_id'].$this->sub_directory, $file->getClientOriginalName());
+        $path = $file->storeAs('items/'.$this->image['item_id'].$this->sub_directory, $file->getClientOriginalName(), 'public');
         $fileURL = env('APP_URL').'/storage/'.str_replace( 'public/', '', $path );
         return $fileURL;        
     }
