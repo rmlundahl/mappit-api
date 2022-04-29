@@ -116,8 +116,8 @@ class UpdateItemTest extends TestCase
                 'language' => 'nl',
                 'name' => 'Updated Name',
                 'item_properties' => [
-                    ['location' => 'updated to London'],
-                    ['second key' => 'second val']
+                    'location' => 'updated to London',
+                    'second key' => 'second val'
                 ]
             ])->assertStatus( 200 );
         

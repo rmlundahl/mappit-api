@@ -51,7 +51,7 @@ class CreateItemTest extends TestCase
                 'user_id' => $user->id,
                 'status_id' => 10,
                 'item_properties' => [
-                    ['location' => 'Amsterdam']
+                    'location' => 'Amsterdam'
                 ]
             ])->assertStatus( 201 );
         
