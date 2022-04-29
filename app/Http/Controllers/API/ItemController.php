@@ -13,7 +13,7 @@ use App\Http\Requests\API\Item\CreateItemRequest;
 use App\Http\Requests\API\Item\UpdateItemRequest;
 use App\Http\Requests\API\Item\DeleteItemRequest;
 
-use App, Log;
+use App, Log, Storage;
 
 class ItemController extends Controller
 {
@@ -45,8 +45,14 @@ class ItemController extends Controller
                     ($item->item_properties)->put($r->key,$r->value);
                 }
             }
+            // add featured image
+            $path = '/items/'.$item->id.'/uitgelichte_afbeelding/';
+            $files = Storage::allFiles($path);
+            if( !empty($files[0]) ) {
+                ($item->item_properties)->put('uitgelichte_afbeelding', $files[0]);
+            }
         });
-            
+
         return response()->json( $items, 200 );
     }
 
