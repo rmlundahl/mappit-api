@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Item;
 use Illuminate\Http\Request;
 
+use App\Services\Item\GetItem;
 use App\Services\Item\CreateItem;
 use App\Services\Item\UpdateItem;
 use App\Services\Item\DeleteItem;
@@ -59,12 +60,13 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-       $items = $this->item->all()->where('language', App::getLocale());
-       return response()->json( $items, 200 );
+        $getItem = new GetItem( $request->all() );
+        $items = $getItem->all();
+        return response()->json( $items, 200 );
     }
 
     /**
