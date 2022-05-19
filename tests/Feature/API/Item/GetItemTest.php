@@ -9,7 +9,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
 
-class GetItemsTest extends TestCase
+class GetItemTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -36,6 +36,24 @@ class GetItemsTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonCount(2);
+    }
+
+    public function test_get_all_markers__from_a_language()
+    {
+        $items = Item::factory()->create(['id'=>1, 'language'=>'nl', 'status_id'=>20]);
+        $items = Item::factory()->create(['id'=>1, 'language'=>'en', 'status_id'=>20]);
+        $items = Item::factory()->create(['id'=>2, 'language'=>'nl', 'status_id'=>20]);
+        $items = Item::factory()->create(['id'=>2, 'language'=>'en', 'status_id'=>20]);
+        $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'status_id'=>10]);
+        $items = Item::factory()->create(['id'=>4, 'language'=>'nl', 'status_id'=>99]);
+        $items = Item::factory()->create(['id'=>5, 'language'=>'nl', 'status_id'=>20]);
+        
+        \App::setLocale('nl');
+
+        $response = $this->getJson('/api/v1/nl/items/all_markers');
+        $response
+            ->assertStatus(200)
+            ->assertJsonCount(3);
     }
 
     public function test_find_item()

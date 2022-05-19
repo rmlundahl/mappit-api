@@ -27,32 +27,18 @@ class ItemController extends Controller
     }
 
     /**
-     * Get all items with item_properties for use as marker on the Google Map
+     * Get all publushed items with item_properties for use as marker on the Google Map
      *
      * @return \Illuminate\Http\Response
      */
-    public function all_markers()
+    public function all_markers(Request $request)
     {
-        $items =  $this->item->select('id', 'language', 'name', 'slug', 'content')->where('language', App::getLocale())->where('item_type_id', 10)->where('status_id', 20)->with('item_properties')->get();
+        $getItem = new GetItem( $request->all() );
+        $items = $getItem->all_markers();
         
         if (empty($items)) {
             return response()->json( [], 404 ); 
         }
-
-        // add flattened properties
-        $items->map( function ($item) {
-            if( !empty($item->item_properties)) {
-                foreach($item->item_properties as $r) {
-                    ($item->item_properties)->put($r->key,$r->value);
-                }
-            }
-            // add featured image
-            $path = '/items/'.$item->id.'/uitgelichte_afbeelding/';
-            $files = Storage::allFiles($path);
-            if( !empty($files[0]) ) {
-                ($item->item_properties)->put('uitgelichte_afbeelding', $files[0]);
-            }
-        });
 
         return response()->json( $items, 200 );
     }
