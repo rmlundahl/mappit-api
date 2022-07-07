@@ -14,7 +14,7 @@ use App\Http\Requests\API\Item\CreateItemRequest;
 use App\Http\Requests\API\Item\UpdateItemRequest;
 use App\Http\Requests\API\Item\DeleteItemRequest;
 
-use App, Log, Storage;
+use App, Log, Storage, Validator;
 
 class ItemController extends Controller
 {
@@ -74,10 +74,19 @@ class ItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function find($id)
+    public function find($id, Request $request)
     {
-        $item = Item::where('id', $id)->where('language', App::getLocale())->with('item_properties')->first();
-        
+        if ( !is_numeric($id) ) {
+            return response()->json( [], 404 );
+        }
+
+        $item_type_id = $request->get('item_type_id') ?? 10;
+        if ( !is_numeric($item_type_id) ) {
+            return response()->json( [], 404 );
+        }
+
+        $item = Item::where('id', $id)->where('item_type_id', $item_type_id)->where('language', App::getLocale())->with('item_properties')->first();
+       
         if (empty($item)) {
             return response()->json( [], 404 ); 
         }

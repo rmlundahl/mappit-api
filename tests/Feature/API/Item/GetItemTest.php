@@ -56,12 +56,40 @@ class GetItemTest extends TestCase
             ->assertJsonCount(3);
     }
 
-    public function test_find_item()
+    public function test_find_item__fails_for_incorrect_input()
     {
         $items = Item::factory()->count(3)->create();
         $item  = Item::factory()->create(['id'=>123, 'language'=>'nl']);
 
+        $response = $this->getJson('/api/v1/nl/items/1g79qna310ddf5177613921');
+
+        $response
+            ->assertStatus(404);
+    }
+
+    public function test_find_item_without_item_type_id()
+    {
+        $items = Item::factory()->count(3)->create();
+        $item  = Item::factory()->create(['id'=>123, 'language'=>'nl', 'item_type_id'=>10]);
+
         $response = $this->getJson('/api/v1/nl/items/123');
+
+        $response
+            ->assertStatus(200)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->count(12)    
+                ->where('id', 123)
+                ->where('language', 'nl')
+                ->etc()
+            );
+    }
+
+    public function test_find_item_with_item_type_id()
+    {
+        $items = Item::factory()->count(3)->create();
+        $item  = Item::factory()->create(['id'=>123, 'language'=>'nl', 'item_type_id'=>20]);
+
+        $response = $this->getJson('/api/v1/nl/items/123?item_type_id=20');
 
         $response
             ->assertStatus(200)
