@@ -3,7 +3,7 @@
 namespace App\Services\User;
 
 use App\Models\User;
-use \Str;
+use Illuminate\Support\Facades\Hash;
 
 class CreateUser {
     
@@ -19,7 +19,7 @@ class CreateUser {
         $user = new User;
         $user->name           = $this->data['name'];
         $user->email          = $this->data['email'];
-        $user->password       = $this->data['password'];
+        $user->password       = Hash::make($this->data['password']);
         $user->group_id       = $this->data['group_id'] ?? null;
         $user->is_group_admin = $this->data['is_group_admin'] ?? 0;
         $user->role           = $this->data['role'] ?? 'author';

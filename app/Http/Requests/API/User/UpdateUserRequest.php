@@ -4,7 +4,9 @@ namespace App\Http\Requests\API\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateUserRequest extends FormRequest
+use Auth;
+
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +26,10 @@ class CreateUserRequest extends FormRequest
     public function rules()
     {
         return [
+            'id'             => 'required|integer',
             'name'           => 'required|string|min:1|max:255',
-            'email'          => 'required|unique:users,email|email|max:255',
-            'password'       => 'required|string|min:8|max:255',
+            'email'          => 'required|unique:users,email,'.Auth::user()->id.'|email|max:255',
+            'password'       => 'sometimes|required|string|min:8|max:255|confirmed',
             'group_id'       => 'nullable|numeric',
             'is_group_admin' => 'nullable|boolean',
             'role'           => 'nullable|string|max:64',

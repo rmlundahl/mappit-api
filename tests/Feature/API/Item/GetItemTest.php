@@ -127,4 +127,31 @@ class GetItemTest extends TestCase
                 ],
             ]);
     }
+
+    public function test_get_all_items_of_type_and_two_statuses()
+    {
+        $items = Item::factory()->create(['id'=>1, 'language'=>'nl', 'item_type_id'=>10, 'status_id'=>1]);
+        $items = Item::factory()->create(['id'=>1, 'language'=>'en', 'item_type_id'=>10, 'status_id'=>1]);
+        $items = Item::factory()->create(['id'=>2, 'language'=>'nl', 'item_type_id'=>20, 'status_id'=>10]);
+        $items = Item::factory()->create(['id'=>2, 'language'=>'en', 'item_type_id'=>20, 'status_id'=>10]);
+        $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'item_type_id'=>10, 'status_id'=>10]);
+        $items = Item::factory()->create(['id'=>4, 'language'=>'nl', 'item_type_id'=>20, 'status_id'=>20]);
+        
+        \App::setLocale('nl');
+        
+        $response = $this->getJson('/api/v1/nl/items?item_type_id=20&status_id=10,20');
+        $response
+            ->assertJson([
+                [
+                "id" => 2,
+                "language" => "nl",
+                "item_type_id" => 20
+                ],
+                [
+                "id" => 4,
+                "language" => "nl",
+                "item_type_id" => 20
+                ],
+            ]);
+    }
 }
