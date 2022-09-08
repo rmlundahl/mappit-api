@@ -35,7 +35,13 @@ class GetItem {
         // any parameters to add to the query?
         if( !empty($this->data) ) {
             foreach($this->data as $k => $v) {
-                $query->where($k, $v);
+                
+                if(strpos($v, ',')!==false) {
+                    $array = explode(',', $v);
+                    $query->whereIn($k, $array);
+                } else {
+                    $query->where($k, $v);
+                }
             }
         }
 
