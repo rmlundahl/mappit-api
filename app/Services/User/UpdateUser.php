@@ -32,12 +32,20 @@ class UpdateUser {
             }
         }
 
+        if( !empty($this->data['group_id']) )
+            $this->user->group_id = $this->data['group_id'];
+
+        if( !empty($this->data['is_group_admin']) )
+            $this->user->is_group_admin = $this->data['is_group_admin'];
+
+        if( !empty($this->data['role']) )
+            $this->user->role = $this->data['role'];
+
         if( !empty($this->data['status_id']) )
             $this->user->status_id = $this->data['status_id'];
         
         $this->user->save();
 
-Log::debug($this->user);
         return $this->user;
     }
 

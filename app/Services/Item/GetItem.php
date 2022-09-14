@@ -3,12 +3,15 @@
 namespace App\Services\Item;
 
 use App\Models\Item;
+use App\Models\Group;
+use App\Services\User\GetUser;
 
-use App, Storage;
+use App, Auth, Storage;
 
 class GetItem {
     
     private $data;
+    private $getUser;
 
     public function __construct(array $parameterData)
     {
@@ -26,6 +29,75 @@ class GetItem {
         return $this->all();
     }   
         
+    public function all_from_user()
+    {
+        $user = Auth::user();        
+
+        // based on role and is_group_admin, a user can see items:
+        // - author: can see own items, with status_id: 10, 20
+        // - author && is_group_admin: can see all items in same group, with status_id: 10, 20
+        // - editor: can see all items in same group and group descendants, with status_id: 10, 20, 99
+        // - administrator: can see all items in same group and group descendants, all statuses
+
+        if($user->role=='author' && $user->is_group_admin==0) {
+
+            $this->data = array_merge($this->data, ['user_id'=>$user->id, 'status_id'=>'10,20']);
+
+        } else if($user->role=='author' && $user->is_group_admin==1) {
+            
+            // Get all users from same group
+            $this->getUser = new GetUser($user);
+            $users_from_group = $this->getUser->users_from_group($user->group_id);
+            if (empty($users_from_group)) {
+                return;
+            }
+            $user_ids = implode(',', $users_from_group->pluck('id')->all());
+           
+            $this->data = array_merge($this->data, ['user_id'=>$user_ids, 'status_id'=>'10,20']);
+
+        } else if($user->role=='editor') {
+            
+            // Get all groups from user
+            $groups = Group::find($user->group_id)->descendantsAndSelf()->get();
+            if (empty($groups)) {
+                return;
+            }
+            $group_ids = $groups->pluck('id');
+            
+            $this->getUser = new GetUser($user);
+            $users_from_groups = $this->getUser->users_from_groups($group_ids);
+            if (empty($users_from_groups)) {
+                return;
+            }
+            $user_ids = implode(',', $users_from_groups->pluck('id')->all());
+           
+            $this->data = array_merge($this->data, ['user_id'=>$user_ids, 'status_id'=>'10,20,99']);
+
+        } else if($user->role=='administrator') {
+            
+            // Get all groups from user
+            $groups = Group::find($user->group_id)->descendantsAndSelf()->get();
+            if (empty($groups)) {
+                return;
+            }
+            $group_ids = $groups->pluck('id');
+            
+            $this->getUser = new GetUser($user);
+            $users_from_groups = $this->getUser->users_from_groups($group_ids);
+            if (empty($users_from_groups)) {
+                return;
+            }
+            $user_ids = implode(',', $users_from_groups->pluck('id')->all());
+           
+            $this->data = array_merge($this->data, ['user_id'=>$user_ids]);
+
+        } else {
+            // no role found
+            return;
+        }
+
+        return $this->all();
+    }
 
     public function all()
     {
@@ -46,7 +118,7 @@ class GetItem {
         }
 
         $items = $query->get();
-
+        
         // add flattened properties
         $items->map( function ($item) {
             if( !empty($item->item_properties)) {

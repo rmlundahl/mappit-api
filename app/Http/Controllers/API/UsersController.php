@@ -13,7 +13,7 @@ use App\Services\User\UpdateUser;
 use App\Http\Requests\API\User\CreateUserRequest;
 use App\Http\Requests\API\User\UpdateUserRequest;
 
-use Auth;
+use Auth, Log;
 
 class UsersController extends Controller
 {
@@ -39,7 +39,7 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        if( Auth::user()->can('index', [User::class]) ) {
+        if ( Auth::user()->can('index', [User::class]) ) {
             
             $users = $this->getUser->all();
             return response()->json( $users, 200 );
@@ -70,6 +70,27 @@ class UsersController extends Controller
         $createUser = new CreateUser( $request->all() );
         $newUser = $createUser->save();
         return response()->json( $newUser, 201 );
+    }
+
+    /**
+     * Find the specified resource by primary key.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function find($id, Request $request)
+    {
+        if ( !is_numeric($id) ) {
+            return response()->json( [], 404 );
+        }
+
+        $user = User::where('id', $id)->first();
+       
+        if (empty($user)) {
+            return response()->json( [], 404 ); 
+        }
+        return response()->json( $user, 200 );
+        
     }
 
     /**

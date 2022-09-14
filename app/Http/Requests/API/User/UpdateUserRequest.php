@@ -28,7 +28,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'id'             => 'required|integer',
             'name'           => 'required|string|min:1|max:255',
-            'email'          => 'required|unique:users,email,'.Auth::user()->id.'|email|max:255',
+            'email'          => 'required|unique:users,email,'.request()->id.'|email|max:255',
             'password'       => 'sometimes|required|string|min:8|max:255|confirmed',
             'group_id'       => 'nullable|numeric',
             'is_group_admin' => 'nullable|boolean',

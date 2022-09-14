@@ -24,7 +24,7 @@ class DevController extends Controller
         $groups = Group::find(2)->descendantsAndSelf()->get();
         // s($groups);
         $users = $this->getUser->users_from_group( 1 );
-        $users = $users = $this->getUser->all();
+        $users = $this->getUser->all();
         s(count($users));
 
         $groups = Filter::tree()->get();

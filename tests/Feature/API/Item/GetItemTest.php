@@ -7,6 +7,7 @@ use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 use App\Models\User;
+use App\Models\Group;
 use App\Models\Item;
 
 class GetItemTest extends TestCase
@@ -36,6 +37,142 @@ class GetItemTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonCount(2);
+    }
+
+    public function test_get_all_from_user__author_sees_own_items_only()
+    {
+        $user = User::factory()->create(['id'=>123, 'role'=>'author', 'is_group_admin'=>0]);
+
+        $items = Item::factory()->create(['id'=>11, 'language'=>'nl', 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>11, 'language'=>'en', 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>12, 'language'=>'nl', 'user_id'=>2]);
+        $items = Item::factory()->create(['id'=>12, 'language'=>'en', 'user_id'=>2]);
+        $items = Item::factory()->create(['id'=>13, 'language'=>'nl', 'user_id'=>123]);
+        
+        \App::setLocale('nl');
+        
+        $response = $this->actingAs($user)->getJson('/api/v1/nl/items/all_from_user');
+
+        $response
+            ->assertStatus(200)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->has(2)
+                ->first( fn ($json) =>
+                    $json->where('id', 11)
+                    ->where('user_id', 123)
+                    ->etc()
+                )
+            )
+            ->assertJsonMissing(['user_id'=>2]);
+    }
+
+    public function test_get_all_from_user__author_is_group_admin_and_sees_own_group_items_only()
+    {
+        $user1 = User::factory()->create(['id'=>123, 'group_id'=>123, 'role'=>'author', 'is_group_admin'=>1]);
+        $user2 = User::factory()->create(['id'=>2,   'group_id'=>123, 'role'=>'author', 'is_group_admin'=>0]);
+        $user3 = User::factory()->create(['id'=>3,   'group_id'=>3,   'role'=>'author', 'is_group_admin'=>0]);
+
+        $items = Item::factory()->create(['id'=>11, 'language'=>'nl', 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>11, 'language'=>'en', 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>12, 'language'=>'nl', 'user_id'=>2]);
+        $items = Item::factory()->create(['id'=>12, 'language'=>'en', 'user_id'=>2]);
+        $items = Item::factory()->create(['id'=>13, 'language'=>'nl', 'user_id'=>3]);
+        
+        \App::setLocale('nl');
+        
+        $response = $this->actingAs($user1)->getJson('/api/v1/nl/items/all_from_user');
+
+        $response
+            ->assertStatus(200)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->has(2)
+                ->first( fn ($json) =>
+                    $json->where('id', 11)
+                    ->where('user_id', 123)
+                    ->where('language', 'nl')
+                    ->etc()
+                )
+            )
+            ->assertJsonFragment(['user_id'=>2])
+            ->assertJsonMissing(['user_id'=>3]);
+    }
+
+    public function test_get_all_from_user__editor_sees_own_group_and_descendants_items_only()
+    {
+        $group1 = Group::factory()->create(['id'=>123, 'parent_id'=>1]);
+        $group2 = Group::factory()->create(['id'=>124, 'parent_id'=>123]);
+        $group3 = Group::factory()->create(['id'=>301, 'parent_id'=>300]);
+
+        $user1 = User::factory()->create(['id'=>123, 'group_id'=>123, 'role'=>'editor', 'is_group_admin'=>0]);
+        $user2 = User::factory()->create(['id'=>2,   'group_id'=>123, 'role'=>'author', 'is_group_admin'=>0]);
+        $user3 = User::factory()->create(['id'=>3,   'group_id'=>124, 'role'=>'author', 'is_group_admin'=>0]);
+        $user3 = User::factory()->create(['id'=>4,   'group_id'=>301, 'role'=>'author', 'is_group_admin'=>0]);
+
+        $items = Item::factory()->create(['id'=>11, 'language'=>'nl', 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>11, 'language'=>'en', 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>12, 'language'=>'nl', 'user_id'=>2]);
+        $items = Item::factory()->create(['id'=>13, 'language'=>'nl', 'user_id'=>3]);
+        $items = Item::factory()->create(['id'=>14, 'language'=>'nl', 'user_id'=>4]);
+        
+        \App::setLocale('nl');
+        
+        $response = $this->actingAs($user1)->getJson('/api/v1/nl/items/all_from_user');
+
+        $response
+            ->assertStatus(200)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->has(3)
+                ->first( fn ($json) =>
+                    $json->where('id', 11)
+                    ->where('user_id', 123)
+                    ->where('language', 'nl')
+                    ->etc()
+                )
+            )
+            ->assertJsonFragment(['user_id'=>2])
+            ->assertJsonFragment(['user_id'=>3])
+            ->assertJsonMissing(['user_id'=>4]);
+    }
+
+    public function test_get_all_from_user__administrator_sees_all_items()
+    {
+        $group0 = Group::factory()->create(['id'=>1,   'parent_id'=>null]);
+        $group1 = Group::factory()->create(['id'=>123, 'parent_id'=>1]);
+        $group2 = Group::factory()->create(['id'=>124, 'parent_id'=>123]);
+        $group3 = Group::factory()->create(['id'=>301, 'parent_id'=>2]);
+
+        $user1 = User::factory()->create(['id'=>123, 'group_id'=>1,   'role'=>'administrator', 'is_group_admin'=>0]);
+        $user2 = User::factory()->create(['id'=>2,   'group_id'=>123, 'role'=>'author', 'is_group_admin'=>0]);
+        $user3 = User::factory()->create(['id'=>3,   'group_id'=>124, 'role'=>'author', 'is_group_admin'=>0]);
+        $user3 = User::factory()->create(['id'=>4,   'group_id'=>301, 'role'=>'author', 'is_group_admin'=>0]);
+        $user3 = User::factory()->create(['id'=>5,   'group_id'=>3,   'role'=>'author', 'is_group_admin'=>0]);
+
+        $items = Item::factory()->create(['id'=>11, 'language'=>'nl', 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>11, 'language'=>'en', 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>12, 'language'=>'nl', 'user_id'=>2]);
+        $items = Item::factory()->create(['id'=>13, 'language'=>'nl', 'user_id'=>3]);
+        $items = Item::factory()->create(['id'=>14, 'language'=>'nl', 'user_id'=>4]);
+        
+        \App::setLocale('nl');
+        
+        $response = $this->actingAs($user1)->getJson('/api/v1/nl/items/all_from_user');
+
+        $response
+            ->assertStatus(200)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->has(3)
+                ->first( fn ($json) =>
+                    $json->where('id', 11)
+                    ->where('user_id', 123)
+                    ->where('language', 'nl')
+                    ->etc()
+                )
+            )
+            ->assertJsonFragment(['user_id'=>123])
+            ->assertJsonFragment(['user_id'=>2])
+            ->assertJsonFragment(['user_id'=>3])
+            ->assertJsonMissing(['user_id'=>4])
+            ->assertJsonMissing(['user_id'=>5]);
     }
 
     public function test_get_all_markers__from_a_language()

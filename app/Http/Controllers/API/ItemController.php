@@ -22,12 +22,12 @@ class ItemController extends Controller
 
     public function __construct(Item $item)
     {
-        $this->middleware('auth:sanctum')->only(['store', 'update', 'delete']);
+        $this->middleware('auth:sanctum')->only(['all_from_user', 'store', 'update', 'delete']);
         $this->item = $item;
     }
 
     /**
-     * Get all publushed items with item_properties for use as marker on the Google Map
+     * Get all published items with item_properties for use as marker on the Google Map
      *
      * @return \Illuminate\Http\Response
      */
@@ -52,6 +52,22 @@ class ItemController extends Controller
     {
         $getItem = new GetItem( $request->all() );
         $items = $getItem->all();
+        return response()->json( $items, 200 );
+    }
+    
+    /**
+     * Get a listing of all items a user can see, based on the user's role
+     *
+     * * @return \Illuminate\Http\Response
+     */
+    public function all_from_user(Request $request)
+    {
+        $getItem = new GetItem( $request->all() );
+        $items = $getItem->all_from_user();
+        
+        if (empty($items)) {
+            return response()->json( [], 404 ); 
+        }
         return response()->json( $items, 200 );
     }
 

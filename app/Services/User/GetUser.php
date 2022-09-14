@@ -26,4 +26,11 @@ class GetUser {
 
         return $this->user->where('group_id', $group_id)->get();
     }
+
+    public function users_from_groups($group_ids=[])
+    {
+        if( empty($group_ids) ) return;
+
+        return $this->user->whereIn('group_id', $group_ids)->get();
+    }
 }
