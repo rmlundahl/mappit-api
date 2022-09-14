@@ -41,7 +41,7 @@ class UsersController extends Controller
     {
         if ( Auth::user()->can('index', [User::class]) ) {
             
-            $users = $this->getUser->all();
+            $users = $this->getUser->all( $request->all() );
             return response()->json( $users, 200 );
 
         }

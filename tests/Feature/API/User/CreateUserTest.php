@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\API\User;
+namespace Tests\Feature\API\User;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -22,7 +22,7 @@ class CreateUserTest extends TestCase
         $user = User::factory()->create();
         
         $password = Hash::make('MySecretPassword123');
-
+       
         $this->actingAs($user)
             ->json('POST', '/api/v1/users', [
                 'name' => 'New Name',
@@ -37,9 +37,10 @@ class CreateUserTest extends TestCase
         $this->assertDatabaseHas('users', [
             'name' => 'New Name',
             'email' => 'test@example.org',
-            'password' => $password,
+            // 'password' => $password,
             'group_id' => 1,
             'is_group_admin' => 1,
+            'role' => 'author',
             'status_id' => 20
             ]);
     }

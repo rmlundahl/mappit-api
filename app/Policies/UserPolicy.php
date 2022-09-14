@@ -23,18 +23,13 @@ class UserPolicy
     public function index( User $user )
     {
         if( $user->role == 'administrator' ) {
-            
             return true;
-
         } else if($user->role == 'editor') {
-            
-            // editor can see users under own group
-            // $groups = Group::find($user->group_id)->descendantsAndSelf()->select('id')->get();
-           return true;
-
-        } else {
-            return false;
+            return true;
+        } else if( $user->role == 'author' && $user->is_group_admin==1 ) {
+            return true;
         }
+        return false;
     }
 
     public function users_from_group(User $user)
@@ -43,9 +38,10 @@ class UserPolicy
             return true;
         } else if($user->role == 'editor') {
             return true;
-        } else {
-            return false;
+        } else if( $user->role == 'author' && $user->is_group_admin==1 ) {
+            return true;
         }
+        return false;
     }
 
 
