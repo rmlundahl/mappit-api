@@ -55,6 +55,10 @@ Route::group(['prefix' => 'v1/'.$locale], function() {
     Route::delete('/items/{id}',       'API\ItemController@delete');
 
     // Filter routes
-    Route::get('/filters',           'API\FilterController@index');
-    Route::get('/filters/{id}',      'API\FilterController@find');
+    Route::get('/filters',             'API\FilterController@index');
+    Route::get('/filters/{id}',        'API\FilterController@find');
+
+    // Collection routes
+    Route::get('/collections',         'API\CollectionController@index');
+    
 });
