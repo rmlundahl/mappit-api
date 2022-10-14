@@ -21,4 +21,5 @@ class Group extends Model
         'description',
         'status_id',
     ];
+
 }

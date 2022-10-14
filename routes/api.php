@@ -37,6 +37,9 @@ Route::group(['prefix' => 'v1'], function() {
     Route::put('/users/{id}',    'API\UsersController@update');
     Route::delete('/users/{id}', 'API\UsersController@delete');
 
+    // Group routes
+    Route::get('/groups_from_user', 'API\GroupController@groups_from_user');
+
     // Image routes
     Route::get ('/images/{path}', 'API\ImageController@index')->where('path', '[\w\s\-_\/]+');
     Route::post('/images',        'API\ImageController@store');

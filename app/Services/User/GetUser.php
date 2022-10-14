@@ -34,25 +34,27 @@ class GetUser {
                 return;
             }
             $user_ids = implode(',', $users_from_group->pluck('id')->all());
-            $this->data = array_merge($this->data, ['id'=>$user_ids, 'status_id'=>'10,20,99']);
+            $this->data = array_merge($this->data, ['users.id'=>$user_ids, 'users.status_id'=>'10,20,99']);
 
         } else if($user->role=='editor') {
             
             $user_ids = $this->_get_user_ids();            
-            $this->data = array_merge($this->data, ['id'=>$user_ids, 'status_id'=>'10,20,99']);
+            $this->data = array_merge($this->data, ['users.id'=>$user_ids, 'users.status_id'=>'10,20,99']);
 
         } else if($user->role=='administrator') {
             
             $user_ids = $this->_get_user_ids();
-            $this->data = array_merge($this->data, ['user_id'=>$user_ids]);
+            $this->data = array_merge($this->data, ['users.id'=>$user_ids]);
 
         } else {
             // no role found
             return;
         }
 
-        $query = $this->user->query();
-
+        $query = $this->user
+            ->select('users.*','groups.id as group_id','groups.name as group_name')
+            ->join('groups', 'users.group_id', '=', 'groups.id');
+        
         // any parameters to add to the query?
         if( !empty($this->data) ) {
             foreach($this->data as $k => $v) {
