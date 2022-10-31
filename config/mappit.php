@@ -17,5 +17,16 @@ return [
 		'es' => 'es_ES.UTF-8',
 		'nl' => 'nl_NL.UTF-8',
 	],
+	
+	/*
+    |--------------------------------------------------------------------------
+    | URL frontend application
+    |--------------------------------------------------------------------------
+    |
+    | Define the base url for the frontend application where this mappit 
+    | instance serves as backend for
+    |
+    */
+	'app_url_frontend' => env('APP_URL_FRONTEND')
 
 ];
