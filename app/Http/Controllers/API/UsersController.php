@@ -67,9 +67,18 @@ class UsersController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
-        $createUser = new CreateUser( $request->all() );
-        $newUser = $createUser->save();
-        return response()->json( $newUser, 201 );
+        if( Auth::user()->can('store', [User::class]) ) {
+            
+            // authors can only create other authors
+            if( Auth::user()->role=='author' &&  $request['role']!='author' ) {
+                abort(403);
+            }
+
+            $createUser = new CreateUser( $request->all() );
+            $newUser = $createUser->save();
+            return response()->json( $newUser, 201 );
+        }
+        abort(403);
     }
 
     /**
@@ -101,15 +110,24 @@ class UsersController extends Controller
      */
     public function update(UpdateUserRequest $request)
     {
-        $user = User::where('id', $request->id)->first();
+        if( Auth::user()->can('update', [User::class]) ) {
+            
+            $user = User::where('id', $request->id)->first();
        
-        if (empty($user)) {
-            return response()->json( [], 404 ); 
-        }
+            if (empty($user)) {
+                return response()->json( [], 404 ); 
+            }
 
-        $updateUser = new UpdateUser( $request->all(), $user );
-        
-        $user = $updateUser->update($updateUser, $user);
-        return response()->json( $user, 200 );
+            // authors can not update roles
+            if( Auth::user()->role=='author' &&  $request['role']!='author' ) {
+                abort(403);
+            }
+
+            $updateUser = new UpdateUser( $request->all(), $user );
+            
+            $user = $updateUser->update($updateUser, $user);
+            return response()->json( $user, 200 );
+        }
+        abort(403);
     }
 }

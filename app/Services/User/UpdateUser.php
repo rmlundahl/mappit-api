@@ -26,7 +26,7 @@ class UpdateUser {
             $this->user->email    = $this->data['email'];
         
         if( !empty($this->data['password']) && !empty($this->data['password_confirmation']) ) {
-            Log::debug($this->data);
+            
             if( $this->data['password']===$this->data['password_confirmation'] ) {
                 $this->user->password = Hash::make($this->data['password']);
             }
@@ -35,8 +35,8 @@ class UpdateUser {
         if( !empty($this->data['group_id']) )
             $this->user->group_id = $this->data['group_id'];
 
-        if( !empty($this->data['is_group_admin']) )
-            $this->user->is_group_admin = $this->data['is_group_admin'];
+        if( isset($this->data['is_group_admin']) )
+            $this->user->is_group_admin = intval($this->data['is_group_admin']);
 
         if( !empty($this->data['role']) )
             $this->user->role = $this->data['role'];
