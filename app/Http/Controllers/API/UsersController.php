@@ -9,9 +9,11 @@ use App\Models\User;
 use App\Services\User\GetUser;
 use App\Services\User\CreateUser;
 use App\Services\User\UpdateUser;
+use App\Services\User\DeleteUser;
 
 use App\Http\Requests\API\User\CreateUserRequest;
 use App\Http\Requests\API\User\UpdateUserRequest;
+use App\Http\Requests\API\User\DeleteUserRequest;
 
 use Auth, Log;
 
@@ -129,5 +131,25 @@ class UsersController extends Controller
             return response()->json( $user, 200 );
         }
         abort(403);
+    }
+
+    /**
+     * Soft remove the specified resource from storage.
+     *
+     * @param  \App\Models\User  $item
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(DeleteUserRequest $request)
+    {
+        $user = User::find($request->id);
+        
+        if (empty($user)) {
+            return response()->json( [], 404 ); 
+        }
+
+        $deleteUser = new DeleteUser( $request->all(), $user );
+        
+        $user = $deleteUser->delete($deleteUser, $user);
+        return response()->json( [], 204 );
     }
 }
