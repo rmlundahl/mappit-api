@@ -16,7 +16,7 @@ class CreateFiltersTable extends Migration
         Schema::create('filters', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned(); // part of composite PK
             $table->string('language', 2); // part of composite PK
-            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable()->index();
             $table->string('name', 255);
             $table->string('slug', 255)->index();
             $table->timestamps();

@@ -17,7 +17,7 @@ class CreateItemPropertiesTable extends Migration
             $table->bigIncrements('id')->unsigned(); // part of composite PK
             $table->string('language', 2); // part of composite PK
             $table->foreignId('item_id')->index();
-            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable()->index();
             $table->string('key', 255)->index();
             $table->mediumText('value');
             $table->timestamps();
