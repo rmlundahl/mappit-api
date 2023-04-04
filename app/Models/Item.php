@@ -36,8 +36,7 @@ class Item extends Model
     // Mutator for slug attribute
     public function setSlugAttribute($slug) 
     {
-
-        if (static::whereSlug($slug)->whereLanguage($this->attributes['language'])->exists()) {
+        if (static::whereSlug($slug)->whereLanguage($this->attributes['language'])->where('id', '<>', $this->id)->exists()) {
             $slug = $this->incrementSlug($slug);
         }
     
