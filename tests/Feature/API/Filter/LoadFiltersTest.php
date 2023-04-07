@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\API\Filter;
+namespace Tests\Feature\API\Filter;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;

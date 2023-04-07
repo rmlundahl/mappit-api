@@ -1,0 +1,39 @@
+<?php
+
+namespace Mappit\ExtHvaindestad;
+
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+
+class ExtHvaindestadServiceProvider extends ServiceProvider
+{
+    public function register()
+    {
+        //
+    }
+
+    public function boot()
+    {
+        // Only register on the right domain
+        if( stripos(config('app.url'), 'hvaindestad') === false ) {
+            return;
+        }
+        $this->mergeConfigFrom(__DIR__.'/config/config.php', 'exthvaindestad');
+        $this->configureRateLimiting();
+        $this->loadRoutesFrom(__DIR__.'/routes/api.php');
+    }
+
+    /**
+     * Configure the rate limiters for the application.
+     *
+     * @return void
+     */
+    protected function configureRateLimiting()
+    {
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+        });
+    }
+}

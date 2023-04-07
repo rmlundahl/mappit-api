@@ -16,6 +16,8 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
+        "maatwebsite/excel": "^3.1",
+        "mavinoo/laravel-batch": "^2.3",
         "staudenmeir/laravel-adjacency-list": "^1.9"
     },
     "require-dev": {
@@ -30,7 +32,8 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Database\\Seeders\\": "database/seeders/",
+            "Mappit\\ExtHvaindestad\\": "packages/ext-hvaindestad/src"
         },
         "files": [
             "app/Utils/helpers.php"

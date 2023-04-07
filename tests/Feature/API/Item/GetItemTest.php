@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\API\Item;
+namespace Tests\Feature\API\Item;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -214,7 +214,7 @@ class GetItemTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson(fn (AssertableJson $json) => $json
-                ->count(12)    
+                ->count(13)    
                 ->where('id', 123)
                 ->where('language', 'nl')
                 ->etc()
@@ -231,7 +231,7 @@ class GetItemTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson(fn (AssertableJson $json) => $json
-                ->count(12)    
+                ->count(13)    
                 ->where('id', 123)
                 ->where('language', 'nl')
                 ->etc()
