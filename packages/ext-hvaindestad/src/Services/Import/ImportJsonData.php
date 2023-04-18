@@ -13,11 +13,11 @@ class ImportJsonData {
     
     private $item;
     private $existing_items;
-    private $existing_item_properties;
+    private $existing_item_ids;
     private $keep_item_ids;
     private $data_translation; // from type and industry in json to partner and sector in filter
     private $ik_zoek_een_translation; // from item_type_id to readable name
-    private $project_properties = ['Latitude','Longitude','Straat','Postcode','Plaats','Startdatum','Einddatum','Website','Webartikel samenvatting','Webartikel url','Afbeelding url', 'Ik zoek een'];
+    private $project_properties = ['Latitude','Longitude','Straat','Postcode','Plaats','Startdatum','Einddatum','Website','Webartikel samenvatting','Afbeelding url', 'Ik zoek een'];
 
     public function __construct(Item $item, ItemProperty $itemProperty)
     {
@@ -48,10 +48,9 @@ class ImportJsonData {
         
         $i=0;
         $time_before=microtime(true);
-        // ini_set('max_execution_time', '300'); //300 seconds = 5 minutes
+        ini_set('max_execution_time', '180'); // 180 seconds = 3 minutes
         
         $update_item_values = [];
-        $this->update_item_property_values = [];
         $this->insert_item_property_values = [];
 
         foreach($json as $r) {
@@ -153,21 +152,15 @@ class ImportJsonData {
             s('Number of items updated: '.$result);
         }
 
+        // Clear the item_properties table
+        DB::table('item_properties')->truncate();
+
         // Batch inserts for item_property
         if( !empty($this->insert_item_property_values) ) {
             $itemProperty = new ItemProperty;
             $insert_columns = ['language','item_id','key','value','status_id'];
             $result = Batch::insert($itemProperty, $insert_columns, $this->insert_item_property_values);
             s($result);
-        }
-
-        // Batch updates for item_property
-        if( !empty($this->update_item_property_values) ) {
-            $this->update_item_property_values = array_reverse($this->update_item_property_values) ;
-            // p($this->update_item_property_values);
-            $itemProperty = new ItemProperty;
-            $result = Batch::update($itemProperty, $this->update_item_property_values, 'id');
-            s('Number of item_properties updated: '.$result);
         }
 
         // fix slugs
@@ -198,19 +191,7 @@ class ImportJsonData {
         foreach($this->existing_items as $r) {
             $this->existing_item_ids[$r->external_id] = $r->id;
         }
-
-        // get all existing item_properties
-        $this->existing_item_properties = [];
-        $this->existing_item_property_ids = [];
-        
-        $item_item_properties = ItemProperty::select(['id','item_id','key','value'])->get();
-        $this->existing_item_properties = $item_item_properties->mapWithKeys(function ($item) {
-            return [$item['item_id'].'|'.$item['key'] => $item];
-        })->toArray();
-        
-        foreach($item_item_properties as $r) {
-            $this->existing_item_property_ids[$r->item_id.'|'.$r->key] = $r->id;
-        }
+       
 
         // init array to keep track of id's that should be kept because they are updated or new
         $this->keep_item_ids = [];
@@ -246,6 +227,27 @@ class ImportJsonData {
             '104' => 'HvA Campus',
             '105' => 'Centre of Expertise',
         ];
+
+        // init array for 'SDG'
+        $this->sdg_translation = [
+            'No+poverty' => '1. Geen armoede',
+            'Zero+hunger' => '2. Geen honger',
+            'Good+health+and+well-being+for+people' => '3. Gezondheid',
+            'Quality+education' => '4. Onderwijs',
+            'Gender+equality' => '5. Gendergelijkheid',
+            'Clean+water+and+sanitation' => '6. Schoon water',
+            'Affordable+and+clean+energy' => '7. Duurzame energie',
+            'Decent+work+and+economic+growth' => '8. Economische groei',
+            'Industry%2C+Innovation%2C+and+Infrastructure' => '9. Infrastructuur',
+            'Reducing+inequalities' => '10. Minder ongelijkheid',
+            'Sustainable+cities+and+communities' => '11. Duurzame steden',
+            'Responsible+consumption+and+production' => '12. Verantwoorde productie',
+            'Climate+action' => '13. Klimaatactie',
+            'Life+below+water' => '14. Leven in het water',
+            'Life+on+land' => '15. Leven op het land',
+            'Peace%2C+justice+and+strong+institutions' => '16. Vrede',
+            'Partnerships+for+the+goals' => '17. Partnerschappen',
+        ];
     }
    
     private function _save_item_property($item_id, $key, $value) {
@@ -260,49 +262,6 @@ class ImportJsonData {
             'value' => $value,
             'status_id' => 20
         ];
-        
-/*
-        if(isset($this->existing_item_properties[$item_id.'|'.$key])) {
-            // update            
-            $ip = $this->existing_item_properties[$item_id.'|'.$key];
-            
-            if($key=='partner' && $item_id==56) s($ip);          
-            // some keys can have multiple values
-            if(in_array($key, ['sector','sector_naam','partner','partner_naam','sdg'])) {
-                
-                $current_value = explode('|', $ip['value']);
-                if(!in_array($value, $current_value)) {
-                    $value = $ip['value'].'|'.$value;
-                    // s($ip); 
-                    // s($value);
-                    // update existing item properties
-                    $ip['value'] = $value;
-                    $this->existing_item_properties[$item_id.'|'.$key] = $ip;
-                    // s('__'); 
-                    
-                }
-            }
-           
-            $this->update_item_property_values[] = [
-                'id' => $ip['id'],
-                'item_id' => $item_id,
-                'key' => $key,
-                'value' => $value
-            ];
-
-        } else {
-            // insert
-            $this->insert_item_property_values[] = [
-                'language' => 'nl',
-                'item_id' => $item_id,
-                'key' => $key,
-                'value' => $value,
-                'status_id' => 20
-            ];
-
-            $this->existing_item_properties[$item_id.'|'.$key] = ['id' => DB::getPdo()->lastInsertId(), 'item_id'=>$item_id,'key'=>$key,'value'=>$value];
-        }
-*/   
     }
 
     private function _has_longitude_and_latitude($r) {
@@ -405,8 +364,11 @@ class ImportJsonData {
                 }
             }
             // SDG
-            if( isset($_r->SDG) && isset($_r->Naam) ) {
-                $this->_save_item_property($item_id, 'sdg', $_r->Naam);
+            if( isset($_r->SDG) ) {
+                $_sdg_array = explode('%3B', $_r->SDG);
+                foreach($_sdg_array as $_sdg) {
+                    $this->_save_item_property($item_id, 'sdg', $this->sdg_translation[$_sdg]);
+                }
             }
         }
     }
