@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Console\Scheduling\Schedule;
+use Mappit\ExtHvaindestad\Console\Commands\ImportJson;
 
 class ExtHvaindestadServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,21 @@ class ExtHvaindestadServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/config/config.php', 'exthvaindestad');
         $this->configureRateLimiting();
         $this->loadRoutesFrom(__DIR__.'/routes/api.php');
+        
+        // Register the command if we are using the application via the CLI
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                ImportJson::class,
+            ]);
+        }
+
+        // Schedule the command if we are using the application via the CLI
+        if ($this->app->runningInConsole()) {
+            $this->app->booted(function () {
+                $schedule = $this->app->make(Schedule::class);
+                $schedule->command('exthvaindestad:import_json')->everyMinute();
+            });
+        }
     }
 
     /**

@@ -18,6 +18,7 @@ class ImportJsonData {
     private $data_translation; // from type and industry in json to partner and sector in filter
     private $ik_zoek_een_translation; // from item_type_id to readable name
     private $project_properties = ['Latitude','Longitude','Straat','Postcode','Plaats','Startdatum','Einddatum','Website','Webartikel samenvatting','Afbeelding url', 'Ik zoek een'];
+    private $report = [];
 
     public function __construct(Item $item, ItemProperty $itemProperty)
     {
@@ -149,7 +150,7 @@ class ImportJsonData {
         if( !empty($update_item_values) ) {
             $item = new Item;
             $result = Batch::update($item, $update_item_values, 'id');
-            s('Number of items updated: '.$result);
+            $this->report[] = 'Number of items updated: '.$result;
         }
 
         // Clear the item_properties table
@@ -160,7 +161,9 @@ class ImportJsonData {
             $itemProperty = new ItemProperty;
             $insert_columns = ['language','item_id','key','value','status_id'];
             $result = Batch::insert($itemProperty, $insert_columns, $this->insert_item_property_values);
-            s($result);
+            foreach($result as $_k => $_v) {
+                $this->report[] = $_k.': '.$_v;
+            }
         }
 
         // fix slugs
@@ -170,15 +173,17 @@ class ImportJsonData {
             $r->save();
         }
 
-        // DB::commit();
-
         $time_after=microtime(true);
-        s("Time taken to parse JSON: " . number_format($time_after - $time_before, 4) . " seconds");
+        $this->report[] = "Time taken to parse JSON: " . number_format($time_after - $time_before, 4) . " seconds";
         
         $this->_delete_old_data();
+
+        $this->report[] = 'Done.';
+
+        Log::info(implode("\r", $this->report));
         
-        p('Done');
-        p($response->successful());
+        s(implode("<br />", $this->report));
+
         return response()->json( ['import'=>'ready'], 200 );
     }
     
