@@ -51,9 +51,9 @@ class ImportJsonData {
         $time_before=microtime(true);
         ini_set('max_execution_time', '180'); // 180 seconds = 3 minutes
         
-        $update_item_values = [];
-        $this->insert_item_property_values = [];
-
+        // Clear the items table
+        DB::table('items')->truncate();
+        
         foreach($json as $r) {
             
             if( !$this->_has_longitude_and_latitude($r) ) continue;
@@ -61,35 +61,21 @@ class ImportJsonData {
             if(isset($this->keep_item_ids[$r->Id])) continue;
 
             $item_type_id = $this->_get_item_type_id($r);
-
-            if(isset($this->existing_items[$r->Id])) {
-                            
-                // update
-                $item = $this->existing_items[$r->Id];
-                $update_item_values[] = [
-                    'id' => $item->id,
-                    'language' => 'nl',
-                    'item_type_id'=>$item_type_id,
-                    'name' => $this->_get_name($r),
-                    'slug' => $r->Id
-                ];
-
-            } else {
-                // insert
-                $item = new Item;
-                $item->language = 'nl';
-                $item->item_type_id = $item_type_id;
-                
-                if ($item->item_type_id==1) continue;
-                if( !empty($r->Id) ) $item->external_id = $r->Id;
-                $item->name = $this->_get_name($r);
-                $item->slug = $r->Id;
-                $item->user_id = 0;
-                $item->status_id = 20;
-                $item->save();
-                 // after inserts, there is no id 
-                if( empty($item->id) ) $item->id = DB::getPdo()->lastInsertId();
-            }
+            
+            // insert
+            $item = new Item;
+            $item->language = 'nl';
+            $item->item_type_id = $item_type_id;
+            
+            if ($item->item_type_id==1) continue;
+            if( !empty($r->Id) ) $item->external_id = $r->Id;
+            $item->name = $this->_get_name($r);
+            $item->slug = $r->Id;
+            $item->user_id = 1;
+            $item->status_id = 20;
+            $item->save();
+            // after inserts, there is no id 
+            if( empty($item->id) ) $item->id = DB::getPdo()->lastInsertId();
                         
             // add this item to array of items to keep
             $this->keep_item_ids[$r->Id] = $item->id;
@@ -175,9 +161,6 @@ class ImportJsonData {
 
         $time_after=microtime(true);
         $this->report[] = "Time taken to parse JSON: " . number_format($time_after - $time_before, 4) . " seconds";
-        
-        $this->_delete_old_data();
-
         $this->report[] = 'Done.';
 
         Log::info(implode("\r", $this->report));
@@ -189,17 +172,10 @@ class ImportJsonData {
     
     private function _init_arrays() {        
                 
-        // get all existing items     
-        $this->existing_items = Item::select(['id','external_id'])->get()->keyBy('external_id');
-        $this->existing_item_ids = [];
-        
-        foreach($this->existing_items as $r) {
-            $this->existing_item_ids[$r->external_id] = $r->id;
-        }
-       
-
         // init array to keep track of id's that should be kept because they are updated or new
         $this->keep_item_ids = [];
+
+        $this->insert_item_property_values = [];
         
         // read array with translations from type and industry
         $contents = Storage::get('type_and_industry.json');
@@ -378,18 +354,4 @@ class ImportJsonData {
         }
     }
 
-    private function _delete_old_data() {
-        
-        // which items can be deleted?
-        $_to_be_deleted = array_diff_key($this->existing_item_ids, $this->keep_item_ids);
-
-        if(!empty($_to_be_deleted)) {
-            
-            foreach ($_to_be_deleted as $item_id) {
-                ItemProperty::where('item_id', $item_id)->where('language', 'nl')->delete();
-                Item::where('id', $item_id)->where('language', 'nl')->delete();
-            }
-        }
-
-    }
 }
