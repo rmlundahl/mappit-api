@@ -41,6 +41,9 @@ class UpdateUser {
         if( !empty($this->data['role']) )
             $this->user->role = $this->data['role'];
 
+        if( !empty($this->data['locale']) )
+            $this->user->locale = $this->data['locale'];
+
         if( !empty($this->data['status_id']) )
             $this->user->status_id = $this->data['status_id'];
         

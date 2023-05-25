@@ -28,6 +28,7 @@ class CreateUserTest extends TestCase
                 'name' => 'New Name',
                 'email' => 'test@example.org',
                 'password' => $password,
+                'locale' => 'nl',
                 'group_id' => 1,
                 'is_group_admin' => 1,
                 'role' => 'author',
@@ -38,6 +39,7 @@ class CreateUserTest extends TestCase
         $this->assertDatabaseHas('users', [
             'name' => 'New Name',
             'email' => 'test@example.org',
+            'locale' => 'nl',
             'group_id' => 1,
             'is_group_admin' => 1,
             'role' => 'author',

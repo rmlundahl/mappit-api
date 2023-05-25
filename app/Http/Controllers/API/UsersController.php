@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\UserCreated;
 
 use App\Services\User\GetUser;
 use App\Services\User\CreateUser;
@@ -128,6 +129,12 @@ class UsersController extends Controller
             $updateUser = new UpdateUser( $request->all(), $user );
             
             $user = $updateUser->update($updateUser, $user);
+
+            // send email to new user?
+            if($request['form_action']=='new') {
+                $user->notify(new UserCreated($request['name'], $request['email'], $request['password']??''));
+            }
+
             return response()->json( $user, 200 );
         }
         abort(403);

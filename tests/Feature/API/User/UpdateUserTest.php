@@ -27,6 +27,7 @@ class UpdateUserTest extends TestCase
                 'id' => 100,
                 'name' => 'Updated name',
                 'email'=>'updated@example.org',
+                'locale'=>'es',
             ])->assertStatus( 200 );
         
         
@@ -34,6 +35,7 @@ class UpdateUserTest extends TestCase
             'id' => 100,
             'name' => 'Updated name',
             'email'=>'updated@example.org',
+            'locale'=>'es',
             ]);
     }
 
