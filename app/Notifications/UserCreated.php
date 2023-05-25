@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-use App;
+use App, Auth;
 
 class UserCreated extends Notification
 {
@@ -54,7 +54,8 @@ class UserCreated extends Notification
                     ->line(__('user.welcome_line_1'))
                     ->line(__('user.welcome_email', ['email' => $this->email]))
                     ->line(__('user.welcome_password', ['password' => $this->password]))
-                    ->action(__('user.welcome_action'), url('/'.App::getLocale().'/login'));
+                    ->action(__('user.welcome_action'), url('/'.App::getLocale().'/login'))
+                    ->cc(Auth::user()->email);
                     
     }
 
