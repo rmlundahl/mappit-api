@@ -5,6 +5,8 @@ namespace App\Services\User;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
+use App;
+
 class CreateUser {
     
     private $data;
@@ -23,6 +25,7 @@ class CreateUser {
         $user->group_id       = $this->data['group_id'] ?? null;
         $user->is_group_admin = $this->data['is_group_admin'] ?? 0;
         $user->role           = $this->data['role'] ?? 'author';
+        $user->locale         = $this->data['locale'] ?? App::getLocale();
         $user->status_id      = $this->data['status_id'] ?? 1;
         $user->save();
 
