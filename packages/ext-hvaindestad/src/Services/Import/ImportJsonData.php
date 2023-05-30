@@ -165,9 +165,9 @@ class ImportJsonData {
 
         Log::info(implode("\r", $this->report));
         
-        s(implode("<br />", $this->report));
+        // s(implode("<br />", $this->report));
 
-        return response()->json( ['import'=>'ready'], 200 );
+        return response()->json($this->report, 200 );
     }
     
     private function _init_arrays() {        
@@ -348,7 +348,7 @@ class ImportJsonData {
             if( isset($_r->SDG) ) {
                 $_sdg_array = explode('%3B', $_r->SDG);
                 foreach($_sdg_array as $_sdg) {
-                    $this->_save_item_property($item_id, 'sdg', $this->sdg_translation[$_sdg]);
+                    if(!empty($this->sdg_translation[$_sdg])) $this->_save_item_property($item_id, 'sdg', $this->sdg_translation[$_sdg]);
                 }
             }
         }

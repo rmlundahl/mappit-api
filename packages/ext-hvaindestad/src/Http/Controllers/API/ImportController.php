@@ -28,7 +28,7 @@ class ImportController extends Controller
 
     public function import_json_data()
     {
-        $this->importJsonData->import_json_data();
+        return $this->importJsonData->import_json_data();
     }
 
     public function import_type_and_industry()
