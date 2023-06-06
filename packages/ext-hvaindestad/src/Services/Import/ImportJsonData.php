@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\Item;
 use App\Models\ItemProperty;
 
-use DB, Batch, Exception, Log, Storage, Str;
+use App, DB, Batch, Exception, Log, Storage, Str;
 
 class ImportJsonData {
     
@@ -38,13 +38,15 @@ class ImportJsonData {
             return;
         }
         
-        // the json data is in the third line of the response
-        $arr = explode("\n",$response->body());
-        $json = json_decode($arr[2]);
-        // p($json);
-        
-        // $json = json_decode(Storage::get('2023-02-01.json'));
-        
+        if(App::environment() != 'testing') {
+            // the json data is in the third line of the response
+            $arr = explode("\n",$response->body());
+            $json = json_decode($arr[2]);
+            // p($json);
+        } else {
+            $json = json_decode(file_get_contents('tests/Feature/API/Item/stubs/response_200.json'), true);
+        }
+
         $this->_init_arrays();
         
         $i=0;
