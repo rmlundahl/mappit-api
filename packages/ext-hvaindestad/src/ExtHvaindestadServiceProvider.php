@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Console\Scheduling\Schedule;
 use Mappit\ExtHvaindestad\Console\Commands\ImportJson;
 
+use App;
+
 class ExtHvaindestadServiceProvider extends ServiceProvider
 {
     public function register()
@@ -19,7 +21,7 @@ class ExtHvaindestadServiceProvider extends ServiceProvider
     public function boot()
     {
         // Only register on the right domain
-        if( stripos(config('app.url'), 'hvaindestad') === false ) {
+        if( stripos(config('app.url'), 'hvaindestad') === false && App::environment() != 'testing') {
             return;
         }
         $this->mergeConfigFrom(__DIR__.'/config/config.php', 'exthvaindestad');
