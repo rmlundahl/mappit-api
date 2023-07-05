@@ -12,8 +12,7 @@ use App, DB, Batch, Exception, Log, Storage, Str;
 class ImportJsonData {
     
     private $item;
-    private $existing_items;
-    private $existing_item_ids;
+    private $existing_projects;
     private $keep_item_ids;
     private $data_translation; // from type and industry in json to partner and sector in filter
     private $ik_zoek_een_translation; // from item_type_id to readable name
@@ -53,24 +52,38 @@ class ImportJsonData {
         $time_before=microtime(true);
         ini_set('max_execution_time', '180'); // 180 seconds = 3 minutes
         
-        // Clear the items table
-        DB::table('items')->truncate();
+        // Get existing items
+        $items = Item::whereIn('item_type_id', [101, 102, 103, 104])->get();
         
+        $this->existing_projects = [];
+        foreach($items as $_i) {
+            $this->existing_projects[$_i->external_id] = $_i->external_id;
+        }
+
+        // clear item_properties table
+        DB::table('item_properties')->truncate();
+
         foreach($json as $r) {
             
-            if( !$this->_has_longitude_and_latitude($r) ) continue;
+            if( !$this->_has_longitude_and_latitude($r) || empty($r->Id) ) continue;
             
             if(isset($this->keep_item_ids[$r->Id])) continue;
-
+            
+            // Update or insert?
+            if(isset($this->existing_projects[$r->Id])) {
+                // update
+                $item = Item::where('external_id', $r->Id)->first();
+            } else {
+                // insert
+                $item = new Item;
+            }
+            $item->language = 'nl';
             $item_type_id = $this->_get_item_type_id($r);
             
-            // insert
-            $item = new Item;
-            $item->language = 'nl';
+            if ( $item_type_id==1) continue;
+                      
             $item->item_type_id = $item_type_id;
-            
-            if ($item->item_type_id==1) continue;
-            if( !empty($r->Id) ) $item->external_id = $r->Id;
+            $item->external_id = $r->Id;
             $item->name = $this->_get_name($r);
             $item->slug = $r->Id;
             $item->user_id = 1;
@@ -81,7 +94,8 @@ class ImportJsonData {
                         
             // add this item to array of items to keep
             $this->keep_item_ids[$r->Id] = $item->id;
-                       
+
+
             // save project properties as item_property
             foreach($this->project_properties as $p) {
                 if(!empty($r->$p)) $this->_save_item_property($item->id, $p, $r->$p);
@@ -130,8 +144,8 @@ class ImportJsonData {
             // save related item_properties 
             if ($item_type_id != 1) $this->_save_related_item_properties($item->id, $r);
 
-            // $i++;
-            // if($i==10) break;
+            $i++;
+            if($i==10) break;
         }
 
         // Batch updates for item
@@ -141,8 +155,7 @@ class ImportJsonData {
             $this->report[] = 'Number of items updated: '.$result;
         }
 
-        // Clear the item_properties table
-        DB::table('item_properties')->truncate();
+        
 
         // Batch inserts for item_property
         if( !empty($this->insert_item_property_values) ) {

@@ -4,6 +4,7 @@ namespace App\Services\Item;
 
 use App\Models\Item;
 use App\Services\ItemProperty\SaveItemProperty;
+use App\Services\ItemCollection\SaveItemCollection;
 
 use Str;
 
@@ -41,6 +42,13 @@ class CreateItem {
             $this->data['item_id'] = $item->id;
             $saveItemProperty = new SaveItemProperty($this->data);
             $saveItemProperty->save();
+
+            // save collection
+            if( isset($this->data['collection_items']) ) {
+                
+                $saveItemCollection = new SaveItemCollection($this->data);
+                $saveItemCollection->save();
+            }
         }
 
         return $item;
