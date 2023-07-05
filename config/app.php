@@ -199,6 +199,7 @@ return [
          * Mappit client specific extensions
          */
         Mappit\ExtHvaindestad\ExtHvaindestadServiceProvider::class,
+        Mappit\ExtLerenMetDeStad\ExtLerenMetDeStadServiceProvider::class,
     ],
 
     /*

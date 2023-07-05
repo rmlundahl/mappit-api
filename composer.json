@@ -33,7 +33,8 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "Mappit\\ExtHvaindestad\\": "packages/ext-hvaindestad/src"
+            "Mappit\\ExtHvaindestad\\": "packages/ext-hvaindestad/src",
+            "Mappit\\ExtLerenMetDeStad\\": "packages/ext-lerenmetdestad/src"
         },
         "files": [
             "app/Utils/helpers.php"

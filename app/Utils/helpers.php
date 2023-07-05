@@ -12,7 +12,7 @@ if (!function_exists('p')) {
 	function p($_var) {
 		if ($_SERVER['APP_ENV']!=='testing') {
 			if (empty($_SERVER['REMOTE_ADDR'])) return;
-			if ($_SERVER['REMOTE_ADDR'] !== $_ENV['IP_ADDRESS_DEV'] && $_SERVER['SERVER_NAME'] !== 'sharemystory.local' && $_SERVER['SERVER_NAME'] !== 'hvaindestad-v2.local') return;
+			if ($_SERVER['REMOTE_ADDR'] !== $_ENV['IP_ADDRESS_DEV'] && !in_array($_SERVER['SERVER_NAME'], ['sharemystory.local','hvaindestad-v2.local','lerenmetdestadleiden.local']) ) return;
 		}
 
 		echo "<pre>";
