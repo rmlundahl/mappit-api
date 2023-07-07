@@ -144,8 +144,8 @@ class ImportJsonData {
             // save related item_properties 
             if ($item_type_id != 1) $this->_save_related_item_properties($item->id, $r);
 
-            $i++;
-            if($i==10) break;
+            // $i++;
+            // if($i==10) break;
         }
 
         // Batch updates for item
