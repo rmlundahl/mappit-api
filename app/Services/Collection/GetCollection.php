@@ -52,7 +52,7 @@ class GetCollection {
             
             // create a new top-level
             if( !isset($collections[$r->collection_id]) ) {
-                $collections[$r->collection_id] = ['name'=>$r->collection_name, 'slug'=>$r->collection_slug, 'content'=>$r->collection_content, 'elements'=>[]];
+                $collections[$r->collection_id] = ['id'=>$r->collection_id, 'name'=>$r->collection_name, 'slug'=>$r->collection_slug, 'content'=>$r->collection_content, 'elements'=>[]];
             }
             // add to items to elements
             if( !empty($r->id) ) {

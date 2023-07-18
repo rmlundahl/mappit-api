@@ -36,7 +36,7 @@ class Item extends Model
 
     public function collection_items()
     {
-        return $this->hasMany('App\Models\ItemCollection', ['item_id'], ['id']);
+        return $this->hasMany('App\Models\ItemCollection', ['collection_item_id'], ['id']);
     }
 
     // Mutator for slug attribute
