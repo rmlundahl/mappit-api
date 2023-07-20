@@ -103,7 +103,8 @@ class ImportJsonData {
                 // derive '1e of 2e semester'
                 if( $p=='Startdatum' && (!empty($r->$p)) ) {
                     
-                    $month = explode('-', $r->$p)[1];
+                    // date is like this: 6-30-2017 10:00
+                    $month = explode('-', $r->$p)[0];
                     if( in_array($month,[1,8,9,10,11,12]) ) {
                         $semester=1;
                     } else {
@@ -115,9 +116,11 @@ class ImportJsonData {
                 // derive 'status': 'actueel' or 'afgerond'                
                 if( $p=='Einddatum') {
 
-                    $_status = 'actueel';                    
-                    if ( !empty($r->$p) && date("Y-m-d H:i") > $r->$p ) {
-                        $_status = 'afgerond';
+                    $_status = 'actueel';
+                    if ( !empty($r->$p) ) {
+                        // date is like this: 6-30-2017 10:00
+                        $_enddate = \DateTime::createFromFormat('j-n-Y H:i', $r->$p)->format('Y-m-d H:i');
+                        if(date("Y-m-d H:i") > $_enddate) $_status = 'afgerond';
                     }
                     $this->_save_item_property($item->id, 'status', $_status);
                 }                
