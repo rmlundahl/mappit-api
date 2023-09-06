@@ -24,12 +24,14 @@ class ImportItemsTest extends TestCase
 
         // execute
         $response = $this->getJson('/api/v1/hvaindestad/import/json_data');
-        
+
         // assert
         $response
             ->assertStatus(200)
-            ->assertJsonCount(0);
-        
+            ->assertJsonCount(2);
+            //   0 => "Time taken to parse JSON: 1.8557 seconds"
+            //   1 => "Done."
+            
     }
 
 }

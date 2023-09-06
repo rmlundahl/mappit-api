@@ -63,5 +63,6 @@ Route::group(['prefix' => 'v1/'.$locale], function() {
 
     // Collection routes
     Route::get('/collections',         'API\CollectionController@index');
+    Route::get('/collections/{id}',    'API\CollectionController@find');
     
 });

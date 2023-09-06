@@ -16,7 +16,7 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned(); // part of composite PK
             $table->string('language', 2); // part of composite PK
-            $table->tinyInteger('item_type_id')->default(10); // 10 = item, 20 = page
+            $table->tinyInteger('item_type_id')->unsigned()->default(10); // 10 = item, 20 = page, 30 = collection
             $table->unsignedBigInteger('parent_id')->nullable()->index();
             $table->string('external_id', 255)->nullable()->index(); // only required if data is imported from external source, to keep track of updates on existing records
             $table->string('name', 255);

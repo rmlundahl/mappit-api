@@ -34,6 +34,8 @@ class GetCollection {
                 'collection.id as collection_id',
                 'collection.name as collection_name',
                 'collection.slug as collection_slug',
+                'collection.content as collection_content',
+                'collection.status_id as collection_status_id',
                 'items.*'
             )
             ->orderBy('collection_id')
@@ -51,7 +53,7 @@ class GetCollection {
             
             // create a new top-level
             if( !isset($collections[$r->collection_id]) ) {
-                $collections[$r->collection_id] = ['name'=>$r->collection_name, 'slug'=>$r->collection_slug, 'elements'=>[]];
+                $collections[$r->collection_id] = ['id'=>$r->collection_id, 'name'=>$r->collection_name, 'slug'=>$r->collection_slug, 'content'=>$r->collection_content, 'status_id'=>$r->collection_status_id, 'elements'=>[]];
             }
             // add to items to elements
             if( !empty($r->id) ) {

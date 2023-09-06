@@ -5,6 +5,7 @@ namespace App\Services\Item;
 use App\Models\Item;
 use App\Models\ItemProperty;
 use App\Services\ItemProperty\SaveItemProperty;
+use App\Services\ItemCollection\SaveItemCollection;
 
 use DB, Log, Str;
 
@@ -50,6 +51,13 @@ class UpdateItem {
         $saveItemProperty = new SaveItemProperty($this->data);
         $saveItemProperty->save();
         
+        // save collection
+        if( isset($this->data['collection_items']) ) {
+            
+            $saveItemCollection = new SaveItemCollection($this->data);
+            $saveItemCollection->save();
+        }
+
         return $this->item;
     }
 
