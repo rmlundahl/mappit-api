@@ -50,7 +50,7 @@ class SaveItemProperty {
                     // Images are send as Object in a subdirectory
                     $clear_sub_directory = true;
                     $storeImage = new StoreImage( ['file'=>$v, 'item_id'=>$item_property->item_id], '/'.$k, $clear_sub_directory);
-                    $storeImage = $storeImage->store();
+                    $fileURL = $storeImage->store();
 
                 }
             }
