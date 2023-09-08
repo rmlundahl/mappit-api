@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Item;
 use App\Models\ItemProperty;
 
-use Batch, DB, Str;
+use Batch, DB, Log, Str;
 
 class ImportController extends Controller
 {
@@ -31,6 +31,11 @@ class ImportController extends Controller
     // https://lerenmetdestadleiden.local/api/v1/lerenmetdestad/import/excel
     public function import_excel()
     {
+        if ($_SERVER['REMOTE_ADDR'] !== $_ENV['IP_ADDRESS_DEV'] && $_SERVER['SERVER_NAME'] !== 'lerenmetdestadleiden.local') {
+            Log::info('Unauthorized call');
+            return;
+        }
+
         $array  = Excel::toArray(new DatabaseImport, 'Overzicht_voor_database_en_digitale_kaart_v9.xlsx');
         
         if(empty($array)) p('Geen Excel data');
