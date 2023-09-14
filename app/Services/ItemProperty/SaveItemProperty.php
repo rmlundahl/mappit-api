@@ -33,7 +33,7 @@ class SaveItemProperty {
             if(empty($data)) return;
 
             foreach ($data as $k => $v) {
-                               
+                           
                 $item_property = new ItemProperty;
                 $item_property->language  = $this->data['language'];
                 $item_property->item_id   = $this->data['item_id'];
@@ -44,6 +44,19 @@ class SaveItemProperty {
                     $item_property->key = $k;
                     $item_property->value = $v;
                     $item_property->save();
+
+                } else if( gettype($v)==='array') {
+
+                    foreach($v as $r) {
+                        $item_property = new ItemProperty;
+                        $item_property->language  = $this->data['language'];
+                        $item_property->item_id   = $this->data['item_id'];
+                        $item_property->status_id = $this->data['status_id'];
+
+                        $item_property->key = $k;
+                        $item_property->value = $r;
+                        $item_property->save();
+                    }
 
                 } else if( gettype($v)==='object' ) {
                    
