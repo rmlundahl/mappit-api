@@ -2,7 +2,7 @@
 
 namespace App\Services\Image;
 
-use Log, Storage;
+use Log, File;
 
 class StoreImage {
     
@@ -21,15 +21,19 @@ class StoreImage {
             
             // Get all files in a directory
             $dir = storage_path('app/public').'/items/'.$this->image['item_id'].$this->sub_directory.'/';
-            $files =   Storage::allFiles($dir);
-           
+            $files = File::allFiles($dir);
+            
             // Delete Files
-            Storage::delete($files);
+            File::delete($files);
         }
 
         $file = $this->image['file'];
-        $path = $file->storeAs('items/'.$this->image['item_id'].$this->sub_directory, $file->getClientOriginalName(), 'public');
-        $fileURL = env('APP_URL').'/storage/'.str_replace( 'public/', '', $path );
-        return $fileURL;        
+        $filename = \Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+        $extension = $file->getClientOriginalExtension();
+        $filename =  $filename.'.'.$extension;
+
+        $path = $file->storeAs('items/'.$this->image['item_id'].$this->sub_directory, $filename, 'public');
+        
+        return $filename;        
     }
 }
