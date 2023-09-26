@@ -65,7 +65,7 @@ class SaveItemProperty {
                     $storeImage = new StoreImage( ['file'=>$v, 'item_id'=>$item_property->item_id], '/'.$k, $clear_sub_directory);
                     $filename = $storeImage->store();
 
-                    $item_property->key = 'uitgelichte_afbeelding';
+                    $item_property->key = $k;
                     $item_property->value = $filename;
                     $item_property->save();
 
