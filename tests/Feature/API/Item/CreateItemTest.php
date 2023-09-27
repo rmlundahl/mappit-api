@@ -106,8 +106,8 @@ class CreateItemTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('item_collection', [
-            'item_id' => '3',
-            'collection_item_id' => '88' 
+            'item_id' => '88',
+            'collection_item_id' => '3' 
             ]);
     }
 }

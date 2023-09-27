@@ -29,6 +29,15 @@ class CreateUser {
         $user->status_id      = $this->data['status_id'] ?? 1;
         $user->save();
 
+        if(!empty($this->data['user_preferences'])) {
+            foreach($this->data['user_preferences'] as $k => $v) {
+                $user->user_preferences()->create([
+                    'key'=> $k,
+                    'val'=> $v,
+                ]);
+            }
+        }
+        
         return $user;
     }
     

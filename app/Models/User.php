@@ -59,4 +59,9 @@ class User extends Authenticatable implements HasLocalePreference
         return $this->locale;
     }
 
+    public function user_preferences()
+    {
+        return $this->hasMany('App\Models\UserPreference');
+    }
+
 }

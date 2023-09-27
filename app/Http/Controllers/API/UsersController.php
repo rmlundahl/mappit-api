@@ -96,7 +96,7 @@ class UsersController extends Controller
             return response()->json( [], 404 );
         }
 
-        $user = User::where('id', $id)->first();
+        $user = User::where('id', $id)->with('user_preferences')->first();
        
         if (empty($user)) {
             return response()->json( [], 404 ); 
@@ -122,7 +122,12 @@ class UsersController extends Controller
             }
 
             // authors can not update roles
-            if( Auth::user()->role=='author' &&  $request['role']!='author' ) {
+            if( Auth::user()->role=='author' && isset($request['role']) && $request['role']!='author' ) {
+                abort(403);
+            }
+
+            // authors can not update other authors, unless they are group admin. And they can update their own profile
+            if( Auth::user()->role=='author' && !Auth::user()->is_group_admin && Auth::user()->id != $request['id']) {
                 abort(403);
             }
 
