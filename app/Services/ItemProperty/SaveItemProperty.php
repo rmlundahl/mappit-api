@@ -22,7 +22,8 @@ class SaveItemProperty {
         if (empty($this->data['item_properties'])) return;
 
         if ( empty($this->data['item_id']) || empty($this->data['language']) ) return;
-        
+
+        DB::beginTransaction();
         try {
             // delete exsiting data
             DB::table('item_properties')->where('item_id', $this->data['item_id'])->where('language', $this->data['language'])->delete();
@@ -33,7 +34,7 @@ class SaveItemProperty {
             if(empty($data)) return;
 
             foreach ($data as $k => $v) {
-                           
+                
                 $item_property = new ItemProperty;
                 $item_property->language  = $this->data['language'];
                 $item_property->item_id   = $this->data['item_id'];
@@ -48,6 +49,9 @@ class SaveItemProperty {
                 } else if( gettype($v)==='array') {
 
                     foreach($v as $r) {
+                        
+                        if(empty($r)) continue;
+
                         $item_property = new ItemProperty;
                         $item_property->language  = $this->data['language'];
                         $item_property->item_id   = $this->data['item_id'];
@@ -73,9 +77,10 @@ class SaveItemProperty {
             }
 
         } catch (Exception $e) {
-            
+            DB::rollBack();
             Log::error('SaveItemProperty->save(): '.$e->getMessage());
         }
+        DB::commit();
     }
    
 }
