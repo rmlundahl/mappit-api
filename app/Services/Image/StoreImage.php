@@ -17,10 +17,14 @@ class StoreImage {
 
     public function store ()
     {
+        $dir = storage_path('app/public').'/items/'.$this->image['item_id'].$this->sub_directory.'/';
+        
+        // create directory if necessary
+        File::ensureDirectoryExists($dir);
+
         if( !empty($this->image['item_id']) && !empty($this->sub_directory) && $this->clear_sub_directory) {
             
             // Get all files in a directory
-            $dir = storage_path('app/public').'/items/'.$this->image['item_id'].$this->sub_directory.'/';
             $files = File::allFiles($dir);
             
             // Delete Files
