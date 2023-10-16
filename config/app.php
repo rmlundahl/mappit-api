@@ -200,6 +200,7 @@ return [
          */
         Mappit\ExtHvaindestad\ExtHvaindestadServiceProvider::class,
         Mappit\ExtLerenMetDeStad\ExtLerenMetDeStadServiceProvider::class,
+        Mappit\ExtShareMyStory\ExtShareMyStoryServiceProvider::class,
     ],
 
     /*

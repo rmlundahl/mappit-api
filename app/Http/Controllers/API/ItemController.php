@@ -121,8 +121,8 @@ class ItemController extends Controller
         $item = Item::find(['id'=>$request->id, 'language'=>$request->language]);
         
         $updateItem = new UpdateItem( $request->all(), $item );
-        
         $item = $updateItem->update($updateItem, $item);
+
         return response()->json( $item, 200 );
     }
 
