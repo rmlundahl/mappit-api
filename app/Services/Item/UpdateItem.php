@@ -6,6 +6,7 @@ use App\Models\Item;
 use App\Models\ItemProperty;
 use App\Services\ItemProperty\SaveItemProperty;
 use App\Services\ItemCollection\SaveItemCollection;
+use App\Services\Notification\ItemPublishedNotification;
 
 use DB, Log, Str;
 
@@ -39,8 +40,10 @@ class UpdateItem {
         $this->item->content      = $this->data['content'] ?? null;
         $this->item->user_id      = $this->data['user_id'] ?? 1;
 
-        if( !empty($this->data['status_id']) )
+        if( !empty($this->data['status_id']) ) {
+            $this->_check_whether_notification_should_be_sent();
             $this->item->status_id = $this->data['status_id'];
+        }
         
         $this->item->save();
 
@@ -61,4 +64,17 @@ class UpdateItem {
         return $this->item;
     }
 
+    // if the frontend indicated and status changed to 'published' (status_id = 20) we should send a notification
+    private function _check_whether_notification_should_be_sent()
+    {
+        // the frontend should send a 'should_notify' flag
+        if(empty($this->data['should_notify'])) return;
+
+        if($this->data['status_id'] != 20) return;
+        
+        if($this->data['status_id'] != $this->item->status_id) {
+            $notify = new ItemPublishedNotification($this->item);
+            $notify->sendNotifications();
+        }
+    }
 }

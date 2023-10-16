@@ -43,6 +43,12 @@ Route::group(['prefix' => 'v1'], function() {
     // Image routes
     Route::get ('/images/{path}', 'API\ImageController@index')->where('path', '[\w\s\-_\/]+');
     Route::post('/images',        'API\ImageController@store');
+
+    // Notification routes
+    Route::get('/notifications',         'API\NotificationController@index');
+    Route::get('/notifications/{id}',    'API\NotificationController@find');
+    Route::put('/notifications/{id}',    'API\NotificationController@update');
+    Route::delete('/notifications/{id}', 'API\NotificationController@delete');
 });
 
 // routes with locale

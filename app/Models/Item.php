@@ -39,6 +39,11 @@ class Item extends Model
         return $this->hasMany('App\Models\ItemCollection', ['collection_item_id'], ['id']);
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
     // Mutator for slug attribute
     public function setSlugAttribute($slug) 
     {
