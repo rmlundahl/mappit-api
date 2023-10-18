@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 \DB::connection()->enableQueryLog();
 
-// e.g. /api/v1/en/items
+// // e.g. /api/v1/en/items
 $locale = request()->segment(3);
 
 if(!array_key_exists($locale, config('mappit.supported_locales'))) {
@@ -52,7 +52,7 @@ Route::group(['prefix' => 'v1'], function() {
 });
 
 // routes with locale
-Route::group(['prefix' => 'v1/'.$locale], function() {
+Route::group(['middleware'=>'setLocale', 'prefix' => 'v1/'.$locale], function() {
     
     // Item routes
     Route::get('/items/all_markers',   'API\ItemController@all_markers');
