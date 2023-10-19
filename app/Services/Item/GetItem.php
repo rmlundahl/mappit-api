@@ -128,7 +128,7 @@ class GetItem {
             }
             // add featured image
             $path = '/items/'.$item->id.'/uitgelichte_afbeelding/';
-            $files = Storage::allFiles($path);
+            $files = Storage::disk('public')->allFiles($path);
             if( !empty($files[0]) ) {
                 ($item->item_properties)->put('uitgelichte_afbeelding', $files[0]);
             }
