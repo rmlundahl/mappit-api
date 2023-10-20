@@ -27,7 +27,7 @@ class UpdateNotificationRequest extends FormRequest
     {
         return [
             'id'             => 'required|uuid',
-            'read_at'        => 'required|date_format:Y-m-d H:i:',
+            'read_at'        => 'required|date_format:Y-m-d H:i:s',
         ];
     }
 
