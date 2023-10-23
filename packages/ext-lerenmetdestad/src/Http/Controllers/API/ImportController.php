@@ -11,11 +11,11 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Item;
 use App\Models\ItemProperty;
 
-use Batch, DB, Str;
+use Batch, DB, Log, Str;
 
 class ImportController extends Controller
 {
-    private $item_properties = ['semester','type','thema','opleiding','locatie','korte_intro','samenvatting','link_voor_kaart_of_database','geolocatie'];
+    private $item_properties = ['semester','type','thema','opleiding','locatie','korte_intro','samenvatting','link_voor_kaart_of_database'];
     private $insert_item_property_values = [];
 
     public function __construct()
@@ -31,7 +31,12 @@ class ImportController extends Controller
     // https://lerenmetdestadleiden.local/api/v1/lerenmetdestad/import/excel
     public function import_excel()
     {
-        $array  = Excel::toArray(new DatabaseImport, 'Overzicht voor database en digitale kaart_v2.xlsx');
+        if ($_SERVER['REMOTE_ADDR'] !== $_ENV['IP_ADDRESS_DEV'] && $_SERVER['SERVER_NAME'] !== 'lerenmetdestadleiden.local') {
+            Log::info('Unauthorized call');
+            return;
+        }
+
+        $array  = Excel::toArray(new DatabaseImport, 'Overzicht_voor_database_en_digitale_kaart_v9.xlsx');
         
         if(empty($array)) p('Geen Excel data');
 
@@ -49,7 +54,7 @@ class ImportController extends Controller
                 $first=false; continue;
             }
            
-            if( empty($r['titel_digitale_kaart']) || empty($r['geolocatie']) ) {
+            if( empty($r['titel_digitale_kaart']) ) {
                 continue;
             }
             // s($r);
@@ -58,6 +63,7 @@ class ImportController extends Controller
             $item = new Item;
             $item->language = 'nl';
             $item->item_type_id = $this->_get_item_type_id($r);
+            $item->external_id = $r['id'];
             $item->name = $r['titel_digitale_kaart'];
 
             $item->slug = Str::slug($r['titel_digitale_kaart']);
@@ -72,18 +78,46 @@ class ImportController extends Controller
             foreach($this->item_properties as $p) {
                 if(!empty($r[$p])) $this->_save_item_property($item->id, $p, $r[$p]);
             }
+            
+            // Ik zoek een
+            $this->_save_item_property($item->id, 'ik_zoek_een', $this->item_type_id_translation[$item->item_type_id]);
+
+            // Faculteit
+            if( !empty($r['faculteit']) ) {
+                $_import_array = explode(',', $r['faculteit']);
+
+                foreach($_import_array as $_faculteit) {
+                    $this->_save_item_property($item->id, 'faculteit', $_faculteit);
+                }
+            }
 
             // Partners
             if( !empty($r['partners']) ) {
                 $_import_array = explode(',', $r['partners']);
 
                 foreach($_import_array as $_partner) {
-                    if( in_array( trim($_partner), ['Incluzio','BuZz','SOL','gemeente Leiden'] )) {
+                    if( in_array( trim($_partner), ['Incluzio','BuZz','SOL','Gemeente Leiden'] )) {
                         $this->_save_item_property($item->id, 'vaste_partner', $_partner);
                     } else {
                         $this->_save_item_property($item->id, 'partner', $_partner);
                     }
                 }
+            }
+
+            // Type partner
+            if( !empty($r['type_partner']) ) {
+                $_import_array = explode(',', $r['type_partner']);
+
+                foreach($_import_array as $_type_partner) {
+                    $this->_save_item_property($item->id, 'type_partner', $_type_partner);
+                }
+            }
+
+            // Geolocatie
+            if( !empty($r['geolocatie']) ) {
+                $_loc = explode(',', $r['geolocatie']);
+                $this->_save_item_property($item->id, 'latitude', trim($_loc[0]));
+                $this->_save_item_property($item->id, 'longitude', trim($_loc[1]));
             }
 
         }

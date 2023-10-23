@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => env('LOCALE', 'nl'),
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => env('FALLBACK_LOCALE', 'nl'),
 
     /*
     |--------------------------------------------------------------------------
@@ -200,6 +200,7 @@ return [
          */
         Mappit\ExtHvaindestad\ExtHvaindestadServiceProvider::class,
         Mappit\ExtLerenMetDeStad\ExtLerenMetDeStadServiceProvider::class,
+        Mappit\ExtShareMyStory\ExtShareMyStoryServiceProvider::class,
     ],
 
     /*

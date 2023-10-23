@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 use App\Models\User;
+use App\Models\UserPreference;
 use Illuminate\Support\Facades\Hash;
 use DB, Log, Str;
 
@@ -48,6 +49,22 @@ class UpdateUser {
             $this->user->status_id = $this->data['status_id'];
         
         $this->user->save();
+
+        // update user preferences?
+        if(!empty($this->data['user_preferences'])) {
+            foreach($this->data['user_preferences'] as $k => $v) {
+
+                $userPreference = $this->user->user_preferences()->where('key', '=', $k)->first();
+                
+                if(empty($userPreference)) {
+                    $userPreference = new UserPreference;
+                }
+                $userPreference->key = $k;
+                $userPreference->val = $v;
+                $this->user->user_preferences()->save($userPreference);
+
+            }
+        }
 
         return $this->user;
     }

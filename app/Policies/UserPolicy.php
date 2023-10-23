@@ -63,7 +63,7 @@ class UserPolicy
             return true;
         } else if($user->role == 'editor') {
             return true;
-        } else if( $user->role == 'author' && $user->is_group_admin==1 ) {
+        } else if( $user->role == 'author' ) {
             return true;
         }
         return false;

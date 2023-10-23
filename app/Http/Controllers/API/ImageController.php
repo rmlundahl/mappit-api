@@ -25,7 +25,7 @@ class ImageController extends Controller
      */
     public function index($path)
     {
-        $files = Storage::allFiles($path);
+        $files = Storage::disk('public')->allFiles($path);
         return response()->json( $files, 200 );
     }
 

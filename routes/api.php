@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 \DB::connection()->enableQueryLog();
 
-// e.g. /api/v1/en/items
+// // e.g. /api/v1/en/items
 $locale = request()->segment(3);
 
 if(!array_key_exists($locale, config('mappit.supported_locales'))) {
@@ -43,10 +43,16 @@ Route::group(['prefix' => 'v1'], function() {
     // Image routes
     Route::get ('/images/{path}', 'API\ImageController@index')->where('path', '[\w\s\-_\/]+');
     Route::post('/images',        'API\ImageController@store');
+
+    // Notification routes
+    Route::get('/notifications',         'API\NotificationController@index');
+    Route::get('/notifications/{id}',    'API\NotificationController@find');
+    Route::put('/notifications/{id}',    'API\NotificationController@update');
+    Route::delete('/notifications/{id}', 'API\NotificationController@delete');
 });
 
 // routes with locale
-Route::group(['prefix' => 'v1/'.$locale], function() {
+Route::group(['middleware'=>'setLocale', 'prefix' => 'v1/'.$locale], function() {
     
     // Item routes
     Route::get('/items/all_markers',   'API\ItemController@all_markers');
