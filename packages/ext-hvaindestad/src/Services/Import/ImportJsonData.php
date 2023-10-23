@@ -53,7 +53,7 @@ class ImportJsonData {
         ini_set('max_execution_time', '180'); // 180 seconds = 3 minutes
         
         // Get existing items
-        $items = Item::whereIn('item_type_id', [101, 102, 103, 104])->get();
+        $items = Item::whereIn('item_type_id', [101, 102, 103, 104, 105])->get();
         
         $this->existing_projects = [];
         foreach($items as $_i) {
