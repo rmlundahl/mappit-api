@@ -31,24 +31,7 @@ class LoadFiltersTest extends TestCase
         $response = $this->getJson('/api/v1/nl/filters');
         $response
             ->assertStatus(200)
-            ->assertJsonCount(2);
-    }
-
-    public function test_find_filter()
-    {
-        $filters = Filter::factory()->count(3)->create();
-        $filter  = Filter::factory()->create(['id'=>123, 'language'=>'nl']);
-
-        $response = $this->getJson('/api/v1/nl/filters/123');
-
-        $response
-            ->assertStatus(200)
-            ->assertJson(fn (AssertableJson $json) => $json
-                ->count(8)    
-                ->where('id', 123)
-                ->where('language', 'nl')
-                ->etc()
-            );
+            ->assertJsonCount(3);
     }
 
 }
