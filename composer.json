@@ -11,6 +11,7 @@
         "intervention/image": "^2.7",
         "intervention/imagecache": "^2.5",
         "laravel-lang/lang": "^11.0",
+        "laravel/fortify": "^1.18",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.7",
