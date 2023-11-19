@@ -47,7 +47,7 @@ class User extends Authenticatable implements HasLocalePreference
 
     public function group()
     {
-        return $this->hasOne('App\Models\Group');
+        return $this->belongsTo('App\Models\Group');
     }
 
     /**

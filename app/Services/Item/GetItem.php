@@ -102,7 +102,7 @@ class GetItem {
     public function all()
     {
         // select with item_properties
-        $query = Item::with('item_properties');
+        $query = Item::with(['item_properties','user']);
 
         // any parameters to add to the query?
         if( !empty($this->data) ) {
@@ -119,13 +119,19 @@ class GetItem {
 
         $items = $query->get();
         
-        // add flattened properties
-        $items->map( function ($item) {
+        $items->transform( function ($item) {
+            // add flattened properties
             if( !empty($item->item_properties)) {
+                $i=0;
                 foreach($item->item_properties as $r) {
                     ($item->item_properties)->put($r->key,$r->value);
+                    unset($item->item_properties[$i]);
+                    $i++;
                 }
             }
+            // add group_id 
+            $item->group_id = $item->user->group_id;
+            return $item;
         });
 
         return $items;

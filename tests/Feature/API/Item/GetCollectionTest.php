@@ -6,6 +6,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
+use App\Models\User;
+use App\Models\Group;
 use App\Models\Item;
 use App\Models\ItemCollection;
 
@@ -28,12 +30,15 @@ class GetCollectionTest extends TestCase
         $collection = Item::factory()->create(['id'=>100, 'language'=>'nl', 'name'=>'Ambassadeurs', 'slug'=>'ambassadeurs', 'item_type_id'=>30]);
         $collection = Item::factory()->create(['id'=>100, 'language'=>'en', 'name'=>'Ambassadors', 'slug'=>'ambassadors', 'item_type_id'=>30]);
         $collection = Item::factory()->create(['id'=>101, 'language'=>'nl', 'name'=>'Top 10', 'slug'=>'top-10', 'item_type_id'=>30]);
-
-        $item = Item::factory()->create(['id'=>1, 'language'=>'nl', 'name'=>'item 1 - nl']);
-        $item = Item::factory()->create(['id'=>1, 'language'=>'en', 'name'=>'item 1 - en']);
-        $item = Item::factory()->create(['id'=>2, 'language'=>'nl', 'name'=>'item 2 - nl']);
-        $item = Item::factory()->create(['id'=>2, 'language'=>'en', 'name'=>'item 2 - en']);
-        $item = Item::factory()->create(['id'=>3, 'language'=>'nl', 'name'=>'item 3 - nl']);
+        
+        $group = Group::factory()->create(['id'=>1]);
+        $user = User::factory()->create(['id'=>1, 'group_id'=>1]);
+        
+        $item = Item::factory()->create(['id'=>1, 'language'=>'nl', 'name'=>'item 1 - nl', 'user_id'=>1]);
+        $item = Item::factory()->create(['id'=>1, 'language'=>'en', 'name'=>'item 1 - en', 'user_id'=>1]);
+        $item = Item::factory()->create(['id'=>2, 'language'=>'nl', 'name'=>'item 2 - nl', 'user_id'=>1]);
+        $item = Item::factory()->create(['id'=>2, 'language'=>'en', 'name'=>'item 2 - en', 'user_id'=>1]);
+        $item = Item::factory()->create(['id'=>3, 'language'=>'nl', 'name'=>'item 3 - nl', 'user_id'=>1]);
        
         DB::table('item_properties')->insert(['id'=>1, 'language'=>'nl', 'item_id'=>1, 'key'=>'uitgelichte_afbeelding', 'value'=> '/storage/items/1018_universiteit.jpg']);
 

@@ -27,7 +27,7 @@ class ItemFactory extends Factory
             'external_id' => $this->faker->randomNumber(),
             'name' => $this->faker->name,
             'slug' => $this->faker->unique()->slug,
-            'user_id' => $this->faker->randomNumber(),
+            'user_id' => 1,
             'status_id' => 20,
         ];
     }

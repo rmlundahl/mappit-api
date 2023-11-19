@@ -22,6 +22,7 @@ class GroupFactory extends Factory
     public function definition()
     {
         return [
+            'id' => $this->faker->unique()->randomNumber(),
             'parent_id' => 1,
             'name' => $this->faker->name(),
             'status_id' => 20,

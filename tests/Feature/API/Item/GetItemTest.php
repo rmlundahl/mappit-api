@@ -25,18 +25,20 @@ class GetItemTest extends TestCase
     
     public function test_get_all_items__from_a_language()
     {
-        $items = Item::factory()->create(['id'=>1, 'language'=>'nl']);
-        $items = Item::factory()->create(['id'=>1, 'language'=>'en']);
-        $items = Item::factory()->create(['id'=>2, 'language'=>'nl']);
-        $items = Item::factory()->create(['id'=>2, 'language'=>'en']);
-        $items = Item::factory()->create(['id'=>3, 'language'=>'nl']);
+        $user = User::factory()->create(['id'=>123]);
+
+        $items = Item::factory()->create(['id'=>1, 'language'=>'nl', 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>1, 'language'=>'en', 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>2, 'language'=>'nl', 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>2, 'language'=>'en', 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'user_id'=>123]);
         
         \App::setLocale('en');
         
         $response = $this->getJson('/api/v1/nl/items');
         $response
             ->assertStatus(200)
-            ->assertJsonCount(2);
+            ->assertJsonCount(3);
     }
 
     public function test_get_all_from_user__author_sees_own_items_only()
@@ -52,7 +54,6 @@ class GetItemTest extends TestCase
         \App::setLocale('nl');
         
         $response = $this->actingAs($user)->getJson('/api/v1/nl/items/all_from_user');
-
         $response
             ->assertStatus(200)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -177,13 +178,15 @@ class GetItemTest extends TestCase
 
     public function test_get_all_markers__from_a_language()
     {
-        $items = Item::factory()->create(['id'=>1, 'language'=>'nl', 'status_id'=>20]);
-        $items = Item::factory()->create(['id'=>1, 'language'=>'en', 'status_id'=>20]);
-        $items = Item::factory()->create(['id'=>2, 'language'=>'nl', 'status_id'=>20]);
-        $items = Item::factory()->create(['id'=>2, 'language'=>'en', 'status_id'=>20]);
-        $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'status_id'=>10]);
-        $items = Item::factory()->create(['id'=>4, 'language'=>'nl', 'status_id'=>99]);
-        $items = Item::factory()->create(['id'=>5, 'language'=>'nl', 'status_id'=>20]);
+        $user = User::factory()->create(['id'=>123]);
+
+        $items = Item::factory()->create(['id'=>1, 'language'=>'nl', 'status_id'=>20, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>1, 'language'=>'en', 'status_id'=>20, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>2, 'language'=>'nl', 'status_id'=>20, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>2, 'language'=>'en', 'status_id'=>20, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'status_id'=>10, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>4, 'language'=>'nl', 'status_id'=>99, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>5, 'language'=>'nl', 'status_id'=>20, 'user_id'=>123]);
         
         \App::setLocale('nl');
 
@@ -240,12 +243,14 @@ class GetItemTest extends TestCase
 
     public function test_get_all_items_of_type()
     {
-        $items = Item::factory()->create(['id'=>1, 'language'=>'nl', 'item_type_id'=>10]);
-        $items = Item::factory()->create(['id'=>1, 'language'=>'en', 'item_type_id'=>10]);
-        $items = Item::factory()->create(['id'=>2, 'language'=>'nl', 'item_type_id'=>20]);
-        $items = Item::factory()->create(['id'=>2, 'language'=>'en', 'item_type_id'=>20]);
-        $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'item_type_id'=>10]);
-        $items = Item::factory()->create(['id'=>4, 'language'=>'nl', 'item_type_id'=>20]);
+        $user = User::factory()->create(['id'=>123]);
+
+        $items = Item::factory()->create(['id'=>1, 'language'=>'nl', 'item_type_id'=>10, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>1, 'language'=>'en', 'item_type_id'=>10, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>2, 'language'=>'nl', 'item_type_id'=>20, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>2, 'language'=>'en', 'item_type_id'=>20, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'item_type_id'=>10, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>4, 'language'=>'nl', 'item_type_id'=>20, 'user_id'=>123]);
         
         \App::setLocale('nl');
         
@@ -267,12 +272,14 @@ class GetItemTest extends TestCase
 
     public function test_get_all_items_of_type_and_two_statuses()
     {
-        $items = Item::factory()->create(['id'=>1, 'language'=>'nl', 'item_type_id'=>10, 'status_id'=>1]);
-        $items = Item::factory()->create(['id'=>1, 'language'=>'en', 'item_type_id'=>10, 'status_id'=>1]);
-        $items = Item::factory()->create(['id'=>2, 'language'=>'nl', 'item_type_id'=>20, 'status_id'=>10]);
-        $items = Item::factory()->create(['id'=>2, 'language'=>'en', 'item_type_id'=>20, 'status_id'=>10]);
-        $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'item_type_id'=>10, 'status_id'=>10]);
-        $items = Item::factory()->create(['id'=>4, 'language'=>'nl', 'item_type_id'=>20, 'status_id'=>20]);
+        $user = User::factory()->create(['id'=>123]);
+
+        $items = Item::factory()->create(['id'=>1, 'language'=>'nl', 'item_type_id'=>10, 'status_id'=>1, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>1, 'language'=>'en', 'item_type_id'=>10, 'status_id'=>1, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>2, 'language'=>'nl', 'item_type_id'=>20, 'status_id'=>10, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>2, 'language'=>'en', 'item_type_id'=>20, 'status_id'=>10, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'item_type_id'=>10, 'status_id'=>10, 'user_id'=>123]);
+        $items = Item::factory()->create(['id'=>4, 'language'=>'nl', 'item_type_id'=>20, 'status_id'=>20, 'user_id'=>123]);
         
         \App::setLocale('nl');
         
