@@ -8,6 +8,7 @@ use App\Models\Item;
 class DeleteItem {
     
     private $data;
+    private $item;
 
     public function __construct(array $deleteItemData, Item $item)
     {

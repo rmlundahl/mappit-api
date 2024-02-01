@@ -42,24 +42,4 @@ class ImageController extends Controller
         return response()->json( $storeImage, 201 );
     }
 
-    
-    /**
-     * Soft remove the specified resource from storage.
-     *
-     * @param  \App\Models\Item  $item
-     * @return \Illuminate\Http\Response
-     */
-    public function delete(DeleteItemRequest $request)
-    {
-        $item =Item::find(['id'=>$request->id, 'language'=>$request->language]);
-        
-        if (empty($item)) {
-            return response()->json( [], 404 ); 
-        }
-
-        $deleteItem = new DeleteItem( $request->all(), $item );
-        
-        $item = $deleteItem->delete($deleteItem, $item);
-        return response()->json( [], 204 );
-    }
 }

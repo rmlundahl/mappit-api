@@ -7,12 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Group;
 use App\Models\User;
 
-use Auth, Log;
+use Auth;
 
 class GroupController extends Controller
 {
-    private $group;
-    private $getGroup;
+    private $user;
+    private $groups;
     
     public function __construct(User $user)
     {

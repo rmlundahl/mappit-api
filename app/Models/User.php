@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -60,7 +61,7 @@ class User extends Authenticatable implements HasLocalePreference
         return $this->locale;
     }
 
-    public function user_preferences()
+    public function user_preferences(): HasMany
     {
         return $this->hasMany('App\Models\UserPreference');
     }

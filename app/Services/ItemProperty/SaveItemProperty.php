@@ -31,8 +31,6 @@ class SaveItemProperty {
             // insert new data
             $data = $this->data['item_properties'];
             
-            if(empty($data)) return;
-
             foreach ($data as $k => $v) {
                 
                 $item_property = new ItemProperty;

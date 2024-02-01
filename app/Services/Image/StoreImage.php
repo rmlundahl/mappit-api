@@ -2,11 +2,13 @@
 
 namespace App\Services\Image;
 
-use Log, File;
+use File;
 
 class StoreImage {
     
     private $image;
+    private $sub_directory;
+    private $clear_sub_directory;
     
     public function __construct( $image, $sub_directory='', $clear_sub_directory=false )
     {

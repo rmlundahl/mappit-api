@@ -13,6 +13,9 @@ class ItemPublished extends Notification
 {
     use Queueable;
 
+    private $item;
+    private $ns, $item_type, $url;
+
     /**
      * Create a new notification instance.
      *

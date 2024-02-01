@@ -9,7 +9,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Filter;
 
-use DB;
+use App, DB;
 
 class LoadFiltersTest extends TestCase
 {
@@ -26,7 +26,7 @@ class LoadFiltersTest extends TestCase
         $filters = Filter::factory()->create(['id'=>2, 'language'=>'en']);
         $filters = Filter::factory()->create(['id'=>3, 'language'=>'nl']);
 
-        \App::setLocale('en');
+        App::setLocale('en');
         
         $response = $this->getJson('/api/v1/nl/filters');
         $response

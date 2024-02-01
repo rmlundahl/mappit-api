@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Awobaz\Compoships\Database\Eloquent\Relations\BelongsTo;
+use Awobaz\Compoships\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,18 +30,17 @@ class Item extends Model
         'status_id',
     ];
 
-    public function item_properties()
+    public function item_properties(): HasMany
     {
-        // return $this->hasMany(ItemProperty::class);
         return $this->hasMany('App\Models\ItemProperty', ['item_id','language'], ['id','language']);
     }
 
-    public function collection_items()
+    public function collection_items(): HasMany
     {
         return $this->hasMany('App\Models\ItemCollection', ['collection_item_id'], ['id']);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo('App\Models\User');
     }

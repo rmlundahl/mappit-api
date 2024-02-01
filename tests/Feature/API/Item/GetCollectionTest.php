@@ -11,7 +11,7 @@ use App\Models\Group;
 use App\Models\Item;
 use App\Models\ItemCollection;
 
-use DB;
+use App, DB;
 
 class GetCollectionTest extends TestCase
 {
@@ -45,7 +45,7 @@ class GetCollectionTest extends TestCase
         DB::table('item_collection')->insert(['item_id'=>1, 'collection_item_id'=>100]);
         DB::table('item_collection')->insert(['item_id'=>3, 'collection_item_id'=>100]);
 
-        \App::setLocale('nl');
+        App::setLocale('nl');
         
         $response = $this->getJson('/api/v1/nl/collections');
         $response

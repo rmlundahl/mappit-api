@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Services\Collection\GetCollection;
 
-use App, Log;
+use App;
 
 class CollectionController extends Controller
 {

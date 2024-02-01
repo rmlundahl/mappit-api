@@ -79,7 +79,7 @@ class GetUser {
 
         // Get all groups from user
         $groups = Group::find($user->group_id)->descendantsAndSelf()->get();
-        if (empty($groups)) {
+        if ($groups->isEmpty()) {
             return;
         }
         $group_ids = $groups->pluck('id');

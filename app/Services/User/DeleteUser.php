@@ -8,6 +8,7 @@ use App\Models\User;
 class DeleteUser {
     
     private $data;
+    private $user;
 
     public function __construct(array $deleteUserData, User $user)
     {

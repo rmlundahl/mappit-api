@@ -13,6 +13,7 @@ use Auth;
 
 class DevController extends Controller
 {
+    private $getUser;
     
     public function __construct(GetUser $getUser)
     {

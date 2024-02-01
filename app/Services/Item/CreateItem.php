@@ -54,11 +54,4 @@ class CreateItem {
         return $item;
     }
 
-    private function _create_unique_slug()
-    {
-        // check or
-        $this->data['slug'];
-        $query = "SELECT $field_name FROM $table_name WHERE $field_name = '".$slug."' OR $field_name LIKE '".$slug."-[0-9]*' ORDER BY LENGTH($field_name), $field_name DESC LIMIT 1";
-        $query = "SELECT $field_name FROM $table_name WHERE $field_name = '".$slug."' OR $field_name REGEXP '".$slug."-[0-9]*' ORDER BY LENGTH($field_name) DESC, $field_name DESC LIMIT 1";
-    }
 }

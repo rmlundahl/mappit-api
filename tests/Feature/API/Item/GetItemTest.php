@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\Group;
 use App\Models\Item;
 
+use App;
+
 class GetItemTest extends TestCase
 {
     use RefreshDatabase;
@@ -33,7 +35,7 @@ class GetItemTest extends TestCase
         $items = Item::factory()->create(['id'=>2, 'language'=>'en', 'user_id'=>123]);
         $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'user_id'=>123]);
         
-        \App::setLocale('en');
+        App::setLocale('en');
         
         $response = $this->getJson('/api/v1/nl/items');
         $response
@@ -51,7 +53,7 @@ class GetItemTest extends TestCase
         $items = Item::factory()->create(['id'=>12, 'language'=>'en', 'user_id'=>2]);
         $items = Item::factory()->create(['id'=>13, 'language'=>'nl', 'user_id'=>123]);
         
-        \App::setLocale('nl');
+        App::setLocale('nl');
         
         $response = $this->actingAs($user)->getJson('/api/v1/nl/items/all_from_user');
         $response
@@ -79,7 +81,7 @@ class GetItemTest extends TestCase
         $items = Item::factory()->create(['id'=>12, 'language'=>'en', 'user_id'=>2]);
         $items = Item::factory()->create(['id'=>13, 'language'=>'nl', 'user_id'=>3]);
         
-        \App::setLocale('nl');
+        App::setLocale('nl');
         
         $response = $this->actingAs($user1)->getJson('/api/v1/nl/items/all_from_user');
 
@@ -115,7 +117,7 @@ class GetItemTest extends TestCase
         $items = Item::factory()->create(['id'=>13, 'language'=>'nl', 'user_id'=>3]);
         $items = Item::factory()->create(['id'=>14, 'language'=>'nl', 'user_id'=>4]);
         
-        \App::setLocale('nl');
+        App::setLocale('nl');
         
         $response = $this->actingAs($user1)->getJson('/api/v1/nl/items/all_from_user');
 
@@ -154,7 +156,7 @@ class GetItemTest extends TestCase
         $items = Item::factory()->create(['id'=>13, 'language'=>'nl', 'user_id'=>3]);
         $items = Item::factory()->create(['id'=>14, 'language'=>'nl', 'user_id'=>4]);
         
-        \App::setLocale('nl');
+        App::setLocale('nl');
         
         $response = $this->actingAs($user1)->getJson('/api/v1/nl/items/all_from_user');
 
@@ -188,7 +190,7 @@ class GetItemTest extends TestCase
         $items = Item::factory()->create(['id'=>4, 'language'=>'nl', 'status_id'=>99, 'user_id'=>123]);
         $items = Item::factory()->create(['id'=>5, 'language'=>'nl', 'status_id'=>20, 'user_id'=>123]);
         
-        \App::setLocale('nl');
+        App::setLocale('nl');
 
         $response = $this->getJson('/api/v1/nl/items/all_markers');
         $response
@@ -252,7 +254,7 @@ class GetItemTest extends TestCase
         $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'item_type_id'=>10, 'user_id'=>123]);
         $items = Item::factory()->create(['id'=>4, 'language'=>'nl', 'item_type_id'=>20, 'user_id'=>123]);
         
-        \App::setLocale('nl');
+        App::setLocale('nl');
         
         $response = $this->getJson('/api/v1/nl/items?item_type_id=20');
         $response
@@ -281,7 +283,7 @@ class GetItemTest extends TestCase
         $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'item_type_id'=>10, 'status_id'=>10, 'user_id'=>123]);
         $items = Item::factory()->create(['id'=>4, 'language'=>'nl', 'item_type_id'=>20, 'status_id'=>20, 'user_id'=>123]);
         
-        \App::setLocale('nl');
+        App::setLocale('nl');
         
         $response = $this->getJson('/api/v1/nl/items?item_type_id=20&status_id=10,20');
         $response
