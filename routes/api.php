@@ -36,7 +36,7 @@ use Laravel\Fortify\RoutePath;
 
 \DB::connection()->enableQueryLog();
 
-// // e.g. /api/v1/en/items
+// e.g. /api/v1/en/items
 $locale = request()->segment(3);
 
 if(!array_key_exists($locale, config('mappit.supported_locales'))) {

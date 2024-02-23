@@ -6,7 +6,8 @@ use App\Models\Item;
 use App\Models\Group;
 use App\Services\User\GetUser;
 
-use App, Auth, Storage;
+use Illuminate\Support\Facades\App;
+use Auth, DB;
 
 class GetItem {
     
@@ -25,8 +26,8 @@ class GetItem {
     public function all_markers()
     {
         // only published items of item_type 10 are markers on the map
-        $this->data = array_merge($this->data, ['item_type_id'=>10, 'status_id'=>20]);    
-        return $this->all();
+        $this->data = array_merge($this->data, ['items.item_type_id'=>10, 'items.status_id'=>20]);
+        return $this->all_with_default_nl();
     }   
         
     public function all_from_user()
@@ -135,5 +136,68 @@ class GetItem {
         });
 
         return $items;
+    }
+
+    public function all_with_default_nl()
+    {
+        // look for items in the requested language, and use 'nl' records as fallback
+        $preferred_language = $this->data['language'];
+
+        $query = DB::table('items')
+                    ->select('items.*', 'users.group_id')
+                    ->join('users', 'items.user_id', '=', 'users.id')
+                    ->leftJoin('items as i2', function($join) use ($preferred_language) {
+                        $join->on('i2.id', '=', 'items.id')
+                                ->where('i2.language', '=', $preferred_language)
+                                ->where('items.language', '<>', $preferred_language);
+                    })
+                    ->whereIn('items.language', [$preferred_language, 'nl'])
+                    ->whereNull('i2.id');
+                   
+        // any parameters to add to the query?        
+        foreach($this->data as $k => $v) {
+            
+            if($k==='language') continue;
+                        
+            if(strpos($v, ',')!==false) {
+                $array = explode(',', $v);
+                $query->whereIn($k, $array);
+            } else {
+                $query->where($k, $v);
+            }
+        }               
+        $items = $query->get();
+
+        // look for item_properties in the requested language, and use 'nl' records as fallback
+        $query = DB::table('item_properties')
+                    ->select('item_properties.*')
+                    ->join('items', 'item_properties.item_id', '=', 'items.id')
+                    ->leftJoin('item_properties as p2', function($join) use ($preferred_language) {
+                        $join->on('p2.id', '=', 'item_properties.id')
+                                ->where('p2.language', '=', $preferred_language)
+                                ->where('item_properties.language', '<>', $preferred_language);
+                    
+                    })
+                    ->whereIn('item_properties.language', [$preferred_language, 'nl'])                        
+                    ->whereNull('p2.id')
+                    ->where('items.item_type_id', '=', 10);
+                    
+        $item_properties = $query->get();
+
+        // add flattened properties
+        $items->transform( function ($item) use ($item_properties) {
+            $item->item_properties = (object)[];
+            
+            foreach($item_properties as $r) {
+                if($r->item_id===$item->id) {
+                    $item->item_properties->{$r->key} = $r->value;
+                }
+            }
+            
+            return $item;
+        });
+
+        return $items;
+        
     }
 }

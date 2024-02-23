@@ -43,6 +43,37 @@ class GetItemTest extends TestCase
             ->assertJsonCount(3);
     }
 
+    public function test_get_all_markers__from_a_language_with_fallback_language()
+    {
+        $user = User::factory()->create(['id'=>123]);
+        
+        $items = Item::factory()->create(['id'=>1, 'language'=>'nl', 'name'=>'1-nl', 'status_id'=>20, 'user_id'=>123]); // X because 'en' record instead
+        $items = Item::factory()->create(['id'=>1, 'language'=>'en', 'name'=>'1-en', 'status_id'=>20, 'user_id'=>123]); // V
+        $items = Item::factory()->create(['id'=>2, 'language'=>'nl', 'name'=>'2-nl', 'status_id'=>20, 'user_id'=>123]); // X because 'en' record instead
+        $items = Item::factory()->create(['id'=>2, 'language'=>'en', 'name'=>'2-en', 'status_id'=>20, 'user_id'=>123]); // V
+        $items = Item::factory()->create(['id'=>3, 'language'=>'nl', 'name'=>'3-nl', 'status_id'=>10, 'user_id'=>123]); // X because status is wrong
+        $items = Item::factory()->create(['id'=>4, 'language'=>'nl', 'name'=>'4-nl', 'status_id'=>99, 'user_id'=>123]); // X because deleted
+        $items = Item::factory()->create(['id'=>5, 'language'=>'nl', 'name'=>'5-nl', 'status_id'=>20, 'user_id'=>123]); // V 
+        
+        $response = $this->getJson('/api/v1/nl/items/all_markers?language=en');
+   
+        $response
+            ->assertStatus(200)
+            ->assertJsonCount(3)
+            ->assertJsonFragment(
+                ['id'=>1, 'name'=>'1-en', 'status_id'=>20],
+                ['id'=>2, 'name'=>'2-en', 'status_id'=>20],
+                ['id'=>5, 'name'=>'5-nl', 'status_id'=>20],
+            )
+            ->assertJsonMissing(
+                ['name'=>'1-nl'],
+                ['name'=>'2-nl'],
+                ['name'=>'3-nl'],
+                ['name'=>'4-nl'],
+            );
+            
+    }
+
     public function test_get_all_from_user__author_sees_own_items_only()
     {
         $user = User::factory()->create(['id'=>123, 'role'=>'author', 'is_group_admin'=>0]);
