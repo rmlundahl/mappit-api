@@ -8,4 +8,20 @@ return [
     'welcome_email' => 'Email address: :email',
     'welcome_password' => 'Password: :password',
     'welcome_action' => 'Login to :app_name now',
+    'file' => [
+        'mimes' => 'The file must be of type .xls or .xlsx',
+        'max' => 'The file size must be smaller than 2 MB'
+    ],
+    'errors' => [
+        'name' => [
+            'required' => 'The user name is mandatory.'
+        ],
+        'email' => [
+            'required' => 'The e-mail address is mandatory.',
+            'unique' => 'A user already exists with this email address: :email'
+        ],
+        'group' => [
+            'exists' => 'No user group exists with the name: :name'
+        ]
+    ]
 ];

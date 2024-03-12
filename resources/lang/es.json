@@ -654,6 +654,7 @@
     "There are no fields to display.": "No hay campos para mostrar.",
     "There are no new notifications.": "No hay notificaciones nuevas.",
     "There is no active subscription.": "No hay una suscripción activa.",
+    "There was an error on row :row. :message": "Se ha producido un error en la fila :row. :message",
     "There was a problem executing the action.": "Hubo un problema ejecutando la acción.",
     "There was a problem fetching the resource.": "Hubo un problema obteniendo el recurso.",
     "There was a problem submitting the form.": "Hubo un problema al enviar el formulario.",

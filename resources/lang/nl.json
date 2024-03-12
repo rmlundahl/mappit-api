@@ -1,6 +1,6 @@
 {
-    "(and :count more error)": "(and :count more error)",
-    "(and :count more errors)": "(and :count more errors)",
+    "(and :count more error)": "(en nog :count fout)",
+    "(and :count more errors)": "(en nog :count fouten)",
     "30 Days": "30 dagen",
     "60 Days": "60 dagen",
     "90 Days": "90 dagen",
@@ -654,6 +654,7 @@
     "There are no fields to display.": "Er zijn geen velden om weer te geven..",
     "There are no new notifications.": "Er zijn geen nieuwe notificaties.",
     "There is no active subscription.": "Er is geen actief abonnement.",
+    "There was an error on row :row. :message": "Er was een fout op rij :row. :message",
     "There was a problem executing the action.": "Er was een probleem met de uitvoering van de actie.",
     "There was a problem fetching the resource.": "Er was probleem met het ophalen van de bron.",
     "There was a problem submitting the form.": "Er was een probleem met het indienen van het formulier.",

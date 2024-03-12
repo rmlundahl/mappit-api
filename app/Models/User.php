@@ -23,7 +23,11 @@ class User extends Authenticatable implements HasLocalePreference
         'name',
         'email',
         'password',
+        'group_id',
+        'is_group_admin',
+        'role',
         'locale',
+        'status_id',
     ];
 
     /**

@@ -44,7 +44,6 @@ class UserPolicy
         return false;
     }
 
-
     public function store( User $user )
     {
         if( $user->role == 'administrator' ) {
@@ -64,6 +63,18 @@ class UserPolicy
         } else if($user->role == 'editor') {
             return true;
         } else if( $user->role == 'author' ) {
+            return true;
+        }
+        return false;
+    }
+
+    public function import(User $user)
+    {
+        if( $user->role == 'administrator' ) {
+            return true;
+        } else if($user->role == 'editor') {
+            return true;
+        } else if( $user->role == 'author' && $user->is_group_admin==1 ) {
             return true;
         }
         return false;

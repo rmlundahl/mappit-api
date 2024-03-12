@@ -56,6 +56,8 @@ Route::group(['prefix' => 'v1'], function() {
     Route::post('/users',        'API\UsersController@store');
     Route::put('/users/{id}',    'API\UsersController@update');
     Route::delete('/users/{id}', 'API\UsersController@delete');
+    Route::post('/users/import', 'API\UsersImportController@import');
+
 
     // Group routes
     Route::get('/groups_from_user', 'API\GroupController@groups_from_user');
