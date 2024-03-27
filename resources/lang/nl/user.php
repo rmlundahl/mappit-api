@@ -18,6 +18,7 @@ return [
         ],
         'email' => [
             'required' => 'Het e-mailadres is verplicht.',
+            'email' => 'Dit e-mailadres heeft niet de juiste opmaak: ":email"',
             'unique' => 'Er bestaat al een gebruiker met dit e-mailadres: :email'
         ],
         'group' => [

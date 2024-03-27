@@ -18,6 +18,7 @@ return [
         ],
         'email' => [
             'required' => 'The e-mail address is mandatory.',
+            'email' => 'This e-mail address does not have the correct format: ":email"',
             'unique' => 'A user already exists with this email address: :email'
         ],
         'group' => [

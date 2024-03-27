@@ -18,6 +18,7 @@ return [
         ],
         'email' => [
             'required' => 'La dirección de correo electrónico es obligatoria.',
+            'email' => 'Esta dirección de correo electrónico no tiene el formato correcto: ":email"',
             'unique' => 'Ya existe un usuario con esta dirección de correo electrónico: :email'
         ],
         'group' => [

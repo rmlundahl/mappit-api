@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-use App, Auth;
+use App;
 
 class UserCreated extends Notification
 {
@@ -16,17 +16,19 @@ class UserCreated extends Notification
     private $name;
     private $email;
     private $password;
+    private $cc_email;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($name, $email, $password)
+    public function __construct($name, $email, $password, $cc_email)
     {
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
+        $this->cc_email = $cc_email;
     }
 
     /**
@@ -49,13 +51,13 @@ class UserCreated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('user.welcome', ['app_name' => env('APP_NAME')]))
-                    ->greeting(__('user.welcome_name', ['app_name' => env('APP_NAME'), 'name' => $this->name]))
+                    ->subject(__('user.welcome', ['app_name' => config('app.name')]))
+                    ->greeting(__('user.welcome_name', ['app_name' => config('app.name'), 'name' => $this->name]))
                     ->line(__('user.welcome_line_1'))
                     ->line(__('user.welcome_email', ['email' => $this->email]))
                     ->line(__('user.welcome_password', ['password' => $this->password]))
-                    ->action(__('user.welcome_action', ['app_name' => env('APP_NAME')]), env('APP_URL_FRONTEND').'/'.App::getLocale().'/login')
-                    ->cc(Auth::user()->email);
+                    ->action(__('user.welcome_action', ['app_name' => config('app.name')]), config('app.url_frontend').'/'.App::getLocale().'/login')
+                    ->cc($this->cc_email);
                     
     }
 

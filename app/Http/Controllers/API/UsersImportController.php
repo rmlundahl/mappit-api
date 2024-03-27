@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\User;
+use App\Models\UserPreference;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\File\FileUploadRequest;
 
 use App\Imports\UsersImport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Services\Notification\UserCreatedNotification;
 
-use Auth, Log;
+use Auth;
 
 class UsersImportController extends Controller
 {
@@ -31,7 +33,29 @@ class UsersImportController extends Controller
         
         if( Auth::user()->can('import', [User::class]) ) {
 
-            Excel::import(new UsersImport, request()->file('file'));
+            $import = new UsersImport;
+            Excel::import($import, request()->file('file'));
+            
+            // Should we notify new users?
+            if( count($import->getNewUsers()) && $request->input('notify_user')==='true' ) {
+                                
+                foreach($import->getNewUsers() as $user) {
+                    $userPreference = new UserPreference;
+                    $userPreference->user_id = $user->id;
+                    $userPreference->key = 'notify_when_created';
+                    $userPreference->val = 'true';
+                    $userPreference->save();
+
+                    $userPreference = new UserPreference;
+                    $userPreference->user_id = $user->id;
+                    $userPreference->key = 'notify_when_created_cc_email';
+                    $userPreference->val = Auth::user()->email;
+                    $userPreference->save();
+                }
+
+                $userCreatedNotification = new UserCreatedNotification;
+                $userCreatedNotification->send();
+            }
 
             return response()->json( [], 201 );
         }

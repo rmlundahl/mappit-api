@@ -137,7 +137,7 @@ class UsersController extends Controller
 
             // send email to new user?
             if($request['form_action']=='new') {
-                $user->notify(new UserCreated($request['name'], $request['email'], $request['password']??''));
+                $user->notify(new UserCreated($request['name'], $request['email'], $request['password']??'', Auth::user()->email));
             }
 
             return response()->json( $user, 200 );

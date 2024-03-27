@@ -20,6 +20,7 @@ class User extends Authenticatable implements HasLocalePreference
      * @var string[]
      */
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',
