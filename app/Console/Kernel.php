@@ -25,6 +25,12 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        // Run the jobs that are queued in the 'jobs' table in the database
+        $schedule->command('queue:work --queue=emails --stop-when-empty')
+             ->everyMinute()
+             ->withoutOverlapping();
+        
     }
 
     /**
