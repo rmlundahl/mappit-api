@@ -21,52 +21,146 @@ class GetCollection {
             $this->data['language'] = App::getLocale();
         }
     }
-
-    public function all()
+    public function all_from_user()
     {
-        $all_collections = DB::table('items as collection')
-            ->leftJoin('item_collection', 'collection.id', '=', 'item_collection.collection_item_id')
-            ->leftJoin('items', 'item_collection.item_id', '=', 'items.id')
-            ->where('collection.item_type_id', 30)
-            ->where('collection.language', App::getLocale())
-            ->where('items.language', App::getLocale())
-            ->select(
-                'collection.id as collection_id',
-                'collection.name as collection_name',
-                'collection.slug as collection_slug',
-                'collection.content as collection_content',
-                'collection.status_id as collection_status_id',
-                'items.*'
-            )
-            ->orderBy('collection_id')
-            ->get();
-        
-        if(count($all_collections)==0) return;
+        // A Collection is an Item of type_id = 30
+        $getItem = new GetItem( ['item_type_id' => 30, 'language' => $this->data['language']] );
+        $all_collections = $getItem->all_from_user();
+
+        if(count($all_collections)==0) return;        
 
         // Get all items with flattened item_properties
         $getItem = new GetItem( ['language' => $this->data['language']] );
         $all_items = $getItem->all();
 
-        // created a nested result
+        // Add items to the collection
+        $collections = $this->_add_items_to_collections($all_items, $all_collections);
+        return $collections;
+    }
+
+    private function _add_items_to_collections($all_items, $all_collections)
+    {
         $collections = [];
+
         foreach($all_collections as $r) {
-            
-            // create a new top-level
-            if( !isset($collections[$r->collection_id]) ) {
-                $collections[$r->collection_id] = ['id'=>$r->collection_id, 'name'=>$r->collection_name, 'slug'=>$r->collection_slug, 'content'=>$r->collection_content, 'status_id'=>$r->collection_status_id, 'elements'=>[]];
-            }
-            // add to items to elements
-            if( !empty($r->id) ) {
+
+            $collections[$r->id] = ['id'=>$r->id, 'name'=>$r->name, 'slug'=>$r->slug, 'content'=>$r->content, 'status_id'=>$r->status_id, 'collection_items'=>[]];
+
+            // Select the items belonging to the collections
+            $items = DB::table('item_collection')
+            ->select('item_id')
+            ->where('collection_item_id', '=', $r->id)
+            ->get();
+
+            foreach($items as $i) {
                 // find the item in $all_items, and add it
-                $item_with_properties = $all_items->first(function($item) use ($r) {
-                    return $item->id == $r->id;
+                $item_with_properties = $all_items->first(function($item) use ($i) {
+                    return $item->id == $i->item_id;
                 });
                 
-                $collections[$r->collection_id]['elements'][] = $item_with_properties;
+                $collections[$r->id]['collection_items'][] = $item_with_properties;
             }
         }
 
         return $collections;
+    }
+
+    public function all()
+    {
+        // A Collection is an Item of type_id = 30
+        $getItem = new GetItem( ['item_type_id' => 30, 'language' => $this->data['language']] );
+        $all_collections = $getItem->all();
+
+        if(count($all_collections)==0) return;        
+
+        // Get all items with flattened item_properties
+        $getItem = new GetItem( ['language' => $this->data['language']] );
+        $all_items = $getItem->all();
+
+        // Add items to the collection
+        $collections = $this->_add_items_to_collections($all_items, $all_collections);
+        return $collections;
+        
+    }
+
+    /**
+     * Select all published collections on the map
+     */
+    public function all_collections()
+    {
+        // only published items of item_type 30 are collections on the map
+        $this->data = array_merge($this->data, ['items.item_type_id'=>30, 'items.status_id'=>20]);
+        return $this->all_with_default_nl();
+    } 
+
+    public function all_with_default_nl()
+    {
+        // look for items in the requested language, and use 'nl' records as fallback
+        $preferred_language = $this->data['language'];
+
+        $query = DB::table('items')
+                    ->select('items.*', 'users.group_id')
+                    ->join('users', 'items.user_id', '=', 'users.id')
+                    ->leftJoin('items as i2', function($join) use ($preferred_language) {
+                        $join->on('i2.id', '=', 'items.id')
+                                ->where('i2.language', '=', $preferred_language)
+                                ->where('items.language', '<>', $preferred_language);
+                    })
+                    ->whereIn('items.language', [$preferred_language, 'nl'])
+                    ->whereNull('i2.id');
+                   
+        // any parameters to add to the query?        
+        foreach($this->data as $k => $v) {
+            
+            if($k==='language') continue;
+                        
+            if(strpos($v, ',')!==false) {
+                $array = explode(',', $v);
+                $query->whereIn($k, $array);
+            } else {
+                $query->where($k, $v);
+            }
+        }               
+        $all_collections = $query->get();
+
+        // look for item_properties in the requested language, and use 'nl' records as fallback
+        $query = DB::table('item_properties')
+                    ->select('item_properties.*')
+                    ->join('items', 'item_properties.item_id', '=', 'items.id')
+                    ->leftJoin('item_properties as p2', function($join) use ($preferred_language) {
+                        $join->on('p2.id', '=', 'item_properties.id')
+                                ->where('p2.language', '=', $preferred_language)
+                                ->where('item_properties.language', '<>', $preferred_language);
+                    
+                    })
+                    ->whereIn('item_properties.language', [$preferred_language, 'nl'])                        
+                    ->whereNull('p2.id')
+                    ->where('items.item_type_id', '=', 10);
+                    
+        $item_properties = $query->get();
+
+        // add flattened properties
+        $all_collections->transform( function ($item) use ($item_properties) {
+            $item->item_properties = (object)[];
+            
+            foreach($item_properties as $r) {
+                if($r->item_id===$item->id) {
+                    $item->item_properties->{$r->key} = $r->value;
+                }
+            }
+            
+            return $item;
+        });
+
+
+        // Get items in the requested language, and use 'nl' records as fallback
+        $getItem = new GetItem( ['language' => $this->data['language']] );
+        $all_items = $getItem->all_with_default_nl();
+
+        $collections = $this->_add_items_to_collections($all_items, $all_collections);
+
+        return $collections;
+        
     }
 
 }

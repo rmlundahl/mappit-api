@@ -152,7 +152,12 @@ Route::group(['middleware'=>'setLocale', 'prefix' => 'v1/'.$locale], function() 
     Route::get('/filters/{id}',        'API\FilterController@find');
 
     // Collection routes
-    Route::get('/collections',         'API\CollectionController@index');
-    Route::get('/collections/{id}',    'API\CollectionController@find');
+    Route::get('/collections/all_collections', 'API\CollectionController@all_collections');
+    Route::get('/collections/all_from_user',   'API\CollectionController@all_from_user');
+    Route::get('/collections',                 'API\CollectionController@index');
+    Route::get('/collections/{id}',            'API\CollectionController@find');
+    Route::post('/collections',                'API\CollectionController@store');
+    Route::put('/collections/{id}',            'API\CollectionController@update');
+    Route::delete('/collections/{id}',         'API\CollectionController@delete');
     
 });

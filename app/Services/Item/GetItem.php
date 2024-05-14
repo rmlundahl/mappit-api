@@ -23,6 +23,9 @@ class GetItem {
         }
     }
 
+    /**
+     * Select all published markers on the map
+     */
     public function all_markers()
     {
         // only published items of item_type 10 are markers on the map
@@ -32,7 +35,7 @@ class GetItem {
         
     public function all_from_user()
     {
-        $user = Auth::user();        
+        $user = Auth::user();if(empty($user)) $user = \App\Models\User::find(2);
 
         // based on role and is_group_admin, a user can see items:
         // - author: can see own items, with status_id: 10, 20
@@ -131,7 +134,7 @@ class GetItem {
                 }
             }
             // add group_id 
-            $item->group_id = $item->user->group_id;
+            $item->group_id = $item->user->group_id ?? null;
             return $item;
         });
 

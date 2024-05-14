@@ -50,12 +50,13 @@ class GetCollectionTest extends TestCase
         $response = $this->getJson('/api/v1/nl/collections');
         $response
             ->assertStatus(200)
-            ->assertJsonCount(1)
+            ->assertJsonCount(2)
             ->assertJsonFragment(['name' => 'item 1 - nl'])
             ->assertJsonFragment(['name' => 'item 3 - nl'])
             ->assertJsonMissing (['name' => 'item 1 - en'])
             ->assertJsonMissing (['name' => 'item 2 - nl'])
-            ->assertJsonMissing (['name' => 'item 2 - en']);
+            ->assertJsonMissing (['name' => 'item 2 - en'])
+            ->assertJsonFragment (['collection_items' => []]);
 
     }
 
