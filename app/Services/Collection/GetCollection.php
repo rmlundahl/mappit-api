@@ -44,7 +44,7 @@ class GetCollection {
 
         foreach($all_collections as $r) {
 
-            $collections[$r->id] = ['id'=>$r->id, 'name'=>$r->name, 'slug'=>$r->slug, 'content'=>$r->content, 'status_id'=>$r->status_id, 'collection_items'=>[]];
+            $collections[$r->id] = ['id'=>$r->id, 'name'=>$r->name, 'slug'=>$r->slug, 'content'=>$r->content, 'status_id'=>$r->status_id, 'group_id'=>$r->group_id, 'item_properties'=>$r->item_properties, 'collection_items'=>[]];
 
             // Select the items belonging to the collections
             $items = DB::table('item_collection')
@@ -135,7 +135,7 @@ class GetCollection {
                     })
                     ->whereIn('item_properties.language', [$preferred_language, 'nl'])                        
                     ->whereNull('p2.id')
-                    ->where('items.item_type_id', '=', 10);
+                    ->where('items.item_type_id', '=', 30);
                     
         $item_properties = $query->get();
 
