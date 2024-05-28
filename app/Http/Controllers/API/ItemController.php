@@ -101,7 +101,7 @@ class ItemController extends Controller
             return response()->json( [], 404 );
         }
 
-        $item = Item::where('id', $id)->where('item_type_id', $item_type_id)->where('language', App::getLocale())->with('item_properties')->first();
+        $item = Item::where('id', $id)->where('item_type_id', $item_type_id)->where('language', App::getLocale())->with('user','item_properties')->first();
        
         if (empty($item)) {
             return response()->json( [], 404 ); 
