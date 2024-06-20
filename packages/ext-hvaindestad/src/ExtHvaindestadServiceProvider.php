@@ -35,13 +35,17 @@ class ExtHvaindestadServiceProvider extends ServiceProvider
             ]);
         }
 
+        /**
+         * Salesforce will be retired at HvA. Stop the daily importing 
+         */
+
         // Schedule the command if we are using the application via the CLI
-        if ($this->app->runningInConsole()) {
-            $this->app->booted(function () {
-                $schedule = $this->app->make(Schedule::class);
-                $schedule->command('exthvaindestad:import_json')->dailyAt('01:15');
-            });
-        }
+        // if ($this->app->runningInConsole()) {
+        //     $this->app->booted(function () {
+        //         $schedule = $this->app->make(Schedule::class);
+        //         $schedule->command('exthvaindestad:import_json')->dailyAt('01:15');
+        //     });
+        // }
     }
 
     /**
