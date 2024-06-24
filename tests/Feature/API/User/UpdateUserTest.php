@@ -15,6 +15,7 @@ class UpdateUserTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->clearTables();
     }
 
     public function test_update_user__administrator_can_update_author()

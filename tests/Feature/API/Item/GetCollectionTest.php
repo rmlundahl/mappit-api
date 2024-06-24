@@ -19,6 +19,8 @@ class GetCollectionTest extends TestCase
 
     public function test_get_all_collections__no_items()
     {
+        $this->clearTables();
+        
         $response = $this->getJson('/api/v1/nl/collections');
         $response
             ->assertStatus(200)

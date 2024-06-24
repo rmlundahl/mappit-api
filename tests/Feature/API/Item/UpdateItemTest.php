@@ -14,6 +14,12 @@ class UpdateItemTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->clearTables();
+    }
+    
     public function test_update_item()
     {
         $user = User::factory()->create();

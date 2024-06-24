@@ -13,6 +13,12 @@ use DB;
 class GroupsFromUserTest extends TestCase
 {
     use RefreshDatabase;
+    
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->clearTables();
+    }
 
     public function test_groups_from_user__show_no_groups_if_unauthenticated()
     {

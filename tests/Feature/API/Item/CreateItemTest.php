@@ -20,6 +20,8 @@ class CreateItemTest extends TestCase
 
     public function test_create_item()
     {
+        $this->clearTables();
+
         $user = User::factory()->create();
         
         $this->actingAs($user)
@@ -33,6 +35,7 @@ class CreateItemTest extends TestCase
         
         
         $this->assertDatabaseHas('items', [
+            'id' => '1',
             'name' => 'New Name',
             'slug' => 'new-name',
             'user_id' => $user->id
@@ -59,7 +62,7 @@ class CreateItemTest extends TestCase
         $this->assertDatabaseHas('items', [
             'id' => '2',
             'name' => 'New Name',
-            'slug' => 'new-name',
+            'slug' => 'new-name-2',
             'user_id' => $user->id
             ]);
         

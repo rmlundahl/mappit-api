@@ -16,6 +16,12 @@ class GetItemTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->clearTables();
+    }
+
     public function test_get_all_items__no_items()
     {
         $response = $this->getJson('/api/v1/nl/items');
@@ -250,7 +256,7 @@ class GetItemTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson(fn (AssertableJson $json) => $json
-                ->count(13)    
+                ->count(14)    
                 ->where('id', 123)
                 ->where('language', 'nl')
                 ->etc()
@@ -267,7 +273,7 @@ class GetItemTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson(fn (AssertableJson $json) => $json
-                ->count(13)    
+                ->count(14)    
                 ->where('id', 123)
                 ->where('language', 'nl')
                 ->etc()

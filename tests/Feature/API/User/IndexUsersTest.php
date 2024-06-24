@@ -14,6 +14,12 @@ class IndexUsersTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->clearTables();
+    }
+    
     public function test_index__show_no_users_if_unauthenticated()
     {
         
