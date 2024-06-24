@@ -13,10 +13,10 @@
         "intervention/imagecache": "^2.5",
         "laravel-lang/lang": "^11.0",
         "laravel/fortify": "^1.18",
-        "laravel/framework": "^9.19",
-        "laravel/sanctum": "^2.11",
+        "laravel/framework": "^10.0",
+        "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.7",
-        "laravel/ui": "^3.3",
+        "laravel/ui": "^4.0",
         "maatwebsite/excel": "^3.1.48",
         "mavinoo/laravel-batch": "^2.3",
         "staudenmeir/laravel-adjacency-list": "^1.12"
@@ -27,9 +27,9 @@
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "nunomaduro/collision": "^7.0",
+        "phpunit/phpunit": "^10.0",
+        "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
         "psr-4": {
