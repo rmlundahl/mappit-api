@@ -7,6 +7,10 @@ use Awobaz\Compoships\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $group_id
+ * @property object $item_properties
+ */
 class Item extends Model
 {
     use HasFactory;

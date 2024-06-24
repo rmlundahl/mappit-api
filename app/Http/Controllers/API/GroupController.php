@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Group;
 use App\Models\User;
@@ -24,8 +23,11 @@ class GroupController extends Controller
 
     public function groups_from_user()
     {
-        $groups = Group::find(Auth::user()->group_id)->descendantsAndSelf()->get();
-        return response()->json( $groups, 200 );
+        $user = Auth::user();
+        if( $user instanceof User) {
+            $groups = Group::find($user->group_id)->descendantsAndSelf()->get();
+            return response()->json( $groups, 200 );
+        }
     }
 
 }

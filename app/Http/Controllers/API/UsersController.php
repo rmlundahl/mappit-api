@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Http\Controllers\API;
 
@@ -38,7 +38,7 @@ class UsersController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -65,15 +65,21 @@ class UsersController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  App\Http\Requests\API\User\CreateUserRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\API\User\CreateUserRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(CreateUserRequest $request)
     {
-        if( Auth::user()->can('store', [User::class]) ) {
+        $user = Auth::user();
+        
+        if( !$user instanceof User) {
+            abort(403);
+        }
+            
+        if( $user->can('store', [User::class]) ) {
             
             // authors can only create other authors
-            if( Auth::user()->role=='author' &&  $request['role']!='author' ) {
+            if( $user->role=='author' &&  $request['role']!='author' ) {
                 abort(403);
             }
 
@@ -88,9 +94,9 @@ class UsersController extends Controller
      * Find the specified resource by primary key.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function find($id, Request $request)
+    public function find($id)
     {
         if ( !is_numeric($id) ) {
             return response()->json( [], 404 );
@@ -108,39 +114,45 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  App\Http\Requests\API\User\UpdateUserRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\API\User\UpdateUserRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateUserRequest $request)
     {
-        if( Auth::user()->can('update', [User::class]) ) {
+        $user = Auth::user();
+        
+        if( !$user instanceof User) {
+            abort(403);
+        }
+        
+        if( $user->can('update', [User::class]) ) {
             
-            $user = User::where('id', $request->id)->first();
+            $userToUpdate = User::where('id', $request->id)->first();
        
-            if (empty($user)) {
+            if (empty($userToUpdate)) {
                 return response()->json( [], 404 ); 
             }
 
             // authors can not update roles
-            if( Auth::user()->role=='author' && isset($request['role']) && $request['role']!='author' ) {
+            if( $user->role=='author' && isset($request['role']) && $request['role']!='author' ) {
                 abort(403);
             }
 
             // authors can not update other authors, unless they are group admin. And they can update their own profile
-            if( Auth::user()->role=='author' && !Auth::user()->is_group_admin && Auth::user()->id != $request['id']) {
+            if( $user->role=='author' && !$user->is_group_admin && $user->id != $request['id']) {
                 abort(403);
             }
 
-            $updateUser = new UpdateUser( $request->all(), $user );
+            $updateUser = new UpdateUser( $request->all(), $userToUpdate );
             
-            $user = $updateUser->update($updateUser, $user);
+            $updatedUser = $updateUser->update();
 
             // send email to new user?
             if($request['form_action']=='new') {
-                $user->notify(new UserCreated($request['name'], $request['email'], $request['password']??'', Auth::user()->email));
+                $updatedUser->notify(new UserCreated($request['name'], $request['email'], $request['password']??'', $user->email));
             }
 
-            return response()->json( $user, 200 );
+            return response()->json( $updatedUser, 200 );
         }
         abort(403);
     }
@@ -148,8 +160,8 @@ class UsersController extends Controller
     /**
      * Soft remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $item
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\API\User\DeleteUserRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function delete(DeleteUserRequest $request)
     {
@@ -161,7 +173,7 @@ class UsersController extends Controller
 
         $deleteUser = new DeleteUser( $request->all(), $user );
         
-        $user = $deleteUser->delete($deleteUser, $user);
+        $user = $deleteUser->delete();
         return response()->json( [], 204 );
     }
 }

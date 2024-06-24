@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Services\User;
 
@@ -21,6 +21,10 @@ class GetUser {
     public function all()
     {
         $user = Auth::user();
+
+        if( !$user instanceof User) {
+            return;
+        }
 
         // based on role, a user can see users:
         // - author && is_group_admin: can see all users in same group, with status_id: 10, 20, 99
@@ -76,6 +80,10 @@ class GetUser {
     private function _get_user_ids()
     {
         $user = Auth::user();
+        
+        if( !$user instanceof User) {
+            return;
+        }
 
         // Get all groups from user
         $groups = Group::find($user->group_id)->descendantsAndSelf()->get();

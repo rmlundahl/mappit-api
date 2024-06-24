@@ -29,7 +29,7 @@ class ItemController extends Controller
     /**
      * Get all published items with item_properties for use as marker on the Google Map
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function all_markers(Request $request)
     {
@@ -46,7 +46,7 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * * @return \Illuminate\Http\Response
+     * * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -58,7 +58,7 @@ class ItemController extends Controller
     /**
      * Get a listing of all items a user can see, based on the user's role
      *
-     * * @return \Illuminate\Http\Response
+     * * @return \Illuminate\Http\JsonResponse
      */
     public function all_from_user(Request $request)
     {
@@ -75,7 +75,7 @@ class ItemController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  App\Http\Requests\API\Item\CreateItemRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(CreateItemRequest $request)
     {
@@ -88,7 +88,7 @@ class ItemController extends Controller
      * Find the specified resource by primary key.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function find($id, Request $request)
     {
@@ -114,14 +114,14 @@ class ItemController extends Controller
      * Update the specified resource in storage.
      *
      * @param  App\Http\Requests\API\Item\UpdateItemRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateItemRequest $request)
     {
         $item = Item::find(['id'=>$request->id, 'language'=>$request->language]);
         
         $updateItem = new UpdateItem( $request->all(), $item );
-        $item = $updateItem->update($updateItem, $item);
+        $item = $updateItem->update();
 
         return response()->json( $item, 200 );
     }
@@ -129,12 +129,11 @@ class ItemController extends Controller
     /**
      * Soft remove the specified resource from storage.
      *
-     * @param  \App\Models\Item  $item
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function delete(DeleteItemRequest $request)
     {
-        $item =Item::find(['id'=>$request->id, 'language'=>$request->language]);
+        $item = Item::find(['id'=>$request->id, 'language'=>$request->language]);
         
         if (empty($item)) {
             return response()->json( [], 404 ); 
@@ -142,7 +141,7 @@ class ItemController extends Controller
 
         $deleteItem = new DeleteItem( $request->all(), $item );
         
-        $item = $deleteItem->delete($deleteItem, $item);
+        $item = $deleteItem->delete();
         return response()->json( [], 204 );
     }
 }

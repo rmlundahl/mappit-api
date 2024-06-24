@@ -66,17 +66,13 @@ class GetItemTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonCount(3)
-            ->assertJsonFragment(
-                ['id'=>1, 'name'=>'1-en', 'status_id'=>20],
-                ['id'=>2, 'name'=>'2-en', 'status_id'=>20],
-                ['id'=>5, 'name'=>'5-nl', 'status_id'=>20],
-            )
-            ->assertJsonMissing(
-                ['name'=>'1-nl'],
-                ['name'=>'2-nl'],
-                ['name'=>'3-nl'],
-                ['name'=>'4-nl'],
-            );
+            ->assertJsonFragment(['name'=>'1-en'])
+            ->assertJsonFragment(['name'=>'2-en'])
+            ->assertJsonFragment(['name'=>'5-nl'])
+            ->assertJsonMissing(['name'=>'1-nl'])
+            ->assertJsonMissing(['name'=>'2-nl'])
+            ->assertJsonMissing(['name'=>'3-nl'])
+            ->assertJsonMissing(['name'=>'4-nl']);
             
     }
 

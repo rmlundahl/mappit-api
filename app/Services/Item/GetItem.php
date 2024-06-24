@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Services\Item;
 
 use App\Models\Item;
 use App\Models\Group;
+use App\Models\User;
 use App\Services\User\GetUser;
 
 use Illuminate\Support\Facades\App;
@@ -35,7 +36,11 @@ class GetItem {
         
     public function all_from_user()
     {
-        $user = Auth::user();if(empty($user)) $user = \App\Models\User::find(2);
+        $user = Auth::user();
+
+        if( !$user instanceof User) {
+           return;
+        }
 
         // based on role and is_group_admin, a user can see items:
         // - author: can see own items, with status_id: 10, 20
@@ -111,7 +116,7 @@ class GetItem {
         // any parameters to add to the query?
         if( !empty($this->data) ) {
             foreach($this->data as $k => $v) {
-                
+                $v = (string) $v;
                 if(strpos($v, ',')!==false) {
                     $array = explode(',', $v);
                     $query->whereIn($k, $array);
@@ -161,7 +166,9 @@ class GetItem {
         foreach($this->data as $k => $v) {
             
             if($k==='language') continue;
-                        
+            
+            $v = (string) $v;
+            
             if(strpos($v, ',')!==false) {
                 $array = explode(',', $v);
                 $query->whereIn($k, $array);

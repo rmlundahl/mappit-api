@@ -21,7 +21,7 @@ class ImageController extends Controller
     /**
      * Get a listing of files in the direcatory
      * @param  string  $path
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index($path)
     {
@@ -33,7 +33,7 @@ class ImageController extends Controller
      * Store an image in storage.
      *
      * @param  App\Http\Requests\API\Image\StoreImageRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreImageRequest $request)
     {

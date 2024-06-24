@@ -5,13 +5,11 @@ parameters:
     paths:
         - app
         - tests
-    level: 1
+    level: 2
 #    ignoreErrors:
 #        - '#PHPDoc tag @var#'
 #
     excludePaths:
         - app/Providers
 
-
-    checkMissingIterableValueType: false
     

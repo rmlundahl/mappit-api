@@ -28,7 +28,7 @@ class CollectionController extends Controller
     /**
      * Get all published collections with items with item_properties for use on the Google Map
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function all_collections(Request $request)
     {
@@ -36,7 +36,7 @@ class CollectionController extends Controller
         $collections = $getCollection->all_collections();
         
         if (empty($collections)) {
-            return response()->json( [], 404 ); 
+            return response()->json( [], 404 );
         }
 
         return response()->json( $collections, 200 );
@@ -45,7 +45,7 @@ class CollectionController extends Controller
     /**
      * Get a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -57,7 +57,7 @@ class CollectionController extends Controller
     /**
      * Get a listing of all collections a user can see, based on the user's role
      *
-     * * @return \Illuminate\Http\Response
+     * * @return \Illuminate\Http\JsonResponse
      */
     public function all_from_user(Request $request)
     {
@@ -74,7 +74,7 @@ class CollectionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  App\Http\Requests\API\Item\CreateItemRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(CreateItemRequest $request)
     {
@@ -87,7 +87,7 @@ class CollectionController extends Controller
      * Find the specified resource by primary key.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function find($id, Request $request)
     {
@@ -113,14 +113,14 @@ class CollectionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  App\Http\Requests\API\Item\UpdateItemRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateItemRequest $request)
     {
         $item = Item::find(['id'=>$request->id, 'language'=>$request->language]);
         
         $updateItem = new UpdateItem( $request->all(), $item );
-        $item = $updateItem->update($updateItem, $item);
+        $item = $updateItem->update();
 
         return response()->json( $item, 200 );
     }
@@ -128,8 +128,7 @@ class CollectionController extends Controller
     /**
      * Soft remove the specified resource from storage.
      *
-     * @param  \App\Models\Item  $item
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function delete(DeleteItemRequest $request)
     {
