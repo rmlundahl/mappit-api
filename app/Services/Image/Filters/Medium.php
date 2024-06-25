@@ -10,6 +10,6 @@ class Medium implements FilterInterface
     public function applyFilter(Image $image)
     {
         $sizes = explode('x', config('imagecache.dimensions.medium'));
-        return $image->fit( $sizes[0],$sizes[1] )->encode('jpg', 100);
+        return $image->fit( (int) $sizes[0], (int) $sizes[1] )->encode('jpg', 100);
     }
 }

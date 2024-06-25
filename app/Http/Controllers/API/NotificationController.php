@@ -33,7 +33,7 @@ class NotificationController extends Controller
     /**
      * Find the specified resource by primary key.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function find($id)
