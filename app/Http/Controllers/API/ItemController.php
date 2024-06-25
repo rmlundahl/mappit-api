@@ -18,12 +18,10 @@ use App, Log, Validator;
 
 class ItemController extends Controller
 {
-    private $item;
 
-    public function __construct(Item $item)
+    public function __construct()
     {
         $this->middleware('auth:sanctum')->only(['all_from_user', 'store', 'update', 'delete']);
-        $this->item = $item;
     }
 
     /**
@@ -139,7 +137,7 @@ class ItemController extends Controller
             return response()->json( [], 404 ); 
         }
 
-        $deleteItem = new DeleteItem( $request->all(), $item );
+        $deleteItem = new DeleteItem($item);
         
         $item = $deleteItem->delete();
         return response()->json( [], 204 );

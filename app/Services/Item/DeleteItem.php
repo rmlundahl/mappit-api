@@ -7,12 +7,10 @@ use App\Models\Item;
 
 class DeleteItem {
     
-    private $data;
     private $item;
 
-    public function __construct(array $deleteItemData, Item $item)
+    public function __construct(Item $item)
     {
-        $this->data = $deleteItemData;
         $this->item = $item;
     }
 

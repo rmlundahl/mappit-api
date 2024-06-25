@@ -10,16 +10,12 @@ use Auth;
 
 class GroupController extends Controller
 {
-    private $user;
-    private $groups;
-    
-    public function __construct(User $user)
+
+    public function __construct()
     {
         $this->middleware('auth:sanctum');
-        $this->user = $user;
 
     }
-
 
     public function groups_from_user()
     {

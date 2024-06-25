@@ -138,7 +138,7 @@ class CollectionController extends Controller
             return response()->json( [], 404 ); 
         }
 
-        $deleteItem = new DeleteItem( $request->all(), $item );
+        $deleteItem = new DeleteItem($item);
         
         $item = $deleteItem->delete();
         return response()->json( [], 204 );

@@ -5,7 +5,7 @@ parameters:
     paths:
         - app
         - tests
-    level: 3
+    level: 4
     ignoreErrors:
         - '#^Property App\\Models\\[a-zA-Z]+\:\:\$primaryKey \(string\) does not accept default value of type array\<int, string\>\.$#'
         - 

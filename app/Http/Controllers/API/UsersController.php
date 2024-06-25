@@ -20,13 +20,11 @@ use Auth, Log;
 
 class UsersController extends Controller
 {
-    private $user;
     private $getUser;
     
-    public function __construct(User $user, GetUser $getUser)
+    public function __construct(GetUser $getUser)
     {
         $this->middleware('auth:sanctum');
-        $this->user = $user;
         $this->getUser = $getUser;
     }
 
@@ -171,7 +169,7 @@ class UsersController extends Controller
             return response()->json( [], 404 ); 
         }
 
-        $deleteUser = new DeleteUser( $request->all(), $user );
+        $deleteUser = new DeleteUser($user);
         
         $user = $deleteUser->delete();
         return response()->json( [], 204 );
