@@ -30,7 +30,7 @@ class SaveItemCollection {
             foreach ($data as $v) {
                 $item_collection = new ItemCollection;            
                 $item_collection->collection_item_id = $this->data['item_id'];
-                $item_collection->item_id = $v;
+                $item_collection->item_id = (int) $v;
                 $item_collection->save();
             }
 
