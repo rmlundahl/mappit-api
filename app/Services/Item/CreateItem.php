@@ -11,12 +11,12 @@ use Str;
 class CreateItem {
     
     /**
-     * @var array<string, string>
+     * @var array<string, int|string>
      */
     private $data;
 
     /**
-     * @param  array<string, string>  $newItemData
+     * @param  array<string, int|string>  $newItemData
      */
     public function __construct($newItemData)
     {
@@ -26,20 +26,20 @@ class CreateItem {
     public function save(): Item
     {
         $item = new Item;
-        $item->language     = $this->data['language'];
-        $item->item_type_id = (int) $this->data['item_type_id'];
-        $item->external_id  = $this->data['external_id'] ?? null;
-        $item->name         = $this->data['name'];
+        $item->language     = (string) $this->data['language'];
+        $item->item_type_id = (int) $this->data['item_type_id'];        
+        if( !empty($this->data['external_id']) ) $item->external_id = (string) $this->data['external_id'];
+        $item->name         = (string) $this->data['name'];
         
         if( !empty($this->data['slug']) ) {
-            $item->slug     = Str::slug($this->data['slug']);
+            $item->slug     = Str::slug((string) $this->data['slug']);
         } else {
-            $item->slug     = Str::slug($this->data['name']);
+            $item->slug     = Str::slug((string) $this->data['name']);
         }
-        
-        $item->content      = $this->data['content'] ?? null;
+
+        if( !empty($this->data['content']) ) $item->content = (string) $this->data['content'];
         $item->user_id      = (int) $this->data['user_id'];
-        $item->status_id    = $this->data['status_id'] ?? 1;
+        $item->status_id    = (int) ($this->data['status_id'] ?? 1);
         
         if ( $item->save() ) {
             // Necessary because the save() method does not return the last created 'id' in the model

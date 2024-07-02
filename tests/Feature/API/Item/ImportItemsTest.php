@@ -17,7 +17,7 @@ class ImportItemsTest extends TestCase
         Http::fake([
             config('exthvaindestad.import_json_data.api_url')
             => Http::response(
-                json_decode(file_get_contents('tests/Feature/API/Item/stubs/response_200.json'), true),
+                json_decode((string) file_get_contents('tests/Feature/API/Item/stubs/response_200.json'), true),
                 200
             )
         ]);

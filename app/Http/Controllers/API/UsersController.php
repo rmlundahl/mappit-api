@@ -173,7 +173,7 @@ class UsersController extends Controller
      */
     public function delete(DeleteUserRequest $request)
     {
-        $user = User::find($request->id);
+        $user = User::find((int) $request->id);
         
         if (empty($user)) {
             return response()->json( [], 404 ); 

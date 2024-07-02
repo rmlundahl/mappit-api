@@ -13,13 +13,13 @@ use DB, Log, Str;
 class UpdateItem {
 
     /**
-     * @var array<string, string>
+     * @var array<string, int|string>
      */    
     private array $data;
     private Item $item;
 
     /**
-     * @param  array<string, string>  $updateItemData
+     * @param  array<string, int|string>  $updateItemData
      */
     public function __construct(array $updateItemData, Item $item)
     {
@@ -32,19 +32,22 @@ class UpdateItem {
         if( !empty($this->data['item_type_id']) )
             $this->item->item_type_id = (int) $this->data['item_type_id'];
         
-        $this->item->external_id  = $this->data['external_id'] ?? null;
-        
+        if( !empty($this->data['external_id']) )
+            $this->item->external_id = (string) $this->data['external_id'];
+
         if( !empty($this->data['name']) )
-            $this->item->name     = $this->data['name'];
+            $this->item->name = (string) $this->data['name'];
 
         if( !empty($this->data['slug']) ) {
-            $this->item->slug     = Str::slug($this->data['slug']);
+            $this->item->slug = Str::slug((string) $this->data['slug']);
         } else {
-            $this->item->slug     = Str::slug($this->data['name']);
+            $this->item->slug = Str::slug((string) $this->data['name']);
         }
         
-        $this->item->content      = $this->data['content'] ?? null;
-        $this->item->user_id      = $this->data['user_id'] ?? 1;
+        if( !empty($this->data['content']) )
+            $this->item->content = (string) $this->data['content'];
+
+        $this->item->user_id = (int) ($this->data['user_id'] ?? 1);
 
         if( !empty($this->data['status_id']) ) {
             $this->_check_whether_notification_should_be_sent();

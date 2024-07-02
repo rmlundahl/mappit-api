@@ -65,7 +65,7 @@ class ItemPublished extends Notification
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     public function toArray($notifiable)
     {

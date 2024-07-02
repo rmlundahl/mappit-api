@@ -13,12 +13,12 @@ use App, DB;
 class GetCollection {
     
     /**
-     * @var array<string, string>
+     * @var array<string, int|string>
      */
     private array $data;
 
     /**
-     * @param  array<string, string>  $parameterData
+     * @param  array<string, int|string>  $parameterData
      */
     public function __construct(array $parameterData=[])
     {
@@ -140,8 +140,8 @@ class GetCollection {
             
             if($k==='language') continue;
                         
-            if(strpos($v, ',')!==false) {
-                $array = explode(',', $v);
+            if(strpos( (string) $v, ',')!==false ) {
+                $array = explode(',',  (string) $v);
                 $query->whereIn($k, $array);
             } else {
                 $query->where($k, $v);

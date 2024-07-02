@@ -9,12 +9,12 @@ use DB, Exception, Log;
 class SaveItemCollection {
     
     /**
-     * @var array<string, string>
+     * @var array<string, int|string>
      */    
     private array $data;
 
     /**
-     * @param  array<string, string>  $itemData
+     * @param  array<string, int|string>  $itemData
      */
     public function __construct($itemData)
     {
@@ -31,7 +31,7 @@ class SaveItemCollection {
             if(empty($this->data['collection_items'])) return;
 
             // insert new data
-            $data = explode(',', $this->data['collection_items']);            
+            $data = explode(',', (string) $this->data['collection_items']);            
 
             foreach ($data as $v) {
                 $item_collection = new ItemCollection;            

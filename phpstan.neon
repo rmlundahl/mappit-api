@@ -5,7 +5,7 @@ parameters:
     paths:
         - app
         - tests
-    level: 6
+    level: 7
 
     treatPhpDocTypesAsCertain: false
     

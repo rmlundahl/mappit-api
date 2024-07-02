@@ -39,7 +39,11 @@ class UsersImportController extends Controller
         if( $auth_user->can('import', [User::class]) ) {
 
             $import = new UsersImport;
-            Excel::import($import, request()->file('file'));
+
+            /** @var \Illuminate\Http\UploadedFile $uploadedFile */
+            $uploadedFile = request()->file('file');
+            
+            Excel::import($import, $uploadedFile);
             
             // Should we notify new users?
             if( count($import->getNewUsers()) && $request->input('notify_user')==='true' ) {

@@ -10,12 +10,12 @@ use DB, Exception, Log;
 class SaveItemProperty {
     
     /**
-     * @var array<string, string>
+     * @var array<string, int|string>
      */    
     private array $data;
 
     /**
-     * @param  array<string, string>  $itemData
+     * @param  array<string, int|string>  $itemData
      */
     public function __construct(array $itemData)
     {
@@ -40,7 +40,7 @@ class SaveItemProperty {
             foreach ($data as $k => $v) {
                 
                 $item_property = new ItemProperty;
-                $item_property->language  = $this->data['language'];
+                $item_property->language  = (string) $this->data['language'];
                 $item_property->item_id   = (int) $this->data['item_id'];
                 $item_property->status_id = (int) $this->data['status_id'];
                 
@@ -57,7 +57,7 @@ class SaveItemProperty {
                         if(empty($r)) continue;
 
                         $item_property = new ItemProperty;
-                        $item_property->language  = $this->data['language'];
+                        $item_property->language  = (string) $this->data['language'];
                         $item_property->item_id   = (int) $this->data['item_id'];
                         $item_property->status_id = (int) $this->data['status_id'];
 

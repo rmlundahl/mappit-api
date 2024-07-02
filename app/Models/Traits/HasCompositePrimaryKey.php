@@ -82,14 +82,19 @@ trait HasCompositePrimaryKey
 	 */
 	public static function findOrFail($ids, $columns = ['*'])
 	{
+		/** @var array<string, string> $ids */
 		$result = self::find($ids, $columns);
 
 		if (!is_null($result)) {
 			return $result;
 		}
 
+		/** @var class-string<\Illuminate\Database\Eloquent\Model> $class */
+		$class = __CLASS__;
+
+		/** @var array<int, int|string>|int|string $ids */
 		throw (new ModelNotFoundException)->setModel(
-			__CLASS__, $ids
+			$class, $ids
 		);
 	}
 

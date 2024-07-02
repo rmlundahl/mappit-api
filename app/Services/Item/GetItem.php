@@ -13,14 +13,14 @@ use Auth, DB, Log;
 class GetItem {
     
     /**
-     * @var array<string, string>
+     * @var array<string, int|string>
      */
     private $data;
 
     private GetUser $getUser;
 
     /**
-     * @param  array<string, string>  $parameterData
+     * @param  array<string, int|string>  $parameterData
      */
     public function __construct(array $parameterData)
     {
