@@ -11,7 +11,7 @@ class ImportItemsTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_import_json_data__no_items()
+    public function test_import_json_data__no_items(): void
     {
         // init
         Http::fake([

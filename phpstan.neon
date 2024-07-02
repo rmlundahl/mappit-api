@@ -5,9 +5,14 @@ parameters:
     paths:
         - app
         - tests
-    level: 5
+    level: 6
+
+    treatPhpDocTypesAsCertain: false
+    
     ignoreErrors:
         - '#^Property App\\Models\\[a-zA-Z]+\:\:\$primaryKey \(string\) does not accept default value of type array\<int, string\>\.$#'
+        - '#^Method App\\Models\\[a-zA-Z]+\:\:setKeysForSaveQuery\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModelClass$#'
+        - '#^Method App\\Models\\[a-zA-Z]+\:\:setKeysForSaveQuery\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModelClass$#'
         - 
             message: '#^Argument of an invalid type string supplied for foreach, only iterables are supported\.$#'
             path: app/Models/Traits/HasCompositePrimaryKey.php

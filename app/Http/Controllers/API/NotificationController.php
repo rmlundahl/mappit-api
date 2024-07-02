@@ -20,7 +20,7 @@ class NotificationController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -28,6 +28,7 @@ class NotificationController extends Controller
         if($user instanceof User) {
             return response()->json( $user->notifications, 200 );
         }
+        return response()->json( [], 404 );
     }
 
     /**

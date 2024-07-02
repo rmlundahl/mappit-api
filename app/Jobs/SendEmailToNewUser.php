@@ -18,12 +18,15 @@ use Illuminate\Queue\SerializesModels;
 
 use Auth;
 
+/**
+ * 
+ */
 class SendEmailToNewUser implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $user;
-    private $userPreference;
+    private User $user;
+    private UserPreference $userPreference;
 
     /**
      * Create a new job instance.
@@ -57,7 +60,7 @@ class SendEmailToNewUser implements ShouldQueue
         );
     }
 
-    private function _get_cc_email()
+    private function _get_cc_email(): string
     {
         $this->userPreference = UserPreference::where('user_id', $this->user->id)->where('key','notify_when_created_cc_email')->first();
         

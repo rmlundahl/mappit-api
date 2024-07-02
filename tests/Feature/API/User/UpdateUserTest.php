@@ -18,7 +18,7 @@ class UpdateUserTest extends TestCase
         $this->clearTables();
     }
 
-    public function test_update_user__administrator_can_update_author()
+    public function test_update_user__administrator_can_update_author(): void
     {
         $user = User::factory()->create(['role'=>'administrator']);
         $author = User::factory()->create(['id'=>100, 'name'=>'Old name', 'email'=>'test@example.org']);
@@ -40,7 +40,7 @@ class UpdateUserTest extends TestCase
             ]);
     }
 
-    public function test_update_user__author_can_not_update_author()
+    public function test_update_user__author_can_not_update_author(): void
     {
         $user = User::factory()->create(['role'=>'author', 'is_group_admin'=>0]);
         $author = User::factory()->create(['id'=>100, 'name'=>'Old name', 'email'=>'test@example.org']);
@@ -61,7 +61,7 @@ class UpdateUserTest extends TestCase
         
     }
 
-    public function test_update_user__author_is_group_admin_can_update_author()
+    public function test_update_user__author_is_group_admin_can_update_author(): void
     {
         $user = User::factory()->create(['role'=>'author', 'is_group_admin'=>1]);
         $author = User::factory()->create(['id'=>100, 'name'=>'Old name', 'email'=>'test@example.org', 'role'=>'author']);
@@ -83,7 +83,7 @@ class UpdateUserTest extends TestCase
 
     }
 
-    public function test_update_user__author_is_group_admin_can_not_update_role()
+    public function test_update_user__author_is_group_admin_can_not_update_role(): void
     {
         $user = User::factory()->create(['role'=>'author', 'is_group_admin'=>1]);
         $author = User::factory()->create(['id'=>100, 'name'=>'Old name', 'email'=>'test@example.org', 'role'=>'author']);

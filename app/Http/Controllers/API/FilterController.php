@@ -9,7 +9,7 @@ use App, DB, Log;
 
 class FilterController extends Controller
 {
-    private $filter;
+    private Filter $filter;
 
     public function __construct(Filter $filter)
     {

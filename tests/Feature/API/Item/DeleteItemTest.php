@@ -13,7 +13,7 @@ class DeleteItemTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_delete_item()
+    public function test_delete_item(): void
     {
         $user = User::factory()->create();       
         $items = Item::factory()->count(3)->create();
@@ -26,7 +26,7 @@ class DeleteItemTest extends TestCase
         $this->assertDatabaseHas('items', ['id' => 123, 'language' => 'nl', 'status_id' => 99]);            
     }
 
-    public function test_delete_item__do_not_delete_non_existing_id()
+    public function test_delete_item__do_not_delete_non_existing_id(): void
     {
         $user = User::factory()->create();
         $item  = Item::factory()->create(['id'=>123, 'language'=>'nl', 'status_id'=>20]);

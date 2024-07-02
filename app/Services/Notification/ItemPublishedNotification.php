@@ -4,21 +4,23 @@ namespace App\Services\Notification;
 
 use App\Notifications\ItemPublished;
 use App\Models\User;
+use App\Models\Item;
 
 use Illuminate\Database\Eloquent\Builder;
 
 use Log, Notification;
 
 class ItemPublishedNotification {
-    
-    private $item;
 
-    public function __construct($item)
+    private Item $item;
+
+    public function __construct(Item $item)
     {
         $this->item = $item;
     }
 
-    public function sendNotifications() {
+    public function sendNotifications(): void 
+    {
 
         /**
          * Select all users that:

@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 
 class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsEmptyRows
 {
-    private $new_users = [];
+    private mixed $new_users = [];
 
     public function startRow(): int
     {
@@ -22,7 +22,7 @@ class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsEmptyRo
     }
     
     /**
-     * @param array $row
+     * @param  array<int>  $row
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
@@ -32,7 +32,7 @@ class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsEmptyRo
             'name'     => $row[0],
             'email'    => $row[1],
             'password' => Hash::make(Str::random(32)),
-            'group_id' => $this->_transformGroupColumn($row[2]),
+            'group_id' => $this->_transformGroupColumn((string) $row[2]),
             'is_group_admin' => (boolean) 0,
             'role' => 'author',
             'status_id' => (int) 20,
@@ -43,7 +43,11 @@ class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsEmptyRo
         return $user;
     }
     
-    public function prepareForValidation($row)
+    /**
+     * @param  array<int, string>  $row
+     * @return array<int, string>
+     */
+    public function prepareForValidation(array $row): array
     {
         $row[0] = trim($row[0]);
         $row[1] = trim($row[1]);
@@ -52,6 +56,10 @@ class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsEmptyRo
         return $row;
     }
 
+    /**
+     * @param  string  $value
+     * @return int
+     */
     private function _transformGroupColumn($value)
     {
         $group = Group::select('id')->where('name', '=', $value)->first();
@@ -60,6 +68,9 @@ class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsEmptyRo
         return (int) $group->id;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function rules(): array
     {
         return [            
@@ -69,6 +80,9 @@ class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsEmptyRo
         ];
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function customValidationMessages()
     {
         return [
@@ -80,6 +94,9 @@ class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsEmptyRo
         ];
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getNewUsers(): array
     {
         return $this->new_users;

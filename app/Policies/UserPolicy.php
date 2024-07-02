@@ -20,7 +20,7 @@ class UserPolicy
         //
     }
 
-    public function index( User $user )
+    public function index( User $user ): bool
     {
         if( $user->role == 'administrator' ) {
             return true;
@@ -32,7 +32,7 @@ class UserPolicy
         return false;
     }
 
-    public function users_from_group(User $user)
+    public function users_from_group(User $user): bool
     {
         if( $user->role == 'administrator' ) {
             return true;
@@ -44,7 +44,7 @@ class UserPolicy
         return false;
     }
 
-    public function store( User $user )
+    public function store( User $user ): bool
     {
         if( $user->role == 'administrator' ) {
             return true;
@@ -56,7 +56,7 @@ class UserPolicy
         return false;
     }
 
-    public function update( User $user )
+    public function update( User $user ): bool
     {
         if( $user->role == 'administrator' ) {
             return true;
@@ -68,7 +68,7 @@ class UserPolicy
         return false;
     }
 
-    public function import(User $user)
+    public function import(User $user): bool
     {
         if( $user->role == 'administrator' ) {
             return true;

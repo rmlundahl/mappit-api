@@ -18,7 +18,7 @@ class CreateItemTest extends TestCase
         parent::setUp();
     }
 
-    public function test_create_item()
+    public function test_create_item(): void
     {
         $this->clearTables();
 
@@ -42,7 +42,7 @@ class CreateItemTest extends TestCase
             ]);
     }
 
-    public function test_create_item_with_item_properties()
+    public function test_create_item_with_item_properties(): void
     {
         $user = User::factory()->create();
         
@@ -75,7 +75,7 @@ class CreateItemTest extends TestCase
             ]);
     }
 
-    public function test_create_item_of_type_collection()
+    public function test_create_item_of_type_collection(): void
     {
         $user = User::factory()->create();
         

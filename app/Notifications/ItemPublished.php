@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Models\Item;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -13,15 +15,15 @@ class ItemPublished extends Notification
 {
     use Queueable;
 
-    private $item;
-    private $ns, $item_type, $url;
+    private Item $item;
+    private string $ns, $item_type, $url;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($item)
+    public function __construct(Item $item)
     {
         $this->item = $item;
 
@@ -35,7 +37,7 @@ class ItemPublished extends Notification
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
-     * @return array
+     * @return array<int, string>
      */
     public function via($notifiable)
     {
@@ -63,7 +65,7 @@ class ItemPublished extends Notification
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return array
+     * @return array<string, string>
      */
     public function toArray($notifiable)
     {

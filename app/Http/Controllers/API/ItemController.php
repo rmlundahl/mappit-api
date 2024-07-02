@@ -34,7 +34,7 @@ class ItemController extends Controller
         $getItem = new GetItem( $request->all() );
         $items = $getItem->all_markers();
         
-        if (empty($items)) {
+        if (!count($items)) {
             return response()->json( [], 404 ); 
         }
 
@@ -44,7 +44,7 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -56,7 +56,7 @@ class ItemController extends Controller
     /**
      * Get a listing of all items a user can see, based on the user's role
      *
-     * * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function all_from_user(Request $request)
     {

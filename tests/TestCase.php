@@ -9,7 +9,7 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected function clearTables() {
+    protected function clearTables(): void {
         DB::table('items')->truncate();
         DB::table('item_properties')->truncate();
         DB::table('users')->truncate();

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Services\Item;
 
@@ -10,18 +10,24 @@ use Str;
 
 class CreateItem {
     
+    /**
+     * @var array<string, string>
+     */
     private $data;
 
+    /**
+     * @param  array<string, string>  $newItemData
+     */
     public function __construct($newItemData)
     {
         $this->data = $newItemData;
     }
 
-    public function save()
+    public function save(): Item
     {
         $item = new Item;
         $item->language     = $this->data['language'];
-        $item->item_type_id = $this->data['item_type_id'];
+        $item->item_type_id = (int) $this->data['item_type_id'];
         $item->external_id  = $this->data['external_id'] ?? null;
         $item->name         = $this->data['name'];
         
@@ -32,7 +38,7 @@ class CreateItem {
         }
         
         $item->content      = $this->data['content'] ?? null;
-        $item->user_id      = $this->data['user_id'];
+        $item->user_id      = (int) $this->data['user_id'];
         $item->status_id    = $this->data['status_id'] ?? 1;
         
         if ( $item->save() ) {

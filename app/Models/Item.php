@@ -34,23 +34,32 @@ class Item extends Model
         'status_id',
     ];
 
+    /**
+     * @return HasMany<\App\Models\ItemProperty>
+     */
     public function item_properties(): HasMany
     {
         return $this->hasMany('App\Models\ItemProperty', ['item_id','language'], ['id','language']);
     }
 
+    /**
+     * @return HasMany<\App\Models\ItemCollection>
+     */
     public function collection_items(): HasMany
     {
         return $this->hasMany('App\Models\ItemCollection', ['collection_item_id'], ['id']);
     }
 
+    /**
+     * @return BelongsTo<\App\Models\User, \App\Models\Item>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo('App\Models\User');
     }
 
     // Mutator for slug attribute
-    public function setSlugAttribute($slug) 
+    public function setSlugAttribute(string $slug): void
     {
         if (static::whereSlug($slug)->whereLanguage($this->attributes['language'])->where('id', '<>', $this->id)->exists()) {
             $slug = $this->incrementSlug($slug);
@@ -59,9 +68,8 @@ class Item extends Model
         $this->attributes['slug'] = $slug;
     }
 
-    public function incrementSlug($slug) 
+    public function incrementSlug(string $slug): string
     {
-        
         $original = $slug;
         $count = 2;
 

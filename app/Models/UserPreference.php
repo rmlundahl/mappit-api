@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,7 +18,10 @@ class UserPreference extends Model
         'val',
     ];
 
-    public function user()
+    /**
+     * @return BelongsTo<\App\Models\User, \App\Models\UserPreference>
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

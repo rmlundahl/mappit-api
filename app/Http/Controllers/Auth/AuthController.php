@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
@@ -12,7 +13,7 @@ use Auth;
 class AuthController extends Controller
 {
     
-    public function register(Request $request)
+    public function register(Request $request): JsonResponse
     {
         $validator = Validator::make( $request->all(), [
             'name' => 'required|string|max:255',
@@ -39,7 +40,7 @@ class AuthController extends Controller
 
     }
 
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         if (Auth::attempt([
             'email' => $request->get('email'),
@@ -53,7 +54,7 @@ class AuthController extends Controller
         }
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         Auth::logout();
         return response()->json('', 204);

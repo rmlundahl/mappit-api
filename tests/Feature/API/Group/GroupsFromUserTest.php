@@ -20,7 +20,7 @@ class GroupsFromUserTest extends TestCase
         $this->clearTables();
     }
 
-    public function test_groups_from_user__show_no_groups_if_unauthenticated()
+    public function test_groups_from_user__show_no_groups_if_unauthenticated(): void
     {
         
         $response = $this->getJson('/api/v1/groups_from_user');
@@ -28,7 +28,7 @@ class GroupsFromUserTest extends TestCase
             ->assertStatus(401);
     }
 
-    public function test_groups_from_user__show_groups_to_author()
+    public function test_groups_from_user__show_groups_to_author(): void
     {
         $group0 = Group::factory()->create(['id'=>1,'parent_id'=>null]); // root
         $group1 = Group::factory()->create(['id'=>101,'parent_id'=>1]);

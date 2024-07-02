@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Services\Item;
 
@@ -11,20 +11,26 @@ use App\Services\Notification\ItemPublishedNotification;
 use DB, Log, Str;
 
 class UpdateItem {
-    
-    private $data;
-    private $item;
 
+    /**
+     * @var array<string, string>
+     */    
+    private array $data;
+    private Item $item;
+
+    /**
+     * @param  array<string, string>  $updateItemData
+     */
     public function __construct(array $updateItemData, Item $item)
     {
         $this->data = $updateItemData;
         $this->item = $item;
     }
 
-    public function update()
+    public function update(): Item
     {
         if( !empty($this->data['item_type_id']) )
-            $this->item->item_type_id = $this->data['item_type_id'];
+            $this->item->item_type_id = (int) $this->data['item_type_id'];
         
         $this->item->external_id  = $this->data['external_id'] ?? null;
         
@@ -42,7 +48,7 @@ class UpdateItem {
 
         if( !empty($this->data['status_id']) ) {
             $this->_check_whether_notification_should_be_sent();
-            $this->item->status_id = $this->data['status_id'];
+            $this->item->status_id = (int) $this->data['status_id'];
         }
         
         $this->item->save();
@@ -65,7 +71,7 @@ class UpdateItem {
     }
 
     // if the frontend indicated and status changed to 'published' (status_id = 20) we should send a notification
-    private function _check_whether_notification_should_be_sent()
+    private function _check_whether_notification_should_be_sent(): void
     {
         // the frontend should send a 'should_notify' flag
         if(empty($this->data['should_notify'])) return;

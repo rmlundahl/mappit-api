@@ -16,7 +16,7 @@ class LoadFiltersTest extends TestCase
     use RefreshDatabase;
 
    
-    public function test_load_all_filters__from_a_language()
+    public function test_load_all_filters__from_a_language(): void
     {
         DB::table('filters')->truncate();
 

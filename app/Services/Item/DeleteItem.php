@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Services\Item;
 
@@ -7,7 +7,7 @@ use App\Models\Item;
 
 class DeleteItem {
     
-    private $item;
+    private Item $item;
 
     public function __construct(Item $item)
     {
@@ -15,7 +15,7 @@ class DeleteItem {
     }
 
 
-    public function delete()
+    public function delete(): bool
     {
         $this->item->status_id = 99;
         

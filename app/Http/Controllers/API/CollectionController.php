@@ -57,7 +57,7 @@ class CollectionController extends Controller
     /**
      * Get a listing of all collections a user can see, based on the user's role
      *
-     * * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function all_from_user(Request $request)
     {

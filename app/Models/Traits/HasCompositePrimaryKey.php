@@ -55,8 +55,8 @@ trait HasCompositePrimaryKey
 	/**
 	 * Execute a query for a single record by ID.
 	 *
-	 * @param  array  $ids Array of keys, like [column => value].
-	 * @param  array  $columns
+	 * @param  array<string, string>  $ids Array of keys, like [column => value].
+	 * @param  array<int, string>  $columns
 	 * @return mixed|static
 	 */
 	public static function find($ids, $columns = ['*'])
@@ -74,9 +74,9 @@ trait HasCompositePrimaryKey
 	/**
 	 * Find a model by its primary key or throw an exception.
 	 *
-	 * @param mixed $ids
-	 * @param array $columns
-	 * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
+	 * @param  array<string, string>|array<int, int|string>|int|string  $ids
+	 * @param  array<int, string>  $columns
+	 * @return mixed
 	 *
 	 * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
 	 */

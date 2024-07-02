@@ -20,7 +20,7 @@ use Auth, Log;
 
 class UsersController extends Controller
 {
-    private $getUser;
+    private GetUser $getUser;
     
     public function __construct(GetUser $getUser)
     {
@@ -28,6 +28,11 @@ class UsersController extends Controller
         $this->getUser = $getUser;
     }
 
+    /**
+     * Display a resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show(Request $request)
     {
         return response()->json( $request->user() );
@@ -42,20 +47,25 @@ class UsersController extends Controller
     {
         if ( Auth::user()->can('index', [User::class]) ) {
             
-            $users = $this->getUser->all( $request->all() );
+            $users = $this->getUser->all();
             return response()->json( $users, 200 );
 
         }
         abort(403);
     }
 
-    public function users_from_group($group_id)
+    /**
+     * Display all users from a group.
+     *
+     * @param  int  $group_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function users_from_group(int $group_id)
     {
         if( Auth::user()->can('users_from_group', [User::class]) ) {
             
             $users = $this->getUser->users_from_group( $group_id );
             return response()->json( $users, 200 );
-
         }
         abort(403);
     }

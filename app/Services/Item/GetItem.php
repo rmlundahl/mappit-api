@@ -2,19 +2,26 @@
 
 namespace App\Services\Item;
 
-use App\Models\Item;
 use App\Models\Group;
 use App\Models\User;
 use App\Services\User\GetUser;
 
+use \Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use Auth, DB;
+use Auth, DB, Log;
 
 class GetItem {
     
+    /**
+     * @var array<string, string>
+     */
     private $data;
-    private $getUser;
 
+    private GetUser $getUser;
+
+    /**
+     * @param  array<string, string>  $parameterData
+     */
     public function __construct(array $parameterData)
     {
         $this->data = $parameterData;
@@ -26,20 +33,33 @@ class GetItem {
 
     /**
      * Select all published markers on the map
+     * 
+     * @return \Illuminate\Support\Collection<int, \App\Models\Item>.
      */
-    public function all_markers()
+    public function all_markers(): \Illuminate\Support\Collection
     {
-        // only published items of item_type 10 are markers on the map
+        // only published items of item_type 10 (default) are markers on the map
         $this->data = array_merge($this->data, ['items.item_type_id'=>10, 'items.status_id'=>20]);
+
+        // items.item_type_id in parameters?
+        if( isset($this->data['items_item_type_id']) ) {
+            // revert the _ back to . 
+            $this->data['items.item_type_id'] = $this->data['items_item_type_id'];
+            unset($this->data['items_item_type_id']);
+        }
+
         return $this->all_with_default_nl();
     }   
-        
-    public function all_from_user()
+
+    /**
+     * @return null|\Illuminate\Support\Collection<int, \App\Models\Item>.
+     */    
+    public function all_from_user(): null|\Illuminate\Support\Collection
     {
         $user = Auth::user();
 
         if( !$user instanceof User) {
-           return;
+           return null;
         }
 
         // based on role and is_group_admin, a user can see items:
@@ -58,7 +78,7 @@ class GetItem {
             $this->getUser = new GetUser($user);
             $users_from_group = $this->getUser->users_from_group($user->group_id);
             if (empty($users_from_group)) {
-                return;
+                return null;
             }
             $user_ids = implode(',', $users_from_group->pluck('id')->all());
            
@@ -69,14 +89,14 @@ class GetItem {
             // Get all groups from user
             $groups = Group::find($user->group_id)->descendantsAndSelf()->get();
             if ($groups->isEmpty()) {
-                return;
+                return null;
             }
             $group_ids = $groups->pluck('id');
             
             $this->getUser = new GetUser($user);
             $users_from_groups = $this->getUser->users_from_groups($group_ids);
             if (empty($users_from_groups)) {
-                return;
+                return null;
             }
             $user_ids = implode(',', $users_from_groups->pluck('id')->all());
            
@@ -87,14 +107,14 @@ class GetItem {
             // Get all groups from user
             $groups = Group::find($user->group_id)->descendantsAndSelf()->get();
             if ($groups->isEmpty()) {
-                return;
+                return null;
             }
             $group_ids = $groups->pluck('id');
             
             $this->getUser = new GetUser($user);
             $users_from_groups = $this->getUser->users_from_groups($group_ids);
             if (empty($users_from_groups)) {
-                return;
+                return null;
             }
             $user_ids = implode(',', $users_from_groups->pluck('id')->all());
            
@@ -102,16 +122,19 @@ class GetItem {
 
         } else {
             // no role found
-            return;
+            return null;
         }
 
         return $this->all();
     }
 
-    public function all()
+    /**
+     *  @return \Illuminate\Support\Collection<int, \App\Models\Item>.
+     */  
+    public function all(): \Illuminate\Support\Collection
     {
         // select with item_properties
-        $query = Item::with(['item_properties','user']);
+        $query = DB::table('items');
 
         // any parameters to add to the query?
         if( !empty($this->data) ) {
@@ -146,7 +169,10 @@ class GetItem {
         return $items;
     }
 
-    public function all_with_default_nl()
+    /**
+     * @return \Illuminate\Support\Collection<int, \App\Models\Item>
+     */  
+    public function all_with_default_nl(): \Illuminate\Support\Collection
     {
         // look for items in the requested language, and use 'nl' records as fallback
         $preferred_language = $this->data['language'];
@@ -161,7 +187,7 @@ class GetItem {
                     })
                     ->whereIn('items.language', [$preferred_language, 'nl'])
                     ->whereNull('i2.id');
-                   
+
         // any parameters to add to the query?        
         foreach($this->data as $k => $v) {
             
@@ -175,7 +201,7 @@ class GetItem {
             } else {
                 $query->where($k, $v);
             }
-        }               
+        }
         $items = $query->get();
 
         // look for item_properties in the requested language, and use 'nl' records as fallback
@@ -189,8 +215,7 @@ class GetItem {
                     
                     })
                     ->whereIn('item_properties.language', [$preferred_language, 'nl'])                        
-                    ->whereNull('p2.id')
-                    ->where('items.item_type_id', '=', 10);
+                    ->whereNull('p2.id');
                     
         $item_properties = $query->get();
 

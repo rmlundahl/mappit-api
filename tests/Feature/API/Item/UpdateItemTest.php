@@ -20,7 +20,7 @@ class UpdateItemTest extends TestCase
         $this->clearTables();
     }
     
-    public function test_update_item()
+    public function test_update_item(): void
     {
         $user = User::factory()->create();
         $item = Item::factory()->create([
@@ -51,7 +51,7 @@ class UpdateItemTest extends TestCase
             ]);
     }
 
-    public function test_update_item__with_existing_slug()
+    public function test_update_item__with_existing_slug(): void
     {
         $user = User::factory()->create();
 
@@ -91,7 +91,7 @@ class UpdateItemTest extends TestCase
             ]);
     }
 
-    public function test_update_item__with_item_properties()
+    public function test_update_item__with_item_properties(): void
     {
         $user = User::factory()->create();
        

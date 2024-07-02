@@ -7,12 +7,19 @@ use App\Models\Item;
 
 use App\Services\Item\GetItem;
 
+use \Illuminate\Support\Collection;
 use App, DB;
 
 class GetCollection {
-        
-    private $data;
+    
+    /**
+     * @var array<string, string>
+     */
+    private array $data;
 
+    /**
+     * @param  array<string, string>  $parameterData
+     */
     public function __construct(array $parameterData=[])
     {
         $this->data = $parameterData;
@@ -21,13 +28,17 @@ class GetCollection {
             $this->data['language'] = App::getLocale();
         }
     }
-    public function all_from_user()
+
+    /**
+     * @return array<int, array<mixed>>
+     */    
+    public function all_from_user(): array
     {
         // A Collection is an Item of type_id = 30
         $getItem = new GetItem( ['item_type_id' => 30, 'language' => $this->data['language']] );
         $all_collections = $getItem->all_from_user();
 
-        if(count($all_collections)==0) return;        
+        if(count($all_collections)==0) return [];        
 
         // Get all items with flattened item_properties
         $getItem = new GetItem( ['language' => $this->data['language']] );
@@ -38,13 +49,19 @@ class GetCollection {
         return $collections;
     }
 
-    private function _add_items_to_collections($all_items, $all_collections)
+    /**
+     * @param  Collection<int, Item>  $all_items
+     * @param  Collection<int, Item>  $all_collections
+     * 
+     * @return array<int, array<mixed>>
+     */ 
+    private function _add_items_to_collections(Collection $all_items, Collection $all_collections)
     {
         $collections = [];
 
         foreach($all_collections as $r) {
 
-            $collections[$r->id] = ['id'=>$r->id, 'name'=>$r->name, 'slug'=>$r->slug, 'content'=>$r->content, 'status_id'=>$r->status_id, 'group_id'=>$r->group_id, 'item_properties'=>$r->item_properties, 'collection_items'=>[]];
+            $collections[$r->id] = ['id'=>$r->id, 'name'=>$r->name, 'slug'=>$r->slug, 'content'=>$r->content, 'status_id'=>$r->status_id, 'group_id'=>$r->group_id, 'item_properties'=>$r->item_properties??null, 'collection_items'=>[]];
 
             // Select the items belonging to the collections
             $items = DB::table('item_collection')
@@ -65,13 +82,17 @@ class GetCollection {
         return $collections;
     }
 
-    public function all()
+    /**
+     * 
+     * @return array<int, array<mixed>>
+     */
+    public function all(): array
     {
         // A Collection is an Item of type_id = 30
         $getItem = new GetItem( ['item_type_id' => 30, 'language' => $this->data['language']] );
         $all_collections = $getItem->all();
 
-        if(count($all_collections)==0) return;        
+        if(count($all_collections)==0) return [];        
 
         // Get all items with flattened item_properties
         $getItem = new GetItem( ['language' => $this->data['language']] );
@@ -85,15 +106,20 @@ class GetCollection {
 
     /**
      * Select all published collections on the map
+     * 
+     * @return array<int, array<mixed>>
      */
-    public function all_collections()
+    public function all_collections(): array
     {
         // only published items of item_type 30 are collections on the map
         $this->data = array_merge($this->data, ['items.item_type_id'=>30, 'items.status_id'=>20]);
         return $this->all_with_default_nl();
     } 
 
-    public function all_with_default_nl()
+    /**
+     * @return array<int, array<mixed>>
+     */
+    public function all_with_default_nl(): array
     {
         // look for items in the requested language, and use 'nl' records as fallback
         $preferred_language = $this->data['language'];

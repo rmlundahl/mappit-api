@@ -17,7 +17,7 @@ class CreateUserTest extends TestCase
         parent::setUp();
     }
 
-    public function test_create_user__administrator_can_create_author()
+    public function test_create_user__administrator_can_create_author(): void
     {
         $user = User::factory()->create(['role'=>'administrator']);
         
@@ -47,7 +47,7 @@ class CreateUserTest extends TestCase
             ]);
     }
 
-    public function test_create_user__author_can_not_create_author()
+    public function test_create_user__author_can_not_create_author(): void
     {
         $user = User::factory()->create(['role'=>'author', 'is_group_admin'=>0]);
         
@@ -66,7 +66,7 @@ class CreateUserTest extends TestCase
         
     }
 
-    public function test_create_user__author_is_group_admin_can_create_author()
+    public function test_create_user__author_is_group_admin_can_create_author(): void
     {
         $user = User::factory()->create(['role'=>'author', 'is_group_admin'=>1]);
         
@@ -94,7 +94,7 @@ class CreateUserTest extends TestCase
             ]);
     }
 
-    public function test_create_user__author_is_group_admin_can_not_create_administrator()
+    public function test_create_user__author_is_group_admin_can_not_create_administrator(): void
     {
         $user = User::factory()->create(['role'=>'author', 'is_group_admin'=>1]);
         

@@ -20,7 +20,7 @@ class IndexUsersTest extends TestCase
         $this->clearTables();
     }
     
-    public function test_index__show_no_users_if_unauthenticated()
+    public function test_index__show_no_users_if_unauthenticated(): void
     {
         
         $response = $this->getJson('/api/v1/users');
@@ -28,7 +28,7 @@ class IndexUsersTest extends TestCase
             ->assertStatus(401);
     }
 
-    public function test_index__show_no_users_to_author()
+    public function test_index__show_no_users_to_author(): void
     {
         $users = User::factory()->count(5)->create();
         $user = User::factory()->create(['role'=>'author']);
@@ -39,7 +39,7 @@ class IndexUsersTest extends TestCase
             ->assertStatus(403);
     }
 
-    public function test_index__author_is_group_admin_sees_users_from_group()
+    public function test_index__author_is_group_admin_sees_users_from_group(): void
     {
         $group0 = Group::factory()->create(['id'=>1,'parent_id'=>null]); // root
         $group1 = Group::factory()->create(['id'=>2,'parent_id'=>1]);
@@ -61,7 +61,7 @@ class IndexUsersTest extends TestCase
         ->assertDontSee('"id":104');
     }
 
-    public function test_index__editor_sees_users_from_group()
+    public function test_index__editor_sees_users_from_group(): void
     {
         $group0 = Group::factory()->create(['id'=>1,'parent_id'=>null]); // root
         $group1 = Group::factory()->create(['id'=>2,'parent_id'=>1]);
@@ -83,7 +83,7 @@ class IndexUsersTest extends TestCase
     }
 
 
-    public function _test_find_User()
+    public function _test_find_User(): void
     {
         $Users = User::factory()->count(3)->create();
         $User  = User::factory()->create(['id'=>123, 'language'=>'nl']);

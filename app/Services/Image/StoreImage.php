@@ -6,18 +6,25 @@ use File;
 
 class StoreImage {
     
-    private $image;
-    private $sub_directory;
-    private $clear_sub_directory;
+    /**
+     * @var array<string, mixed>
+     */
+    private array $image;
     
-    public function __construct( $image, $sub_directory='', $clear_sub_directory=false )
+    private string $sub_directory;
+    private bool $clear_sub_directory;
+
+    /**
+     * @param  array<string, mixed>  $image
+     */
+    public function __construct( array $image, string $sub_directory='', bool $clear_sub_directory=false )
     {
         $this->image = $image;
         $this->sub_directory = $sub_directory;
         $this->clear_sub_directory = $clear_sub_directory;
     }
 
-    public function store ()
+    public function store(): string
     {
         $dir = storage_path('app/public').'/items/'.$this->image['item_id'].$this->sub_directory.'/';
         

@@ -22,7 +22,7 @@ class GetItemTest extends TestCase
         $this->clearTables();
     }
 
-    public function test_get_all_items__no_items()
+    public function test_get_all_items__no_items(): void
     {
         $response = $this->getJson('/api/v1/nl/items');
         $response
@@ -31,7 +31,7 @@ class GetItemTest extends TestCase
     }
 
     
-    public function test_get_all_items__from_a_language()
+    public function test_get_all_items__from_a_language(): void
     {
         $user = User::factory()->create(['id'=>123]);
 
@@ -49,7 +49,7 @@ class GetItemTest extends TestCase
             ->assertJsonCount(3);
     }
 
-    public function test_get_all_markers__from_a_language_with_fallback_language()
+    public function test_get_all_markers__from_a_language_with_fallback_language(): void
     {
         $user = User::factory()->create(['id'=>123]);
         
@@ -76,7 +76,7 @@ class GetItemTest extends TestCase
             
     }
 
-    public function test_get_all_from_user__author_sees_own_items_only()
+    public function test_get_all_from_user__author_sees_own_items_only(): void
     {
         $user = User::factory()->create(['id'=>123, 'role'=>'author', 'is_group_admin'=>0]);
 
@@ -102,7 +102,7 @@ class GetItemTest extends TestCase
             ->assertJsonMissing(['user_id'=>2]);
     }
 
-    public function test_get_all_from_user__author_is_group_admin_and_sees_own_group_items_only()
+    public function test_get_all_from_user__author_is_group_admin_and_sees_own_group_items_only(): void
     {
         $user1 = User::factory()->create(['id'=>123, 'group_id'=>123, 'role'=>'author', 'is_group_admin'=>1]);
         $user2 = User::factory()->create(['id'=>2,   'group_id'=>123, 'role'=>'author', 'is_group_admin'=>0]);
@@ -133,7 +133,7 @@ class GetItemTest extends TestCase
             ->assertJsonMissing(['user_id'=>3]);
     }
 
-    public function test_get_all_from_user__editor_sees_own_group_and_descendants_items_only()
+    public function test_get_all_from_user__editor_sees_own_group_and_descendants_items_only(): void
     {
         $group1 = Group::factory()->create(['id'=>123, 'parent_id'=>1]);
         $group2 = Group::factory()->create(['id'=>124, 'parent_id'=>123]);
@@ -170,7 +170,7 @@ class GetItemTest extends TestCase
             ->assertJsonMissing(['user_id'=>4]);
     }
 
-    public function test_get_all_from_user__administrator_sees_all_items()
+    public function test_get_all_from_user__administrator_sees_all_items(): void
     {
         $group0 = Group::factory()->create(['id'=>1,   'parent_id'=>null]);
         $group1 = Group::factory()->create(['id'=>123, 'parent_id'=>1]);
@@ -211,7 +211,7 @@ class GetItemTest extends TestCase
             ->assertJsonMissing(['user_id'=>5]);
     }
 
-    public function test_get_all_markers__from_a_language()
+    public function test_get_all_markers__from_a_language(): void
     {
         $user = User::factory()->create(['id'=>123]);
 
@@ -231,7 +231,7 @@ class GetItemTest extends TestCase
             ->assertJsonCount(3);
     }
 
-    public function test_find_item__fails_for_incorrect_input()
+    public function test_find_item__fails_for_incorrect_input(): void
     {
         $items = Item::factory()->count(3)->create();
         $item  = Item::factory()->create(['id'=>123, 'language'=>'nl']);
@@ -242,7 +242,7 @@ class GetItemTest extends TestCase
             ->assertStatus(404);
     }
 
-    public function test_find_item_without_item_type_id()
+    public function test_find_item_without_item_type_id(): void
     {
         $items = Item::factory()->count(3)->create();
         $item  = Item::factory()->create(['id'=>123, 'language'=>'nl', 'item_type_id'=>10]);
@@ -259,7 +259,7 @@ class GetItemTest extends TestCase
             );
     }
 
-    public function test_find_item_with_item_type_id()
+    public function test_find_item_with_item_type_id(): void
     {
         $items = Item::factory()->count(3)->create();
         $item  = Item::factory()->create(['id'=>123, 'language'=>'nl', 'item_type_id'=>20]);
@@ -276,7 +276,7 @@ class GetItemTest extends TestCase
             );
     }
 
-    public function test_get_all_items_of_type()
+    public function test_get_all_items_of_type(): void
     {
         $user = User::factory()->create(['id'=>123]);
 
@@ -305,7 +305,7 @@ class GetItemTest extends TestCase
             ]);
     }
 
-    public function test_get_all_items_of_type_and_two_statuses()
+    public function test_get_all_items_of_type_and_two_statuses(): void
     {
         $user = User::factory()->create(['id'=>123]);
 

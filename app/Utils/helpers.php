@@ -9,7 +9,7 @@
 
 if (!function_exists('p')) {
 
-	function p($_var) {
+	function p(mixed $_var):void {
 
 		if ( !App::environment('testing')) {
 			if (empty($_SERVER['REMOTE_ADDR'])) return;
@@ -26,7 +26,7 @@ if (!function_exists('p')) {
 
 if (!function_exists('s')) {
 
-	function s($_var) {
+	function s(mixed $_var): void {
 
 		echo "<pre>";
 		print_r($_var);
@@ -37,7 +37,7 @@ if (!function_exists('s')) {
 
 if (!function_exists('q')) {
 
-	function q($connection = '') {
+	function q(string $connection = ''): void {
 		\DB::enableQueryLog();
 		if (empty($connection)) {
 			$querylog = \DB::getQueryLog();

@@ -13,14 +13,14 @@ use Auth;
 
 class DevController extends Controller
 {
-    private $getUser;
+    private GetUser $getUser;
     
     public function __construct(GetUser $getUser)
     {
         $this->getUser = $getUser;
     }
 
-    public function dev()
+    public function dev(): void
     {
         $groups = Group::find(2)->descendantsAndSelf()->get();
         // s($groups);

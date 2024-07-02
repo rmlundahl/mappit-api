@@ -8,14 +8,20 @@ use DB, Exception, Log;
 
 class SaveItemCollection {
     
-    private $data;
+    /**
+     * @var array<string, string>
+     */    
+    private array $data;
 
+    /**
+     * @param  array<string, string>  $itemData
+     */
     public function __construct($itemData)
     {
         $this->data = $itemData;
     }
 
-    public function save()
+    public function save(): void
     {
         
         try {
@@ -29,7 +35,7 @@ class SaveItemCollection {
 
             foreach ($data as $v) {
                 $item_collection = new ItemCollection;            
-                $item_collection->collection_item_id = $this->data['item_id'];
+                $item_collection->collection_item_id = (int) $this->data['item_id'];
                 $item_collection->item_id = (int) $v;
                 $item_collection->save();
             }

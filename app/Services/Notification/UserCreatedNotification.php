@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Queue;
 
 class UserCreatedNotification {
 
-    public function send() {
-
+    public function send(): void
+    {
         /**
          * Select all users that:
          * - that have status 20

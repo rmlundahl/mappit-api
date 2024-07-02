@@ -13,17 +13,17 @@ class UserCreated extends Notification
 {
     use Queueable;
 
-    private $name;
-    private $email;
-    private $password;
-    private $cc_email;
+    private string $name;
+    private string $email;
+    private string $password;
+    private string $cc_email;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($name, $email, $password, $cc_email)
+    public function __construct(string $name, string $email, string $password, string $cc_email)
     {
         $this->name = $name;
         $this->email = $email;
@@ -35,7 +35,7 @@ class UserCreated extends Notification
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
-     * @return array
+     * @return array<int, string>
      */
     public function via($notifiable)
     {

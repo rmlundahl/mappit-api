@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Services\User;
 
@@ -7,7 +7,7 @@ use App\Models\User;
 
 class DeleteUser {
     
-    private $user;
+    private User $user;
 
     public function __construct(User $user)
     {
@@ -15,7 +15,7 @@ class DeleteUser {
     }
 
 
-    public function delete()
+    public function delete(): bool
     {
         $this->user->status_id = 99;
         

@@ -21,7 +21,7 @@ class UpdateUserRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<mixed>
      */
     public function rules()
     {
@@ -39,7 +39,7 @@ class UpdateUserRequest extends FormRequest
     /**
     * Get the error messages for the defined validation rules.
     *
-    * @return array
+    * @return array<mixed>
     */
     public function messages()
     {

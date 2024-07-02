@@ -17,7 +17,7 @@ class GetCollectionTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_get_all_collections__no_items()
+    public function test_get_all_collections__no_items(): void
     {
         $this->clearTables();
         
@@ -27,7 +27,7 @@ class GetCollectionTest extends TestCase
             ->assertJsonCount(0);
     }
 
-    public function test_get_all_collections__from_a_language()
+    public function test_get_all_collections__from_a_language(): void
     {
         $collection = Item::factory()->create(['id'=>100, 'language'=>'nl', 'name'=>'Ambassadeurs', 'slug'=>'ambassadeurs', 'item_type_id'=>30]);
         $collection = Item::factory()->create(['id'=>100, 'language'=>'en', 'name'=>'Ambassadors', 'slug'=>'ambassadors', 'item_type_id'=>30]);
