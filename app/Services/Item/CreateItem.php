@@ -6,6 +6,7 @@ use App\Models\Item;
 use App\Services\ItemProperty\SaveItemProperty;
 use App\Services\ItemCollection\SaveItemCollection;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Str;
 
 class CreateItem {
@@ -23,6 +24,9 @@ class CreateItem {
         $this->data = $newItemData;
     }
 
+    /**
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
     public function save(): Item
     {
         $item = new Item;
@@ -44,6 +48,8 @@ class CreateItem {
         if ( $item->save() ) {
             // Necessary because the save() method does not return the last created 'id' in the model
             $item = Item::orderBy('id','desc')->first();
+
+            if(!$item) throw (new ModelNotFoundException);
 
             $this->data['item_id'] = $item->id;
             $saveItemProperty = new SaveItemProperty($this->data);

@@ -5,7 +5,7 @@ parameters:
     paths:
         - app
         - tests
-    level: 7
+    level: 8
 
     treatPhpDocTypesAsCertain: false
     
@@ -16,6 +16,9 @@ parameters:
         - 
             message: '#^Argument of an invalid type string supplied for foreach, only iterables are supported\.$#'
             path: app/Models/Traits/HasCompositePrimaryKey.php
+            
+        - '#^Cannot call method can\(\) on Illuminate\\Contracts\\Auth\\Authenticatable\|null\.$#'
+        - '#^Cannot call method descendantsAndSelf\(\) on App\\Models\\Group\|null\.$#'
 
     excludePaths:
         - app/Providers

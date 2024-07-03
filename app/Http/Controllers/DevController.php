@@ -26,7 +26,7 @@ class DevController extends Controller
         // s($groups);
         $users = $this->getUser->users_from_group( 1 );
         $users = $this->getUser->all();
-        s(count($users));
+        if($users!=null) s(count($users));
 
         $groups = Filter::tree()->get();
         p($groups);

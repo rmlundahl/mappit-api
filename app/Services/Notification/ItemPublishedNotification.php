@@ -29,7 +29,7 @@ class ItemPublishedNotification {
          * - and have 'notify_on_item_published' = true in their preferences
          */ 
 
-        $users = User::where('group_id', $this->item->user->group_id)
+        $users = User::where('group_id', $this->item->user?->group_id)
                     ->whereHas('user_preferences', function (Builder $query) {
                         $query->where('key', '=', 'notify_on_item_published')
                               ->where('val', '=', 'true');

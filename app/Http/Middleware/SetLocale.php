@@ -19,11 +19,11 @@ class SetLocale
         // e.g. /api/v1/en/items
         $locale = $request->segment(3);
 
-        if(!array_key_exists($locale, config('mappit.supported_locales'))) {
+        if(!array_key_exists((string) $locale, config('mappit.supported_locales'))) {
             $locale = 'nl';
         }
 
-        app()->setLocale($locale);
+        app()->setLocale((string) $locale);
 
         return $next($request);
     }

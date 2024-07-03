@@ -68,6 +68,8 @@ class NotificationController extends Controller
 
         if($user instanceof User) {
             $notification = $user->notifications->where('id', $request->id)->first();
+            if($notification==null) return response()->json( [], 404 );
+            
             $notification->read_at = $request->read_at;
             $notification->save();
 

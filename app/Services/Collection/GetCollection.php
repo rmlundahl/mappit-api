@@ -38,7 +38,7 @@ class GetCollection {
         $getItem = new GetItem( ['item_type_id' => 30, 'language' => $this->data['language']] );
         $all_collections = $getItem->all_from_user();
 
-        if(count($all_collections)==0) return [];        
+        if(!$all_collections || count($all_collections)==0) return [];        
 
         // Get all items with flattened item_properties
         $getItem = new GetItem( ['language' => $this->data['language']] );

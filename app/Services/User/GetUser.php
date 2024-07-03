@@ -46,7 +46,7 @@ class GetUser {
         if($user->role=='author' && $user->is_group_admin) {
            
             $users_from_group = $this->users_from_group($user->group_id);
-            if ( !count($users_from_group) ) {
+            if ( !$users_from_group || !count($users_from_group) ) {
                 return null;
             }
             $user_ids = implode(',', $users_from_group->pluck('id')->all());
@@ -54,13 +54,13 @@ class GetUser {
 
         } else if($user->role=='editor') {
             
-            $user_ids = $this->_get_user_ids();            
-            $this->data = array_merge($this->data, ['users.id'=>$user_ids, 'users.status_id'=>'10,20,99']);
+            $user_ids = $this->_get_user_ids();
+            if($user_ids!=null) $this->data = array_merge($this->data, ['users.id'=>$user_ids, 'users.status_id'=>'10,20,99']);
 
         } else if($user->role=='administrator') {
             
             $user_ids = $this->_get_user_ids();
-            $this->data = array_merge($this->data, ['users.id'=>$user_ids]);
+            if($user_ids!=null) $this->data = array_merge($this->data, ['users.id'=>$user_ids]);
 
         } else {
             // no role found
@@ -75,6 +75,7 @@ class GetUser {
         if( !empty($this->data) ) {
             foreach($this->data as $k => $v) {
                 
+                $v = (string) $v;
                 if(strpos($v, ',')!==false) {
                     $array = explode(',', $v);
                     $query->whereIn($k, $array);
@@ -105,7 +106,7 @@ class GetUser {
         $group_ids = $groups->pluck('id');
                
         $users_from_groups = $this->users_from_groups($group_ids);
-        if ( !count($users_from_groups) ) {
+        if ( !$users_from_groups || !count($users_from_groups) ) {
             return null;
         }
         $user_ids = implode(',', $users_from_groups->pluck('id')->all());

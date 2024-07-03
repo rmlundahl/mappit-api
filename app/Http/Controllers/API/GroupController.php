@@ -22,7 +22,11 @@ class GroupController extends Controller
     {
         $user = Auth::user();
         if( $user instanceof User) {
-            $groups = Group::find($user->group_id)->descendantsAndSelf()->get();
+            
+            $group =  Group::find($user->group_id);
+            if($group == null) return response()->json( [], 404 );
+
+            $groups = $group->descendantsAndSelf()->get();
             return response()->json( $groups, 200 );
         }
         return response()->json( [], 404 );

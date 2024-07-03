@@ -26,7 +26,6 @@ class SendEmailToNewUser implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private User $user;
-    private UserPreference $userPreference;
 
     /**
      * Create a new job instance.
@@ -62,10 +61,10 @@ class SendEmailToNewUser implements ShouldQueue
 
     private function _get_cc_email(): string
     {
-        $this->userPreference = UserPreference::where('user_id', $this->user->id)->where('key','notify_when_created_cc_email')->first();
+        $userPreference = UserPreference::where('user_id', $this->user->id)->where('key','notify_when_created_cc_email')->first();
         
-        if( !empty($this->userPreference->val) ) {
-            return $this->userPreference->val;
+        if( $userPreference?->val ) {
+            return $userPreference->val;
         }
 
         return config('mail.from.address');
