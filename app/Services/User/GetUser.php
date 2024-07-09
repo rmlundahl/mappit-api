@@ -125,7 +125,7 @@ class GetUser {
     }
 
     /**
-     * @param  Collection<int, \App\Models\User>  $group_ids
+     * @param  Collection<(int|string), mixed>  $group_ids
      * 
      * @return null|Collection<int, \App\Models\User>.
      */

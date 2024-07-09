@@ -95,7 +95,7 @@ class UsersImport implements ToModel, WithValidation, WithStartRow, SkipsEmptyRo
     }
 
     /**
-     * @return array<mixed>
+     * @return array<int, \Illuminate\Database\Eloquent\Model>
      */
     public function getNewUsers(): array
     {

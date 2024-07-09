@@ -118,7 +118,7 @@ class CollectionController extends Controller
     public function update(UpdateItemRequest $request)
     {
         /** @var Item $item */
-        $item = Item::find(['id'=>$request->id, 'language'=>$request->language]);
+        $item = Item::find(['id'=>$request->string('id'), 'language'=>$request->string('language')]);
         
         $updateItem = new UpdateItem( $request->all(), $item );
         $item = $updateItem->update();
@@ -134,7 +134,7 @@ class CollectionController extends Controller
     public function delete(DeleteItemRequest $request)
     {
         /** @var Item $item */
-        $item = Item::find(['id'=>$request->id, 'language'=>$request->language]);
+        $item = Item::find(['id'=>$request->string('id'), 'language'=>$request->string('language')]);
         
         if ($item==null) {
             return response()->json( [], 404 ); 

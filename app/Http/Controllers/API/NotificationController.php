@@ -70,7 +70,7 @@ class NotificationController extends Controller
             $notification = $user->notifications->where('id', $request->id)->first();
             if($notification==null) return response()->json( [], 404 );
             
-            $notification->read_at = $request->read_at;
+            $notification->read_at = $request->date('read_at');
             $notification->save();
 
             return response()->json( $notification, 200 );
