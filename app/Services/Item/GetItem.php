@@ -221,11 +221,20 @@ class GetItem {
 
         // add flattened properties
         $items->transform( function ($item) use ($item_properties) {
-            $item->item_properties = (object)[];
+            $item->item_properties = (array)[];
             
             foreach($item_properties as $r) {
                 if($r->item_id===$item->id) {
-                    $item->item_properties->{$r->key} = $r->value;
+                    // if the key already exists, create an array                    
+                    if(isset($item->item_properties[$r->key])) {
+                        if(!is_array($item->item_properties[$r->key])) {
+                            // move existing value as first item in new array
+                            $item->item_properties[$r->key] = [$item->item_properties[$r->key]];
+                        }
+                        $item->item_properties[$r->key][] = $r->value;
+                    } else {
+                        $item->item_properties[$r->key] = $r->value;
+                    }
                 }
             }
             
