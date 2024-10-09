@@ -7,6 +7,8 @@ use Awobaz\Compoships\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Str;
+
 /**
  * @property int $group_id
  * @property object $item_properties
@@ -56,6 +58,19 @@ class Item extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo('App\Models\User');
+    }
+
+    /**
+     * Mutator for setting the name and auto-generating the slug.
+     */
+    public function setNameAttribute(string $name): void
+    {
+        $this->attributes['name'] = $name;
+
+        // Automatically generate the slug based on the name if it's not set manually
+        if (!isset($this->attributes['slug']) || empty($this->attributes['slug'])) {
+            $this->setSlugAttribute(Str::slug($name));
+        }
     }
 
     // Mutator for slug attribute
