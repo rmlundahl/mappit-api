@@ -3,7 +3,6 @@
 namespace App\Http\Requests\API\File;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\File;
 
 class FileUploadRequest extends FormRequest
 {

@@ -4,7 +4,6 @@ namespace App\Http\Requests\API\Notification;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-use Auth;
 
 class DeleteNotificationRequest extends FormRequest
 {

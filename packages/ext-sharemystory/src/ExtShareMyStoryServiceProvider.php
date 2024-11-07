@@ -3,11 +3,6 @@
 namespace Mappit\ExtShareMyStory;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Console\Scheduling\Schedule;
-use Mappit\ExtHvaindestad\Console\Commands\ImportJson;
 
 use App;
 

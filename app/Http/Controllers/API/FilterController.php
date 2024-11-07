@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Filter;
 
-use App, DB, Log;
+use App;
 
 class FilterController extends Controller
 {

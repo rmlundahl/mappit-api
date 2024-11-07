@@ -6,9 +6,8 @@ use App\Models\Group;
 use App\Models\User;
 use App\Services\User\GetUser;
 
-use \Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use Auth, DB, Log;
+use Auth, DB;
 
 class GetItem {
     

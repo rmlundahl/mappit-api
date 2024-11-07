@@ -5,7 +5,6 @@ namespace Tests\Feature\API\Item;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Http;
-use App\Models\Item;
 
 class ImportItemsTest extends TestCase
 {

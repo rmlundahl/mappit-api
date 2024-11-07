@@ -3,10 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Validation\Rules\File;
 use App\Services\ItemImport\ItemImport;
 
-use App, Validator;
 
 
 class ImportItems extends Command

@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 use App\Models\Filter;
 use App\Models\Group;
 use App\Services\User\GetUser;
 
-use Auth;
 
 class DevController extends Controller
 {

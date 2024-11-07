@@ -2,7 +2,6 @@
 
 namespace Mappit\ExtLerenMetDeStad\Http\Controllers\API;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use Mappit\ExtLerenMetDeStad\Imports\DatabaseImport;

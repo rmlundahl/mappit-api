@@ -3,12 +3,11 @@
 namespace App\Services\Item;
 
 use App\Models\Item;
-use App\Models\ItemProperty;
 use App\Services\ItemProperty\SaveItemProperty;
 use App\Services\ItemCollection\SaveItemCollection;
 use App\Services\Notification\ItemPublishedNotification;
 
-use DB, Log, Str;
+use Str;
 
 class UpdateItem {
 

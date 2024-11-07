@@ -3,12 +3,10 @@
 namespace Tests\Feature\API\Group;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 use App\Models\User;
 use App\Models\Group;
-use DB;
 
 class GroupsFromUserTest extends TestCase
 {

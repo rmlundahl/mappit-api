@@ -5,7 +5,6 @@ namespace App\Services\User;
 use App\Models\User;
 use App\Models\UserPreference;
 use Illuminate\Support\Facades\Hash;
-use DB, Log, Str;
 
 class UpdateUser {
     

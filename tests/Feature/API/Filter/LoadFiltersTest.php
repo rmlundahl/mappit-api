@@ -3,10 +3,8 @@
 namespace Tests\Feature\API\Filter;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
-use App\Models\User;
 use App\Models\Filter;
 
 use App, DB;

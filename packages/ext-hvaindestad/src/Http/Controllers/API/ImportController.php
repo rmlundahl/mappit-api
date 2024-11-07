@@ -2,7 +2,6 @@
 
 namespace Mappit\ExtHvaindestad\Http\Controllers\API;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use Mappit\ExtHvaindestad\Services\Import\ImportJsonData;

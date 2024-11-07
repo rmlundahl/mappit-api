@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Http\Requests\API\Notification\UpdateNotificationRequest;
 use App\Http\Requests\API\Notification\DeleteNotificationRequest;
 
-use Auth, Log;
+use Auth;
 
 class NotificationController extends Controller
 {

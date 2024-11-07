@@ -2,7 +2,6 @@
 
 namespace App\Services\Collection;
 
-use App\Models\ItemCollection;
 use App\Models\Item;
 
 use App\Services\Item\GetItem;

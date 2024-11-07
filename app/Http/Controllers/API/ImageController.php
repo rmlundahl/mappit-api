@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Image\StoreImageRequest;
 use App\Services\Image\StoreImage;
 
-use App, Log, Storage;
+use App, Storage;
 
 class ImageController extends Controller
 {

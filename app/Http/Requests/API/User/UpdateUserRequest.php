@@ -4,7 +4,6 @@ namespace App\Http\Requests\API\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-use Auth;
 
 class UpdateUserRequest extends FormRequest
 {

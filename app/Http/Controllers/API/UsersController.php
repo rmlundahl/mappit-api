@@ -16,7 +16,7 @@ use App\Http\Requests\API\User\CreateUserRequest;
 use App\Http\Requests\API\User\UpdateUserRequest;
 use App\Http\Requests\API\User\DeleteUserRequest;
 
-use Auth, Log;
+use Auth;
 
 class UsersController extends Controller
 {

@@ -5,11 +5,10 @@ namespace App\Notifications;
 use App\Models\Item;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-use App, Log;
+use App;
 
 class ItemPublished extends Notification
 {
