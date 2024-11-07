@@ -12,6 +12,8 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class ItemsImport implements ToCollection, WithHeadingRow
 {
+    private const ITEM_COLUMNS = ['id','language','item_type_id','parent_id','external_id','name','slug','content','user_id','status_id'];
+
     /**
      * @param  Collection<(int|string), mixed>  $rows
      * 
@@ -23,11 +25,21 @@ class ItemsImport implements ToCollection, WithHeadingRow
         foreach ($rows as $row) 
         {
             $rowdata = [];
+            $rowdata['item_properties'] = [];
+            
+            foreach ($row as $key => $value) {
 
-            // we are only interested in the named keys of each row
-            foreach ($row as $key => $value) { 
+                // we are only interested in the named keys of each row
                 if(gettype($key) != 'string') continue;
-                $rowdata[$key] = $value;
+                
+                // where to store this data, in table 'items' or 'item_properties'?
+                if(in_array($key, self::ITEM_COLUMNS)) {
+                    // item data
+                    $rowdata[$key] = $value;
+                } else {
+                    // item_property data
+                    $rowdata['item_properties'][$key] = $value;
+                }
             }
 
             // a row should have the 'external_id' and 'name'
@@ -35,7 +47,7 @@ class ItemsImport implements ToCollection, WithHeadingRow
 
             // the 'external_id' should not be empty
             if(empty($rowdata['external_id'])) continue;
-
+            
             // set defaults for missing values
             if(!isset($rowdata['language'])) $rowdata['language'] = 'nl';
             if(!isset($rowdata['item_type_id'])) $rowdata['item_type_id'] = 10;  
