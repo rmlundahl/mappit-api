@@ -1,0 +1,24 @@
+# Load the Laravel image for PHP 8.2
+image: lorisleiva/laravel-docker:8.2
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Test
+          script:
+            - composer install --no-interaction --no-progress --prefer-dist
+            - php artisan test
+          caches:
+            - composer
+          services:
+            - mysql
+
+definitions:
+  services:
+    mysql:
+      image: mariadb:10.11
+      variables:
+        MYSQL_DATABASE: testing
+        MYSQL_USERNAME: db
+        MYSQL_PASSWORD: db
