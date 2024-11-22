@@ -8,7 +8,7 @@ pipelines:
           name: Test
           script:
             - export DB_CONNECTION=mysql
-            - export DB_HOST=mysql
+            - export DB_HOST=127.0.0.1
             - export DB_PORT=3306
             - export DB_DATABASE=testing
             - export DB_USERNAME=db
@@ -27,7 +27,7 @@ definitions:
       variables:
         MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
         MARIADB_CONNECTION: mysql
-        MARIADB_HOST: mysql
+        MARIADB_HOST: 127.0.0.1
         MARIADB_PORT: 3306
         MARIADB_DATABASE: testing
         MARIADB_USERNAME: db
