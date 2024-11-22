@@ -10,6 +10,7 @@ pipelines:
             # - cp .env.testing .env 
             - export DB_HOST=127.0.0.1
             - composer install --no-interaction --no-progress --prefer-dist
+            - php artisan migrate
             - php artisan test
           caches:
             - composer
