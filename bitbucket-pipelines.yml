@@ -8,7 +8,6 @@ pipelines:
           name: Test
           script:
             - cp .env.testing .env 
-            - php artisan config:clear 
             - export DB_HOST=127.0.0.1
             - composer install --no-interaction --no-progress --prefer-dist
             - php artisan test
