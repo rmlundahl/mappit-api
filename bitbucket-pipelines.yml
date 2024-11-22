@@ -21,9 +21,9 @@ pipelines:
 definitions:
   services:
     mysql:
-      image: mysql:8.0
+      image: mariadb:10.11
       environment:
-        MYSQL_DATABASE: 'testing'
-        MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
-        MYSQL_USER: 'db'
-        MYSQL_PASSWORD: 'db'
+        MARIADB_DATABASE: 'testing'
+        MARIADB_RANDOM_ROOT_PASSWORD: 'yes'
+        MARIADB_USER: 'db'
+        MARIADB_PASSWORD: 'db'
