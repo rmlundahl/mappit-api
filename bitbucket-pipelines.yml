@@ -20,9 +20,9 @@ definitions:
       image: mariadb:10.11
       variables:
         MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
-        MARIADB_CONNECTION=mysql
-        MARIADB_HOST=127.0.0.1
-        MARIADB_PORT=3306
-        MARIADB_DATABASE=testing
-        MARIADB_USERNAME=db
-        MARIADB_PASSWORD=db
+        MARIADB_CONNECTION: mysql
+        MARIADB_HOST: 127.0.0.1
+        MARIADB_PORT: 3306
+        MARIADB_DATABASE: testing
+        MARIADB_USERNAME: db
+        MARIADB_PASSWORD: db
