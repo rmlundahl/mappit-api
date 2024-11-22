@@ -18,12 +18,9 @@ pipelines:
 definitions:
   services:
     mysql:
-      image: mariadb:10.11
+      image: mysql:8.0
       environment:
-        MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
-        MARIADB_CONNECTION: mysql
-        MARIADB_HOST: mysql
-        MARIADB_PORT: '3306'
-        MARIADB_DATABASE: testing
-        MARIADB_USERNAME: db
-        MARIADB_PASSWORD: db
+        MYSQL_DATABASE: 'testing'
+        MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+        MYSQL_USER: 'db'
+        MYSQL_PASSWORD: 'db'
