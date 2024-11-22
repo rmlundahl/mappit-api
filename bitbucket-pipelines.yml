@@ -7,7 +7,9 @@ pipelines:
       - step:
           name: Test
           script:
-            - export DB_HOST=mysql
+            - cp .env.testing .env 
+            - php artisan config:clear 
+            - export DB_HOST=127.0.0.1
             - composer install --no-interaction --no-progress --prefer-dist
             - php artisan test
           caches:
