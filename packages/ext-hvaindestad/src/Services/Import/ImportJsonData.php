@@ -43,7 +43,7 @@ class ImportJsonData {
             $json = json_decode($arr[2]);
             // p($json);
         } else {
-            $json = json_decode(file_get_contents('tests/Feature/API/Item/stubs/response_200.json'), true);
+            $json = json_decode(file_get_contents('./tests/Feature/API/Item/stubs/response_200.json'), true);
         }
 
         $this->_init_arrays();
