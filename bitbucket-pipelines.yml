@@ -20,6 +20,6 @@ definitions:
       image: mariadb:10.11
       variables:
         MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
-        MYSQL_DATABASE: testing
-        MYSQL_USERNAME: db
-        MYSQL_PASSWORD: db
+        MARIADB_DATABASE: testing
+        MARIADB_USER: db
+        MARIADB_PASSWORD: db
