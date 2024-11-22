@@ -7,12 +7,6 @@ pipelines:
       - step:
           name: Test
           script:
-            - export DB_CONNECTION=mysql
-            - export DB_HOST=127.0.0.1
-            - export DB_PORT=3306
-            - export DB_DATABASE=testing
-            - export DB_USERNAME=db
-            - export DB_PASSWORD=db
             - composer install --no-interaction --no-progress --prefer-dist
             - php artisan test
           caches:
@@ -24,11 +18,11 @@ definitions:
   services:
     mysql:
       image: mariadb:10.11
-      variables:
-        MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+      environment:
+        MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
         MARIADB_CONNECTION: mysql
         MARIADB_HOST: 127.0.0.1
-        MARIADB_PORT: 3306
+        MARIADB_PORT: '3306'
         MARIADB_DATABASE: testing
         MARIADB_USERNAME: db
         MARIADB_PASSWORD: db
