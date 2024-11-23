@@ -7,10 +7,10 @@ pipelines:
       - step:
           name: Test
           script:
-            - ./vendor/bin/phpstan analyze --memory-limit=1G
             - cp .env.testing .env 
             - export DB_HOST=127.0.0.1
             - composer install --no-interaction --no-progress --prefer-dist
+            - ./vendor/bin/phpstan analyze --memory-limit=1G
             - php artisan migrate
             - php artisan db:seed
             - php artisan test
