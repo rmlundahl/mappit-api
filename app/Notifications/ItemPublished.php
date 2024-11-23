@@ -28,7 +28,7 @@ class ItemPublished extends Notification
         $this->item = $item;
 
         // use translations from the package
-        $this->ns = env('APP_NAMESPACE');
+        $this->ns = config('mappit.app_namespace');
         $this->item_type = __($this->ns.'::item_type.'.$this->item->item_type_id);
         $this->url = config('mappit.app_url_frontend').'/'.App::getLocale().'/admin/'.__($this->ns.'::item_type.slug_'.$this->item->item_type_id).'/'.$this->item->id.'/edit?item_type_id='.$this->item->item_type_id;
     }

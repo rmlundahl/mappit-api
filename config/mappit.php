@@ -27,6 +27,17 @@ return [
     | instance serves as backend for
     |
     */
-	'app_url_frontend' => env('APP_URL_FRONTEND')
+	'app_url_frontend' => env('APP_URL_FRONTEND'),
+
+	/*
+	|--------------------------------------------------------------------------	
+	| Namespace
+	|--------------------------------------------------------------------------
+	|
+	| Define a unique namespace for the instance of this Mappit application
+	| The namespace will be used for package specific translations
+	|
+	*/
+	'app_namespace' => env('APP_NAMESPACE'),
 
 ];

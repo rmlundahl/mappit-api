@@ -145,7 +145,7 @@ return [
     // List your commercial packages (licensed by you) below, so that they are not
     // flagged by the License Analyzer.
     'commercial_packages' => [
-        'enlightn/enlightnpro',
+        'enlightn/enlightnpro','phpmyadmin/sql-parser'
     ],
 
     'allowed_permissions' => [
