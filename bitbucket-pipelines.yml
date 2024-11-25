@@ -25,7 +25,7 @@ pipelines:
           trigger: manual
           script:
             # Backup the MySQL database
-            - mysqldump -h $STAG_HVAINDESTAD_DB_HOST -u $STAG_HVAINDESTAD_DB_USER -p$STAG_HVAINDESTAD_DB_PASSWORD $STAG_HVAINDESTAD_DB_DATABASE > backup.sql
+            - mysqldump -h $STAG_HVAINDESTAD_DB_HOST -u $STAG_HVAINDESTAD_DB_USER -p $STAG_HVAINDESTAD_DB_PASSWORD $STAG_HVAINDESTAD_DB_DATABASE > backup.sql
             - echo "Database backup created"
           artifacts:
             - db-dump.sql
