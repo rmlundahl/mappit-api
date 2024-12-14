@@ -3,6 +3,7 @@
 namespace App\Services\Item;
 
 use App\Models\Group;
+use App\Models\Item;
 use App\Models\User;
 use App\Services\User\GetUser;
 
@@ -134,7 +135,7 @@ class GetItem {
     public function all(): \Illuminate\Support\Collection
     {
         // select with item_properties
-        $query = DB::table('items');
+        $query = Item::with('item_properties');
 
         // any parameters to add to the query?
         if( !empty($this->data) ) {
@@ -155,14 +156,18 @@ class GetItem {
             // add flattened properties
             if( !empty($item->item_properties)) {
                 $i=0;
-                foreach($item->item_properties as $r) {
-                    ($item->item_properties)->put($r->key,$r->value);
-                    unset($item->item_properties[$i]);
+                foreach($item->item_properties as $r) { // @phpstan-ignore-line
+                    ($item->item_properties)->put($r->key,$r->value); // @phpstan-ignore-line
+                    unset($item->item_properties[$i]); // @phpstan-ignore-line
                     $i++;
                 }
             }
             // add group_id 
             $item->group_id = $item->user->group_id ?? null;
+
+            // remove sensitive data
+            unset($item->user);
+
             return $item;
         });
 
