@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# This script switches between different frontend environment configurations
+
+# Define available environments
+ENV1="hvaindestad"
+ENV2="lerenmetdestadleiden"
+ENV3="sharemystory"
+
+# Display menu if no argument is provided or if help is requested
+if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+  echo "Usage: ddev switch-frontend [1|2|3]"
+  echo ""
+  echo "Available environments:"
+  echo "  1) $ENV1"
+  echo "  2) $ENV2"
+  echo "  3) $ENV3"
+  exit 1
+fi
+
+# Convert number to environment name
+case "$1" in
+  1)
+    FRONTEND="$ENV1"
+    ;;
+  2)
+    FRONTEND="$ENV2"
+    ;;
+  3)
+    FRONTEND="$ENV3"
+    ;;
+  *)
+    echo "Error: Invalid option. Please choose 1, 2, or 3."
+    echo ""
+    echo "Available environments:"
+    echo "  1) $ENV1"
+    echo "  2) $ENV2"
+    echo "  3) $ENV3"
+    exit 1
+    ;;
+esac
+
+if [ ! -f "/var/www/html/.env.$FRONTEND" ]; then
+  echo "Error: Environment file .env.$FRONTEND does not exist."
+  exit 1
+fi
+
+echo "Switching to $FRONTEND environment..."
+cp "/var/www/html/.env.$FRONTEND" /var/www/html/.env
+php /var/www/html/artisan config:clear
+echo "Environment switched to $FRONTEND successfully!"
+echo "Now using database: $(grep DB_DATABASE= /var/www/html/.env | cut -d '=' -f2)"
