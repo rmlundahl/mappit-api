@@ -212,7 +212,6 @@ class GetItem {
         // look for item_properties in the requested language, and use 'nl' records as fallback
         $query = DB::table('item_properties')
                     ->select('item_properties.*')
-                    ->join('items', 'item_properties.item_id', '=', 'items.id')
                     ->leftJoin('item_properties as p2', function($join) use ($preferred_language) {
                         $join->on('p2.id', '=', 'item_properties.id')
                                 ->where('p2.language', '=', $preferred_language)
