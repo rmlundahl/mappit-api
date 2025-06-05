@@ -24,7 +24,7 @@ class FilterController extends Controller
      */
     public function index()
     {
-        $all_filters = $this->filter->whereIn('language', ['nl', App::getLocale()])->get();
+        $all_filters = $this->filter->where('status_id', 20)->whereIn('language', ['nl', App::getLocale()])->get();
         $filters = [];
         $current_parent_id = 1000;
 
