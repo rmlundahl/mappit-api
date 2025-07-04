@@ -1,7 +1,7 @@
 services:
     laravel.test:
         build:
-            context: './vendor/laravel/sail/runtimes/8.4'
+            context: ./vendor/laravel/sail/runtimes/8.4
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
@@ -36,7 +36,7 @@ services:
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
             - 'sail-mysql:/var/lib/mysql'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+            - './docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d'
         networks:
             - sail
         healthcheck:
@@ -47,9 +47,6 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
-        # Add custom command alias
-        labels:
-            sail.commands.switch-frontend: "cd /var/www/html && bash /var/sail/commands/switch-frontend"
 
 networks:
     sail:
