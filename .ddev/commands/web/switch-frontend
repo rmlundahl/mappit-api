@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # This script switches between different frontend environment configurations
+# 
+# Usage: ddev switch-frontend [1|2|3]
+# 
 
 # Define available environments
 ENV1="hvaindestad"
