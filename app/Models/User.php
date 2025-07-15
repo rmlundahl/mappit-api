@@ -81,4 +81,23 @@ class User extends Authenticatable implements HasLocalePreference
         return $this->hasMany('App\Models\UserPreference');
     }
 
+    /**
+     * Check if the user is an admin.
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'administrator';
+    }
+
+     /**
+     * Check if the user is an editor.
+     *
+     * @return bool
+     */
+    public function isEditor(): bool
+    {
+        return $this->role === 'editor';
+    }
 }
