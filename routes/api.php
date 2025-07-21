@@ -147,6 +147,9 @@ Route::group(['middleware'=>'setLocale', 'prefix' => 'v1/'.$locale], function() 
     Route::put('/items/{id}',          'API\ItemController@update');
     Route::delete('/items/{id}',       'API\ItemController@delete');
 
+    // Item Property routes
+    Route::put('/item-properties/bulk-update', 'API\ItemPropertyController@bulkUpdate');
+
     // Filter routes
     Route::get('/filters',             'API\FilterController@index');
     Route::get('/filters/{id}',        'API\FilterController@find');

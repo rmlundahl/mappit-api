@@ -26,7 +26,7 @@ class SaveItemCollection {
         
         try {
             // delete exsiting data
-            DB::table('item_collection')->where('item_id', $this->data['item_id'])->delete();
+            DB::table('item_collection')->where('collection_item_id', $this->data['item_id'])->delete();
 
             if(empty($this->data['collection_items'])) return;
 
