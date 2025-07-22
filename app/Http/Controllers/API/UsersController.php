@@ -110,6 +110,11 @@ class UsersController extends Controller
             return response()->json( [], 404 );
         }
 
+        // Protect root user (ID 1) from being exposed
+        if ( (int)$id === 1 ) {
+            return response()->json( [], 404 );
+        }
+
         $user = User::where('id', $id)->with('user_preferences')->first();
        
         if (empty($user)) {
@@ -135,6 +140,11 @@ class UsersController extends Controller
         
         if( $user->can('update', [User::class]) ) {
             
+            // Protect root user (ID 1) from being updated
+            if ( (int)$request->id === 1 ) {
+                return response()->json( [], 404 );
+            }
+
             $userToUpdate = User::where('id', $request->id)->first();
        
             if (empty($userToUpdate)) {
@@ -173,6 +183,11 @@ class UsersController extends Controller
      */
     public function delete(DeleteUserRequest $request)
     {
+        // Protect root user (ID 1) from being deleted
+        if ( (int)$request->integer('id') === 1 ) {
+            return response()->json( [], 404 );
+        }
+
         $user = User::find($request->integer('id'));
         
         if (empty($user)) {

@@ -69,7 +69,8 @@ class GetUser {
 
         $query = $this->user
             ->select('users.*','groups.id as group_id','groups.name as group_name')
-            ->join('groups', 'users.group_id', '=', 'groups.id');
+            ->join('groups', 'users.group_id', '=', 'groups.id')
+            ->where('users.id', '!=', 1); // Exclude root user (ID 1)
         
         // any parameters to add to the query?
         if( !empty($this->data) ) {
@@ -121,7 +122,7 @@ class GetUser {
     {
         if( !$group_id ) return null;
 
-        return $this->user->where('group_id', $group_id)->get();
+        return $this->user->where('group_id', $group_id)->where('id', '!=', 1)->get(); // Exclude root user (ID 1)
     }
 
     /**
@@ -133,6 +134,6 @@ class GetUser {
     {
         if( !count($group_ids) ) return null;
 
-        return $this->user->whereIn('group_id', $group_ids)->get();
+        return $this->user->whereIn('group_id', $group_ids)->where('id', '!=', 1)->get(); // Exclude root user (ID 1)
     }
 }
