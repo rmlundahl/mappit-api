@@ -66,7 +66,7 @@ class BulkUpdateItemPropertiesTest extends TestCase
 
         // Make the bulk update request - should update both properties with 'Original Partner Name'
         $response = $this->actingAs($user)
-            ->json('POST', '/api/v1/nl/item-properties/bulk-update', [
+            ->json('PUT', '/api/v1/nl/item-properties/bulk-update', [
                 'key' => 'partner_naam',
                 'old_value' => 'Original Partner Name',
                 'new_value' => 'Updated Partner Name'
@@ -142,7 +142,7 @@ class BulkUpdateItemPropertiesTest extends TestCase
 
         // Make the bulk update request with language filter
         $response = $this->actingAs($user)
-            ->json('POST', '/api/v1/nl/item-properties/bulk-update', [
+            ->json('PUT', '/api/v1/nl/item-properties/bulk-update', [
                 'key' => 'sector_naam',
                 'old_value' => 'Target Value',
                 'new_value' => 'Updated Value',
@@ -179,7 +179,7 @@ class BulkUpdateItemPropertiesTest extends TestCase
         
         // Make the bulk update request with non-existent key/value combination
         $response = $this->actingAs($user)
-            ->json('POST', '/api/v1/nl/item-properties/bulk-update', [
+            ->json('PUT', '/api/v1/nl/item-properties/bulk-update', [
                 'key' => 'nonexistent_key',
                 'old_value' => 'nonexistent_value',
                 'new_value' => 'New Value'
@@ -200,7 +200,7 @@ class BulkUpdateItemPropertiesTest extends TestCase
         
         // Make the bulk update request
         $response = $this->actingAs($user)
-            ->json('POST', '/api/v1/nl/item-properties/bulk-update', [
+            ->json('PUT', '/api/v1/nl/item-properties/bulk-update', [
                 'key' => 'test_key',
                 'old_value' => 'Test Value',
                 'new_value' => 'Updated Value'
@@ -215,7 +215,7 @@ class BulkUpdateItemPropertiesTest extends TestCase
         
         // Missing required fields
         $response = $this->actingAs($user)
-            ->json('POST', '/api/v1/nl/item-properties/bulk-update', [
+            ->json('PUT', '/api/v1/nl/item-properties/bulk-update', [
                 'key' => 'test_key',
                 // Missing old_value
                 'new_value' => 'Updated Value'

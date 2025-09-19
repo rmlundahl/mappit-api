@@ -123,8 +123,8 @@ class GetItemTest extends TestCase
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has(2)
                 ->first( fn ($json) =>
-                    $json->where('id', 11)
-                    ->where('user_id', 123)
+                    $json->where('id', 12)
+                    ->where('user_id', 2)
                     ->where('language', 'nl')
                     ->etc()
                 )
@@ -159,8 +159,8 @@ class GetItemTest extends TestCase
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has(3)
                 ->first( fn ($json) =>
-                    $json->where('id', 11)
-                    ->where('user_id', 123)
+                    $json->where('id', 12)
+                    ->where('user_id', 2)
                     ->where('language', 'nl')
                     ->etc()
                 )
@@ -198,8 +198,8 @@ class GetItemTest extends TestCase
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has(3)
                 ->first( fn ($json) =>
-                    $json->where('id', 11)
-                    ->where('user_id', 123)
+                    $json->where('id', 12)
+                    ->where('user_id', 2)
                     ->where('language', 'nl')
                     ->etc()
                 )

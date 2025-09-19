@@ -45,7 +45,7 @@ class IndexUsersTest extends TestCase
         $group1 = Group::factory()->create(['id'=>2,'parent_id'=>1]);
         $group2 = Group::factory()->create(['id'=>3,'parent_id'=>1]);
         
-        $author0 = User::factory()->create(['id'=>1,   'group_id'=>2, 'role'=>'author', 'is_group_admin'=>1]);
+        $author0 = User::factory()->create(['id'=>2,   'group_id'=>2, 'role'=>'author', 'is_group_admin'=>1]);
        
         $author1 = User::factory()->create(['id'=>101, 'group_id'=>2]);
         $author2 = User::factory()->create(['id'=>102, 'group_id'=>2]);
@@ -56,7 +56,7 @@ class IndexUsersTest extends TestCase
 
         $response->assertStatus(200)
         ->assertJsonCount(3)
-        ->assertSeeInOrder(['1','101','102'])
+        ->assertSeeInOrder(['2','101','102'])
         ->assertDontSee('"id":103')
         ->assertDontSee('"id":104');
     }
@@ -67,7 +67,7 @@ class IndexUsersTest extends TestCase
         $group1 = Group::factory()->create(['id'=>2,'parent_id'=>1]);
         $group2 = Group::factory()->create(['id'=>3,'parent_id'=>1]);
         
-        $editor1 = User::factory()->create(['id'=>1,   'group_id'=>2, 'role'=>'editor']);
+        $editor1 = User::factory()->create(['id'=>2,   'group_id'=>2, 'role'=>'editor']);
        
         $author1 = User::factory()->create(['id'=>101, 'group_id'=>2]);
         $author2 = User::factory()->create(['id'=>102, 'group_id'=>2]);
@@ -78,26 +78,8 @@ class IndexUsersTest extends TestCase
 
         $response->assertStatus(200)
         ->assertJsonCount(3)
-        ->assertSeeInOrder(['1','101','102'])
+        ->assertSeeInOrder(['2','101','102'])
         ->assertDontSee('"id":103');
-    }
-
-
-    public function _test_find_User(): void
-    {
-        $Users = User::factory()->count(3)->create();
-        $User  = User::factory()->create(['id'=>123, 'language'=>'nl']);
-
-        $response = $this->getJson('/api/v1/nl/Users/123');
-
-        $response
-            ->assertStatus(200)
-            ->assertJson(fn (AssertableJson $json) => $json
-                ->count(11)    
-                ->where('id', 123)
-                ->where('language', 'nl')
-                ->etc()
-            );
     }
 
 }
