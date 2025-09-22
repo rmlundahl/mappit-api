@@ -24,7 +24,7 @@ class CreateItemPropertiesTable extends Migration
             $table->smallInteger('status_id')->unsigned()->default(1)->index(); // FK
         });
 
-        \DB::unprepared('ALTER TABLE `items` DROP PRIMARY KEY, ADD PRIMARY KEY ( `id` , `language` )');
+        \DB::unprepared('ALTER TABLE `item_properties` DROP PRIMARY KEY, ADD PRIMARY KEY ( `id` , `language` )');
     }
 
     /**

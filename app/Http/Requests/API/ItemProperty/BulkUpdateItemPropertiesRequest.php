@@ -29,6 +29,7 @@ class BulkUpdateItemPropertiesRequest extends FormRequest
             'old_value' => 'required|string',
             'new_value' => 'required|string',
             'language' => 'sometimes|string|max:2',
+            'status_id' => 'sometimes|integer',
         ];
     }
 }

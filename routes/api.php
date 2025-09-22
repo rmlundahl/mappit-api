@@ -148,6 +148,9 @@ Route::group(['middleware'=>'setLocale', 'prefix' => 'v1/'.$locale], function() 
     Route::delete('/items/{id}',       'API\ItemController@delete');
 
     // Item Property routes
+    Route::get('/item-properties',             'API\ItemPropertyController@index');
+    Route::get('/item-properties/{id}',        'API\ItemPropertyController@find');
+    Route::post('/item-properties',            'API\ItemPropertyController@store');
     Route::put('/item-properties/bulk-update', 'API\ItemPropertyController@bulkUpdate');
 
     // Filter routes

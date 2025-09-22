@@ -57,7 +57,8 @@ class BulkUpdateItemProperty
             DB::beginTransaction();
             
             $query->update([
-                'value' => $newValue
+                'value' => $newValue,
+                'status_id' => (int) ($this->data['status_id'] ?? 20)
             ]);
             
             DB::commit();
